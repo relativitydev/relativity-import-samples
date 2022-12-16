@@ -18,9 +18,12 @@ class WebRequest {
         $response = try { 
             Invoke-RestMethod -Uri $serviceUrl -Method 'Post' -Headers $this.header -Body $body
         } catch { 
-            Print-ObjectInfo "Exception" $_.Exception
-            Print-ObjectInfo "Exception Response" $_.Exception.Response 	
-            Print-ObjectInfo "Error Details Message" $_.ErrorDetails.Message
+            $exception = $_."Exception"
+            $response = $_."Exception"."Response"
+            $details = $_."ErrorDetails"."Message"
+            Write-Information -MessageData "Exception $exception" -InformationAction Continue
+            Write-Information -MessageData "Exception Response $response" -InformationAction Continue
+            Write-Information -MessageData "Error Details Message $details" -InformationAction Continue
             throw
         }
         
@@ -32,10 +35,13 @@ class WebRequest {
         
         $response = try { 
             Invoke-RestMethod -Uri $serviceUrl -Method 'Get' -Headers $this.header
-        } catch { 
-            Print-ObjectInfo "Exception" $_.Exception
-            Print-ObjectInfo "Exception Response" $_.Exception.Response 	
-            Print-ObjectInfo "Error Details Message" $_.ErrorDetails.Message
+        } catch {
+            $exception = $_."Exception"
+            $response = $_."Exception"."Response"
+            $details = $_."ErrorDetails"."Message"
+            Write-Information -MessageData "Exception $exception" -InformationAction Continue
+            Write-Information -MessageData "Exception Response $response" -InformationAction Continue
+            Write-Information -MessageData "Error Details Message $details" -InformationAction Continue
             throw
         }
         
