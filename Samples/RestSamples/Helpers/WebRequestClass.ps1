@@ -1,6 +1,3 @@
-#import module
-#. "$global:rootDir\Helpers\AuthClass.ps1"
-
 class WebRequest {
     [Object] $url
     [Object] $header

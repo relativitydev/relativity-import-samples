@@ -1,4 +1,4 @@
-#import module
+#import
 . "$global:rootDir\Helpers\EndpointsClass.ps1"
 
 $importId = New-Guid
@@ -86,7 +86,7 @@ Context "Import native files" {
                 multiValueDelimiter = "$"
                 endOfLine = 0
                 encoding = $null
-				cultureInfo = "en-us"
+                cultureInfo = "en-us"
                 type = 2
             }
         } | ConvertTo-Json -Depth 10
@@ -132,7 +132,7 @@ Context "Import native files" {
     }
 
     Describe "Imported records info" {
-		$uri = $global:Endpoints.importSourceDetailsUri
+        $uri = $global:Endpoints.importSourceDetailsUri
         $sourceDetailsResponse = $global:WebRequest.callGet($uri)
         $state = $sourceDetailsResponse."Value"."State"
 

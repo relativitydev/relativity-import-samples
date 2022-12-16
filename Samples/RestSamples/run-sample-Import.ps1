@@ -1,4 +1,4 @@
-#import module
+#import
 $global:rootDir = "$PSScriptRoot"
 . "$global:rootDir\Helpers\AuthClass.ps1"
 . "$global:rootDir\Helpers\WebRequestClass.ps1"
