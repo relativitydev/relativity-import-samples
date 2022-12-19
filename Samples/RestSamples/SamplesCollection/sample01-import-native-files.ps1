@@ -12,8 +12,8 @@ Context "Import native files" {
         $uri = $global:Endpoints.createImportJobUri
 
         $body = @{
-            applicationName = "Import Sample"
-            correlationID = 1234567890
+            applicationName = "Import-service-sample-app"
+            correlationID = "Sample-job-0001"
         } | ConvertTo-Json -Depth 10
 		
         $response = $global:WebRequest.callPost($uri, $body)
@@ -26,7 +26,7 @@ Context "Import native files" {
         $jobConfigurationBody = '{
             "importSettings" :
             {
-                "Overlay": null,
+                "Overlay":null,
                 "Native":{
                     "FilePathColumnIndex": "22",
                     "FileNameColumnIndex": "13"
