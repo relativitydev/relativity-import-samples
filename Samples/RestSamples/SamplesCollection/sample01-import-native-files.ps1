@@ -4,7 +4,7 @@
 $importId = New-Guid
 $sourceId = New-Guid
 $workspaceId = 1000000
-$dataSourcePath = "C:\DefaultFileRepository\samples\load_file_01.dat"
+$loadFilePath = "C:\DefaultFileRepository\samples\load_file_01.dat"
 $global:Endpoints = [Endpoints]::new($workspaceId, $importId, $sourceId)
 
 Context "Import native files" {
@@ -26,10 +26,7 @@ Context "Import native files" {
         $jobConfigurationBody = '{
             "importSettings" :
             {
-                "Overlay": {
-                            "Mode" : 1,
-                            "KeyField" : "Control Number"
-                        },
+                "Overlay": null,
                 "Native":{
                     "FilePathColumnIndex": "22",
                     "FileNameColumnIndex": "13"
@@ -76,7 +73,7 @@ Context "Import native files" {
         $uri = $global:Endpoints.importSourcesUri
         $dataSourceConfigurationBody = @{
             dataSourceSettings = @{
-                path = $dataSourcePath
+                path = $loadFilePath
                 firstLineContainsColumnNames = $true
                 startLine = 0
                 columnDelimiter = "|"
@@ -117,7 +114,6 @@ Context "Import native files" {
     Describe "Wait for import to complete" {
 		$uri = $global:Endpoints.importJobDetailsUri
         $jobDetailsResponse = $global:WebRequest.callGet($uri)
-        $global:WebRequest.checkIfSuccess($response)
         $isJobFinished = $jobDetailsResponse."Value"."IsFinished"
 
         [int]$sleepTime = 5
@@ -126,7 +122,6 @@ Context "Import native files" {
         {
             Start-Sleep -Seconds $sleepTime
             $jobDetailsResponse = $global:WebRequest.callGet($uri)
-            $global:WebRequest.checkIfSuccess($response)
             $isJobFinished = $jobDetailsResponse."Value"."IsFinished"
             $state = $jobDetailsResponse."Value"."State"
             Write-Information -MessageData "Current job status: $state" -InformationAction Continue
@@ -136,12 +131,10 @@ Context "Import native files" {
     Describe "Imported records info" {
         $uri = $global:Endpoints.importSourceDetailsUri
         $sourceDetailsResponse = $global:WebRequest.callGet($uri)
-        $global:WebRequest.checkIfSuccess($response)
         $state = $sourceDetailsResponse."Value"."State"
 
         $uri = $global:Endpoints.importSourceProgressUri
         $sourceProgresssResponse = $global:WebRequest.callGet($uri)
-        $global:WebRequest.checkIfSuccess($response)
         $totalRecords = $sourceProgresssResponse."Value"."TotalRecords"
         $impoortedRecords = $sourceProgresssResponse."Value"."ImportedRecords"
         $erroredRecords = $sourceProgresssResponse."Value"."ErroredRecords"
