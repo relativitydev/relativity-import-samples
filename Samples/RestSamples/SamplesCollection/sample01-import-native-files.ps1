@@ -17,7 +17,7 @@ Context "Import native files" {
         } | ConvertTo-Json -Depth 10
 		
         $response = $global:WebRequest.callPost($uri, $body)
-        $global:WebRequest.check($response)
+        $global:WebRequest.checkIfSuccess($response)
         Write-Information -MessageData "Job $importId created" -InformationAction Continue
     }
 
@@ -39,10 +39,10 @@ Context "Import native files" {
                 "Fields": {
                     "FieldMappings": [
                         {
-                            "ColumnIndex": "0",
+                            "ColumnIndex": 0,
                             "Field": "Control Number",
                             "ContainsID": false,
-                            "ContainsFilePath": "false"
+                            "ContainsFilePath": false
                         },
                         {
                             "ColumnIndex": 1,
@@ -68,7 +68,7 @@ Context "Import native files" {
             }
         }'
         $response = $global:WebRequest.callPost($uri, $jobConfigurationBody)
-        $global:WebRequest.check($response)
+        $global:WebRequest.checkIfSuccess($response)
         Write-Information -MessageData "Job configuration created" -InformationAction Continue
     }
 
@@ -92,7 +92,7 @@ Context "Import native files" {
         } | ConvertTo-Json -Depth 10
 		
         $response = $global:WebRequest.callPost($uri, $dataSourceConfigurationBody)
-        $global:WebRequest.check($response)
+        $global:WebRequest.checkIfSuccess($response)
         Write-Information -MessageData "Source $sourceId added" -InformationAction Continue
     }
 
@@ -101,7 +101,7 @@ Context "Import native files" {
         $beginBody = ""
 		
         $response = $global:WebRequest.callPost($uri, $beginBody)
-        $global:WebRequest.check($response)
+        $global:WebRequest.checkIfSuccess($response)
         Write-Information -MessageData "Job began" -InformationAction Continue
     }
 
@@ -110,13 +110,14 @@ Context "Import native files" {
         $endBody = ""
 		
         $response = $global:WebRequest.callPost($uri, $endBody)
-        $global:WebRequest.check($response)
+        $global:WebRequest.checkIfSuccess($response)
         Write-Information -MessageData "End job called" -InformationAction Continue
     }
 
     Describe "Wait for import to complete" {
 		$uri = $global:Endpoints.importJobDetailsUri
         $jobDetailsResponse = $global:WebRequest.callGet($uri)
+        $global:WebRequest.checkIfSuccess($response)
         $isJobFinished = $jobDetailsResponse."Value"."IsFinished"
 
         [int]$sleepTime = 5
@@ -125,6 +126,7 @@ Context "Import native files" {
         {
             Start-Sleep -Seconds $sleepTime
             $jobDetailsResponse = $global:WebRequest.callGet($uri)
+            $global:WebRequest.checkIfSuccess($response)
             $isJobFinished = $jobDetailsResponse."Value"."IsFinished"
             $state = $jobDetailsResponse."Value"."State"
             Write-Information -MessageData "Current job status: $state" -InformationAction Continue
@@ -134,16 +136,18 @@ Context "Import native files" {
     Describe "Imported records info" {
         $uri = $global:Endpoints.importSourceDetailsUri
         $sourceDetailsResponse = $global:WebRequest.callGet($uri)
+        $global:WebRequest.checkIfSuccess($response)
         $state = $sourceDetailsResponse."Value"."State"
 
         $uri = $global:Endpoints.importSourceProgressUri
         $sourceProgresssResponse = $global:WebRequest.callGet($uri)
+        $global:WebRequest.checkIfSuccess($response)
         $totalRecords = $sourceProgresssResponse."Value"."TotalRecords"
         $impoortedRecords = $sourceProgresssResponse."Value"."ImportedRecords"
         $erroredRecords = $sourceProgresssResponse."Value"."ErroredRecords"
 
-        Write-Information -MessageData "Data source state: $state"  -InformationAction Continue
-        Write-Information -MessageData "Import progress: Total records: $totalRecords, Imported records: $impoortedRecords, Records with errors: $erroredRecords"  -InformationAction Continue
+        Write-Information -MessageData "Data source state: $state" -InformationAction Continue
+        Write-Information -MessageData "Import progress: Total records: $totalRecords, Imported records: $impoortedRecords, Records with errors: $erroredRecords" -InformationAction Continue
 
         #Expected output
         #Data source state: Completed

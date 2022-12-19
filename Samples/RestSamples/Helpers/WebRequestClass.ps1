@@ -45,7 +45,7 @@ class WebRequest {
         return $response
     }
 
-    check($response){
+    checkIfSuccess($response){
         if($response."IsSuccess" = $false)
         {
             Write-Information -MessageData "Response doesn't idicate success" -InformationAction Continue
