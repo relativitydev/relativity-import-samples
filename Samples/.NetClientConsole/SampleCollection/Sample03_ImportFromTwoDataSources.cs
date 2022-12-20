@@ -1,4 +1,4 @@
-﻿// <copyright file="Sample01_ImportNativeFiles.cs" company="Relativity ODA LLC">
+﻿// <copyright file="Sample03_ImportFromTwoDataSources.cs" company="Relativity ODA LLC">
 // © Relativity All Rights Reserved.
 // </copyright>
 
@@ -14,8 +14,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 	using Relativity.Import.V1.Models.Sources;
 	using System.Net.Http.Json;
 	using Relativity.Import.V1.Models;
-	using System.Text.Json;
 	using System.Text.Json.Serialization;
+	using System.Text.Json;
 	using Relativity.Import.Samples.Net7Client.Helpers;
 
 	/// <summary>
@@ -24,35 +24,35 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 	public partial class ImportServiceSample
 	{
 		/// <summary>
-		/// Example of simple import native files.
+		/// Example of using two data sources to import documents into workspace.
+		/// In this example both data sources are added before import job is started.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-		public async Task Sample01_ImportNativeFiles()
+		public async Task Sample03_ImportFromTwoDataSources()
 		{
-			Console.WriteLine($"Running {nameof(Sample01_ImportNativeFiles)}");
-			// GUID identifiers for import job and data source.
+			Console.WriteLine($"Running {nameof(Sample03_ImportFromTwoDataSources)}");
+			// GUID identifiers for import job and data sources.
 			Guid importId = Guid.NewGuid();
-			Guid sourceId = Guid.NewGuid();
+			Guid source01Id = Guid.NewGuid();
+			Guid source02Id = Guid.NewGuid();
 
 			// destination workspace artifact Id.
 			const int workspaceId = 1019056;
 
 			// set of columns indexes in load file used in import settings.
 			const int controlNumberColumnIndex = 0;
-			const int custodianColumnIndex = 1;
-			const int dateSentColumnIndex = 5;
-			const int emailToColumnIndex = 11;
 			const int fileNameColumnIndex = 13;
 			const int filePathColumnIndex = 22;
 
-			// Path to the load file used in data source settings.
+			// Path to the load files used in data source settings.
 			const string loadFile01Path = "C:\\DefaultFileRepository\\samples\\load_file_01.dat";
+			const string loadFile02Path = "C:\\DefaultFileRepository\\samples\\load_file_02.dat";
 
 			// Create payload for request.
 			var createJobPayload = new
 			{
 				applicationName = "Import-service-sample-app",
-				correlationID = "Sample-job-0001"
+				correlationID = "Sample-job-0003"
 			};
 
 			// Configuration settings for document import. Builder is used to create settings.
@@ -63,17 +63,14 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 					.WithFileNameDefinedInColumn(fileNameColumnIndex))
 				.WithoutImages()
 				.WithFieldsMapped(x => x
-					.WithField(controlNumberColumnIndex, "Control Number")
-					.WithField(custodianColumnIndex, "Custodian - Single Choice")
-					.WithField(emailToColumnIndex, "Email To")
-					.WithField(dateSentColumnIndex, "Date Sent"))
+					.WithField(controlNumberColumnIndex, "Control Number"))
 				.WithoutFolders();
 
 			// Create payload for request.
-			var importSettingPayload = new { importSettings };
+			var importSettingPayload = new {importSettings};
 
 			// Configuration settings for data source. Builder is used to create settings.
-			DataSourceSettings dataSourceSettings = DataSourceSettingsBuilder.Create()
+			DataSourceSettings dataSourceSettings01 = DataSourceSettingsBuilder.Create()
 				.ForLoadFile(loadFile01Path)
 				.WithDelimiters(d => d
 					.WithColumnDelimiters('|')
@@ -87,16 +84,31 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 				.WithDefaultEncoding()
 				.WithDefaultCultureInfo();
 
-			// Create payload for request.
-			var dataSourceSettingsPayload = new { dataSourceSettings };
+			// Configuration settings for second data source. Builder is used to create settings.
+			DataSourceSettings dataSourceSettings02 = DataSourceSettingsBuilder.Create()
+				.ForLoadFile(loadFile02Path)
+				.WithDelimiters(d => d
+					.WithColumnDelimiters('|')
+					.WithQuoteDelimiter('^')
+					.WithNewLineDelimiter('#')
+					.WithNestedValueDelimiter('&')
+					.WithMultiValueDelimiter('$'))
+				.WithoutFirstLineContainingHeaders()
+				.WithEndOfLineForWindows()
+				.WithStartFromBeginning()
+				.WithDefaultEncoding()
+				.WithDefaultCultureInfo();
+
+			// Create payloads for requests.
+			var dataSourceSettingsPayload01 = new { dataSourceSettings = dataSourceSettings01 };
+			var dataSourceSettingsPayload02 = new { dataSourceSettings = dataSourceSettings02 };
 
 			HttpClient httpClient = HttpClientHelper.CreateHttpClient();
 
 			// Create import job.
 			// endpoint: POST /import-jobs/{importId}
 			var createImportJobUri = RelativityImportEndpoints.GetCreateImportUri(workspaceId, importId);
-
-			var response = await httpClient.PostAsJsonAsync(createImportJobUri,createJobPayload);
+			var response = await httpClient.PostAsJsonAsync(createImportJobUri, createJobPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
 			// Add import document settings to existing import job (configure import job).
@@ -105,10 +117,16 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			response = await httpClient.PostAsJsonAsync(documentConfigurationUri, importSettingPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
-			// Add data source settings to existing import job.
+			// Add first data source settings to existing import job.
 			// endpoint: POST /import-jobs/{importId}/sources/{sourceId}
-			var importSourcesUri = RelativityImportEndpoints.GetImportSourcesUri(workspaceId, importId, sourceId);
-			response = await httpClient.PostAsJsonAsync(importSourcesUri, dataSourceSettingsPayload);
+			var importSourcesUri = RelativityImportEndpoints.GetImportSourcesUri(workspaceId, importId, source01Id);
+			response = await httpClient.PostAsJsonAsync(importSourcesUri, dataSourceSettingsPayload01);
+			await ImportJobSampleHelper.EnsureSuccessResponse(response);
+
+			// Add second data source settings to existing import job.
+			// Both data sources are added before job starts.
+			importSourcesUri = RelativityImportEndpoints.GetImportSourcesUri(workspaceId, importId, source02Id);
+			response = await httpClient.PostAsJsonAsync(importSourcesUri, dataSourceSettingsPayload02);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
 			// Start import job.
@@ -124,30 +142,32 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
 			// It may take some time for import job to be completed. Request data source details to monitor the current state.
-			// NOTE: You can also request job details to verify if job is finished - see appropriate sample.
-			// endpoint: GET import-jobs/{importId}/sources/{sourceId}/details"
-			var importSourceDetailsUri = RelativityImportEndpoints.GetImportSourceDetailsUri(workspaceId, importId, sourceId);
+			// You can get job details to verify if job is finished.
+			var importSourceDetailsUri = RelativityImportEndpoints.GetImportDetailsUri(workspaceId, importId);
 
 			JsonSerializerOptions options = new()
 			{
 				Converters = { new JsonStringEnumConverter() }
 			};
-			var t = await httpClient.GetStringAsync(importSourceDetailsUri);
-			var dataSourceState = await ImportJobSampleHelper.WaitImportDataSourceToBeCompleted(
-				funcAsync: () => httpClient.GetFromJsonAsync<ValueResponse<DataSourceDetails>> (importSourceDetailsUri, options),
+
+			var dataSourceState = await ImportJobSampleHelper.WaitImportJobToBeFinished(
+				funcAsync: () => httpClient.GetFromJsonAsync<ValueResponse<ImportDetails>>(importSourceDetailsUri, options),
 				timeout: 10000);
 
 			// Get current import progress for specific data source.
 			// endpoint: GET import-jobs/{importId}/sources/{sourceId}/progress"
-			var importSourceProgressUri = RelativityImportEndpoints.GetImportSourceProgressUri(workspaceId, importId, sourceId);
-
-			var valueResponse = await httpClient.GetFromJsonAsync<ValueResponse<ImportProgress>>(importSourceProgressUri);
-			
-			if (valueResponse?.IsSuccess ?? false)
+			foreach (var sourceId in new[] {source01Id, source02Id})
 			{
-				Console.WriteLine("\n");
-				Console.WriteLine($"Data source state: {dataSourceState}");
-				Console.WriteLine($"Import data source progress: Total records: {valueResponse.Value.TotalRecords}, Imported records: {valueResponse.Value.ImportedRecords}, Records with errors: {valueResponse.Value.ErroredRecords}");
+				var importSourceProgressUri = RelativityImportEndpoints.GetImportSourceProgressUri(workspaceId, importId, sourceId);
+
+				var valueResponse = await httpClient.GetFromJsonAsync<ValueResponse<ImportProgress>>(importSourceProgressUri);
+
+				if (valueResponse?.IsSuccess ?? false)
+				{
+					Console.WriteLine("\n");
+					Console.WriteLine($"Data source state: {dataSourceState}");
+					Console.WriteLine($"Import data source progress: Total records: {valueResponse.Value.TotalRecords}, Imported records: {valueResponse.Value.ImportedRecords}, Records with errors: {valueResponse.Value.ErroredRecords}");
+				}
 			}
 		}
 	}

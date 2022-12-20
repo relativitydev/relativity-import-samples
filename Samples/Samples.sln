@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.33130.400
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Import.DotNetClientWithKepler", "dotNetWithKepler\Import.DotNetClientWithKepler.csproj", "{CB2F2C99-73B5-4FCA-8419-19B93862642A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relativity.Import.Samples.NetFrameworkClient", "dotNetWithKepler\Relativity.Import.Samples.NetFrameworkClient.csproj", "{CB2F2C99-73B5-4FCA-8419-19B93862642A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Import.NetClientConsole", ".NetClientConsole\Import.NetClientConsole.csproj", "{8BFF16C9-3750-45DE-B112-199CC8AC3425}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relativity.Import.Samples.Net7Client", ".NetClientConsole\Relativity.Import.Samples.Net7Client.csproj", "{8BFF16C9-3750-45DE-B112-199CC8AC3425}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

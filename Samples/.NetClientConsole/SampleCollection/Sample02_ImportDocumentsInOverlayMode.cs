@@ -1,4 +1,4 @@
-﻿// <copyright file="Sample01_ImportNativeFiles.cs" company="Relativity ODA LLC">
+﻿// <copyright file="Sample02_ImportDocumentsInOverlayMode.cs" company="Relativity ODA LLC">
 // © Relativity All Rights Reserved.
 // </copyright>
 
@@ -14,8 +14,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 	using Relativity.Import.V1.Models.Sources;
 	using System.Net.Http.Json;
 	using Relativity.Import.V1.Models;
-	using System.Text.Json;
 	using System.Text.Json.Serialization;
+	using System.Text.Json;
 	using Relativity.Import.Samples.Net7Client.Helpers;
 
 	/// <summary>
@@ -24,12 +24,12 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 	public partial class ImportServiceSample
 	{
 		/// <summary>
-		/// Example of simple import native files.
+		/// Example of configuring import job to import documents in overlay mode.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-		public async Task Sample01_ImportNativeFiles()
+		public async Task Sample02_ImportDocumentsInOverlayMode()
 		{
-			Console.WriteLine($"Running {nameof(Sample01_ImportNativeFiles)}");
+			Console.WriteLine($"Running {nameof(Sample02_ImportDocumentsInOverlayMode)}");
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
@@ -48,16 +48,20 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			// Path to the load file used in data source settings.
 			const string loadFile01Path = "C:\\DefaultFileRepository\\samples\\load_file_01.dat";
 
-			// Create payload for request.
+			// overlay key field
+			const string overlayKeyField = "Control Number";
+
 			var createJobPayload = new
 			{
 				applicationName = "Import-service-sample-app",
-				correlationID = "Sample-job-0001"
+				correlationID = "Sample-job-0002"
 			};
 
 			// Configuration settings for document import. Builder is used to create settings.
 			ImportDocumentSettings importSettings = ImportDocumentSettingsBuilder.Create()
-				.WithAppendMode()
+				.WithOverlayMode(x => x
+					.WithKeyField(overlayKeyField)
+					.WithMultiFieldOverlayBehaviour(MultiFieldOverlayBehaviour.MergeAll))
 				.WithNatives(x => x
 					.WithFilePathDefinedInColumn(filePathColumnIndex)
 					.WithFileNameDefinedInColumn(fileNameColumnIndex))
@@ -72,7 +76,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			// Create payload for request.
 			var importSettingPayload = new { importSettings };
 
-			// Configuration settings for data source. Builder is used to create settings.
+			// Configuration settings for data source with custom delimiters. Builder is used to create settings.
 			DataSourceSettings dataSourceSettings = DataSourceSettingsBuilder.Create()
 				.ForLoadFile(loadFile01Path)
 				.WithDelimiters(d => d
@@ -96,7 +100,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			// endpoint: POST /import-jobs/{importId}
 			var createImportJobUri = RelativityImportEndpoints.GetCreateImportUri(workspaceId, importId);
 
-			var response = await httpClient.PostAsJsonAsync(createImportJobUri,createJobPayload);
+			var response = await httpClient.PostAsJsonAsync(createImportJobUri, createJobPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
 			// Add import document settings to existing import job (configure import job).
@@ -132,9 +136,9 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			{
 				Converters = { new JsonStringEnumConverter() }
 			};
-			var t = await httpClient.GetStringAsync(importSourceDetailsUri);
+
 			var dataSourceState = await ImportJobSampleHelper.WaitImportDataSourceToBeCompleted(
-				funcAsync: () => httpClient.GetFromJsonAsync<ValueResponse<DataSourceDetails>> (importSourceDetailsUri, options),
+				funcAsync: () => httpClient.GetFromJsonAsync<ValueResponse<DataSourceDetails>>(importSourceDetailsUri, options),
 				timeout: 10000);
 
 			// Get current import progress for specific data source.
@@ -142,7 +146,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			var importSourceProgressUri = RelativityImportEndpoints.GetImportSourceProgressUri(workspaceId, importId, sourceId);
 
 			var valueResponse = await httpClient.GetFromJsonAsync<ValueResponse<ImportProgress>>(importSourceProgressUri);
-			
+
 			if (valueResponse?.IsSuccess ?? false)
 			{
 				Console.WriteLine("\n");

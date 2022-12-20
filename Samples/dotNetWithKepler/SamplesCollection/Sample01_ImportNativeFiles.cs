@@ -113,9 +113,9 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 
 				// It may take some time for import job to be completed. Request data source details to monitor the current state.
 				var dataSourceState = await this.WaitToStatusChange(
-				targetStatus: DataSourceState.Completed,
-				funcAsync: () => importSourceController.GetDetailsAsync(workspaceId, importId, sourceId),
-				timeout: 10000);
+					targetStatus: DataSourceState.Completed,
+					funcAsync: () => importSourceController.GetDetailsAsync(workspaceId, importId, sourceId),
+					timeout: 10000);
 
 				// Get current import progress for specific data source.
 				var importProgress = await importSourceController.GetProgressAsync(workspaceId, importId, sourceId);

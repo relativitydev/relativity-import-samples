@@ -1,4 +1,4 @@
-﻿// <copyright file="Sample01_ImportNativeFiles.cs" company="Relativity ODA LLC">
+﻿// <copyright file="Sample11_ImportDocumentSettingsForImages.cs" company="Relativity ODA LLC">
 // © Relativity All Rights Reserved.
 // </copyright>
 
@@ -8,14 +8,12 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 	using System.Net.Http;
 	using System.Threading.Tasks;
 	using Relativity.Import.V1;
-	using Relativity.Import.V1.Builders.DataSource;
-	using Relativity.Import.V1.Builders.Documents;
 	using Relativity.Import.V1.Models.Settings;
 	using Relativity.Import.V1.Models.Sources;
 	using System.Net.Http.Json;
 	using Relativity.Import.V1.Models;
-	using System.Text.Json;
 	using System.Text.Json.Serialization;
+	using System.Text.Json;
 	using Relativity.Import.Samples.Net7Client.Helpers;
 
 	/// <summary>
@@ -24,68 +22,76 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 	public partial class ImportServiceSample
 	{
 		/// <summary>
-		/// Example of simple import native files.
+		/// Example of creating ImportDocumentSettings for image import manually - without using ImportDocumentSettingsBuilder.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-		public async Task Sample01_ImportNativeFiles()
+		public async Task Sample11_ImportDocumentSettingsForImages()
 		{
-			Console.WriteLine($"Running {nameof(Sample01_ImportNativeFiles)}");
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
 
-			// destination workspace artifact Id.
+			// destination workspace and root folder artifact Ids.
 			const int workspaceId = 1019056;
+			const int rootFolderId = 1042316;
 
-			// set of columns indexes in load file used in import settings.
-			const int controlNumberColumnIndex = 0;
-			const int custodianColumnIndex = 1;
-			const int dateSentColumnIndex = 5;
-			const int emailToColumnIndex = 11;
-			const int fileNameColumnIndex = 13;
-			const int filePathColumnIndex = 22;
-
-			// Path to the load file used in data source settings.
-			const string loadFile01Path = "C:\\DefaultFileRepository\\samples\\load_file_01.dat";
-
-			// Create payload for request.
+			// Create request's payload
 			var createJobPayload = new
 			{
 				applicationName = "Import-service-sample-app",
 				correlationID = "Sample-job-0001"
 			};
 
-			// Configuration settings for document import. Builder is used to create settings.
-			ImportDocumentSettings importSettings = ImportDocumentSettingsBuilder.Create()
-				.WithAppendMode()
-				.WithNatives(x => x
-					.WithFilePathDefinedInColumn(filePathColumnIndex)
-					.WithFileNameDefinedInColumn(fileNameColumnIndex))
-				.WithoutImages()
-				.WithFieldsMapped(x => x
-					.WithField(controlNumberColumnIndex, "Control Number")
-					.WithField(custodianColumnIndex, "Custodian - Single Choice")
-					.WithField(emailToColumnIndex, "Email To")
-					.WithField(dateSentColumnIndex, "Date Sent"))
-				.WithoutFolders();
+			// Example of configuration settings for images import created without ImportDocumentSettingsBuilder.
+			ImportDocumentSettings importSettings = new ImportDocumentSettings()
+			{
+				Overlay = new OverlaySettings
+				{
+					Mode = OverlayMode.AppendOverlay,
+					KeyField = default,
+					MultiFieldOverlayBehaviour = MultiFieldOverlayBehaviour.UseRelativityDefaults,
+				},
+				Native = null,
+				Image = new ImageSettings
+				{
+					PageNumbering = PageNumbering.AutoNumberImages,
+					ProductionID = null,
+					LoadExtractedText = true,
+				},
+				Fields = null,
+				Folder = new FolderSettings
+				{
+					FolderPathColumnIndex = null,
+					RootFolderID = rootFolderId,
+				},
+				Other = new OtherSettings
+				{
+					ExtractedText = new ExtractedTextSettings
+					{
+						ValidateEncoding = true,
+					},
+				},
+			};
 
 			// Create payload for request.
 			var importSettingPayload = new { importSettings };
 
-			// Configuration settings for data source. Builder is used to create settings.
-			DataSourceSettings dataSourceSettings = DataSourceSettingsBuilder.Create()
-				.ForLoadFile(loadFile01Path)
-				.WithDelimiters(d => d
-					.WithColumnDelimiters('|')
-					.WithQuoteDelimiter('^')
-					.WithNewLineDelimiter('#')
-					.WithNestedValueDelimiter('&')
-					.WithMultiValueDelimiter('$'))
-				.WithFirstLineContainingHeaders()
-				.WithEndOfLineForWindows()
-				.WithStartFromBeginning()
-				.WithDefaultEncoding()
-				.WithDefaultCultureInfo();
+			// Configuration settings for data source created without DataSourceSettingsBuilder.
+			DataSourceSettings dataSourceSettings = new DataSourceSettings
+			{
+				Type = DataSourceType.Opticon,
+				Path = "C:\\DefaultFileRepository\\samples\\opticon_01.opt",
+				NewLineDelimiter = default,
+				ColumnDelimiter = default,
+				QuoteDelimiter = default,
+				MultiValueDelimiter = default,
+				NestedValueDelimiter = default,
+				Encoding = null,
+				CultureInfo = "en-us",
+				EndOfLine = DataSourceEndOfLine.Windows,
+				FirstLineContainsColumnNames = false,
+				StartLine = 0,
+			};
 
 			// Create payload for request.
 			var dataSourceSettingsPayload = new { dataSourceSettings };
@@ -96,7 +102,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			// endpoint: POST /import-jobs/{importId}
 			var createImportJobUri = RelativityImportEndpoints.GetCreateImportUri(workspaceId, importId);
 
-			var response = await httpClient.PostAsJsonAsync(createImportJobUri,createJobPayload);
+			var response = await httpClient.PostAsJsonAsync(createImportJobUri, createJobPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
 			// Add import document settings to existing import job (configure import job).
@@ -126,23 +132,27 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			// It may take some time for import job to be completed. Request data source details to monitor the current state.
 			// NOTE: You can also request job details to verify if job is finished - see appropriate sample.
 			// endpoint: GET import-jobs/{importId}/sources/{sourceId}/details"
-			var importSourceDetailsUri = RelativityImportEndpoints.GetImportSourceDetailsUri(workspaceId, importId, sourceId);
+			var importSourceDetailsUri =
+				RelativityImportEndpoints.GetImportSourceDetailsUri(workspaceId, importId, sourceId);
 
 			JsonSerializerOptions options = new()
 			{
-				Converters = { new JsonStringEnumConverter() }
+				Converters = {new JsonStringEnumConverter()}
 			};
-			var t = await httpClient.GetStringAsync(importSourceDetailsUri);
+
 			var dataSourceState = await ImportJobSampleHelper.WaitImportDataSourceToBeCompleted(
-				funcAsync: () => httpClient.GetFromJsonAsync<ValueResponse<DataSourceDetails>> (importSourceDetailsUri, options),
+				funcAsync: () =>
+					httpClient.GetFromJsonAsync<ValueResponse<DataSourceDetails>>(importSourceDetailsUri, options),
 				timeout: 10000);
 
 			// Get current import progress for specific data source.
 			// endpoint: GET import-jobs/{importId}/sources/{sourceId}/progress"
-			var importSourceProgressUri = RelativityImportEndpoints.GetImportSourceProgressUri(workspaceId, importId, sourceId);
+			var importSourceProgressUri =
+				RelativityImportEndpoints.GetImportSourceProgressUri(workspaceId, importId, sourceId);
 
-			var valueResponse = await httpClient.GetFromJsonAsync<ValueResponse<ImportProgress>>(importSourceProgressUri);
-			
+			var valueResponse =
+				await httpClient.GetFromJsonAsync<ValueResponse<ImportProgress>>(importSourceProgressUri);
+
 			if (valueResponse?.IsSuccess ?? false)
 			{
 				Console.WriteLine("\n");
