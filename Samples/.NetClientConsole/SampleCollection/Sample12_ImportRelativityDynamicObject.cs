@@ -25,11 +25,13 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 	{
 		/// <summary>
 		/// Example of import  Relativity Dynamic Object (RDO).
-		/// Domain object used in this example.
+		/// NOTE: Domain object is used in this example. Please insert document from sample01 first.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample12_ImportRelativityDynamicObject()
 		{
+			Console.WriteLine($"Running {nameof(Sample12_ImportRelativityDynamicObject)}");
+
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
@@ -61,8 +63,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 				.WithAppendMode()
 				.WithFieldsMapped(f => f
 					.WithField(nameColumnIndex, "Name")
-
-					// .WithField(domainEmailBccColumnIndex, "Domains (Email BCC)")
+					// Use sample01 and load_file_01.dat first to import document. The following fields have reference to these documents.
+					// If you do not use these field please just comment them.
 					.WithField(domainEmailCcColumnIndex, "Domains (Email CC)")
 					.WithField(domainEmailFromColumnIndex, "Domains (Email From)")
 					.WithField(domainEmailToColumnIndex, "Domains (Email To)"))
@@ -153,3 +155,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 		}
 	}
 }
+
+/* Expected console result:
+	Data source state: Completed
+	Import data source progress: Total records: 3, Imported records: 3, Records with errors: 0
+ */

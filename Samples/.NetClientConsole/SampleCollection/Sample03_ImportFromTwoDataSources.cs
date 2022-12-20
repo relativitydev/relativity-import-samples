@@ -172,3 +172,10 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 		}
 	}
 }
+/* Expected console result:
+	Data source 01 state: Completed
+	Import data source progress: Total records: 4, Imported records: 4, Records with errors: 0
+
+	Data source 02 state: Completed
+	Import data source progress: Total records: 2, Imported records: 2, Records with errors: 0
+ */

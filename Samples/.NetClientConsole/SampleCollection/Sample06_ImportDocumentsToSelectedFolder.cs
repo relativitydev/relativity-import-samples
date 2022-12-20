@@ -29,6 +29,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample06_ImportDocumentsToSelectedFolder()
 		{
+			Console.WriteLine($"Running {nameof(Sample06_ImportDocumentsToSelectedFolder)}");
+
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
@@ -37,7 +39,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			const int workspaceId = 1019056;
 
 			// destination folder artifact id.
-			const int rootFolderId = 1041269;
+			const int rootFolderId = 1040204;
 
 			// set of columns indexes in load file used in import settings.
 			const int folderPathColumnIndex = 15;
@@ -148,3 +150,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 		}
 	}
 }
+
+/* Expected console result:
+	Data source state: Completed
+	Import data source progress: Total records: 2, Imported records: 2, Records with errors: 0
+ */

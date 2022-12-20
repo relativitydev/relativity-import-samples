@@ -22,8 +22,8 @@ namespace Relativity.Import.Samples.Net7Client.Helpers
 
 		public static string GetImportDetailsUri(int workspaceId, Guid importId) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/{importId}/details";
 		
-		public static string GetImportUri(int workspaceId, int size, int pageSize) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs";
+		public static string GetImportUri(int workspaceId, int start, int length) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/jobs/?start={start}&length={length}";
 
-		public static string GetRdoConfigurationUri(int workspaceId, Guid importId) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/{importId}//rdos-configurations";
+		public static string GetRdoConfigurationUri(int workspaceId, Guid importId) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/{importId}/rdos-configurations";
 	}
 }

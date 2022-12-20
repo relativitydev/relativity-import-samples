@@ -8,14 +8,12 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 	using System.Net.Http;
 	using System.Threading.Tasks;
 	using Relativity.Import.V1;
-	using Relativity.Import.V1.Builders.DataSource;
 	using Relativity.Import.V1.Models.Settings;
 	using Relativity.Import.V1.Models.Sources;
 	using System.Net.Http.Json;
 	using Relativity.Import.V1.Models;
 	using System.Text.Json.Serialization;
 	using System.Text.Json;
-	using Relativity.Import.V1.Builders.Rdos;
 	using Relativity.Import.Samples.Net7Client.Helpers;
 
 	/// <summary>
@@ -25,11 +23,13 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 	{
 		/// <summary>
 		/// Example of import  Relativity Dynamic Object (RDO).
-		/// Domain object used in this example.
+		/// NOTE: Domain object is used in this example. Please insert document from sample01 first.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample14_ImportRdoSettings()
 		{
+			Console.WriteLine($"Running {nameof(Sample14_ImportRdoSettings)}");
+
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
@@ -74,18 +74,13 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 							ColumnIndex = nameColumnIndex,
 							ContainsFilePath = false,
 						},
+						// Use sample01 and load_file_01.dat first to import document. The following fields have reference to these documents.
+						// If you do not use these field please just comment them.
 						new FieldMapping
 						{
 							Field = "Domains (Email CC)",
 							ContainsID = false,
 							ColumnIndex = domainEmailCcColumnIndex,
-							ContainsFilePath = false,
-						},
-						new FieldMapping
-						{
-							Field = "Domain (Email BCC)",
-							ContainsID = false,
-							ColumnIndex = domainEmailBccColumnIndex,
 							ContainsFilePath = false,
 						},
 						new FieldMapping
@@ -201,3 +196,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 		}
 	}
 }
+
+/* Expected console result:
+	Data source state: Completed
+	Import data source progress: Total records: 3, Imported records: 3, Records with errors: 0
+ */

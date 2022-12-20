@@ -27,6 +27,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample11_ImportDocumentSettingsForImages()
 		{
+			Console.WriteLine($"Running {nameof(Sample11_ImportDocumentSettingsForImages)}");
+
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
@@ -162,3 +164,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 		}
 	}
 }
+
+/* Expected console result:
+	Data source state: Completed
+	Import data source progress: Total records: 5, Imported records: 5, Records with errors: 0
+ */

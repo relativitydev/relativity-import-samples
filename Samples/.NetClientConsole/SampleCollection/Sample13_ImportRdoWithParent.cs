@@ -29,6 +29,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample13_ImportRdoWithParent()
 		{
+			Console.WriteLine($"Running {nameof(Sample13_ImportRdoWithParent)}");
+
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();

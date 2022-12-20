@@ -9,7 +9,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 	using System.Threading.Tasks;
 	using Relativity.Import.V1.Models.Settings;
 	using System.Net.Http.Json;
-	using Relativity.Import.V1.Builders.Rdos;
+	using System.Text.Json;
 	using Relativity.Import.Samples.Net7Client.Helpers;
 	using Relativity.Import.V1.Builders.Documents;
 
@@ -24,6 +24,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample16_ReadImportDocumentSettings()
 		{
+			Console.WriteLine($"Running {nameof(Sample16_ReadImportDocumentSettings)}");
+
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 
@@ -74,10 +76,57 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			response = await httpClient.PostAsJsonAsync(documentConfigurationUri, importSettingPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
-			var getResponse = await httpClient.GetFromJsonAsync<dynamic>(documentConfigurationUri);
-			await ImportJobSampleHelper.EnsureSuccessResponse(getResponse);
+			// Get import document settings for existing import job.
+			// endpoint: GET /import-jobs/{importId}/documents-configurations
+			var getResponse = await httpClient.GetAsync(documentConfigurationUri);
+			
+			//Check and print values
+			var valueResponse = await ImportJobSampleHelper.EnsureSuccessValueResponse<ImportDocumentSettings>(getResponse);
+			Console.WriteLine($"FieldMappings count: {valueResponse?.Value.Fields.FieldMappings.Length}");
 
-			Console.WriteLine(getResponse?.Value.Rdo.ArtifactTypeID);
+			var json = JsonSerializer.Serialize(valueResponse, new JsonSerializerOptions()
+			{
+				WriteIndented = true
+			});
+			
+			Console.WriteLine(json);
 		}
 	}
 }
+
+/* Expected console result:
+Response.IsSuccess: True
+FieldMappings count: 2
+
+{
+  "Value": {
+	"Overlay": null,
+	"Native": {
+	  "FilePathColumnIndex": 22,
+	  "FileNameColumnIndex": 13
+	},
+	"Image": null,
+	"Fields": {
+	  "FieldMappings": [
+		{
+		  "ColumnIndex": 0,
+		  "Field": "Control Number",
+		  "ContainsID": false,
+		  "ContainsFilePath": false
+		},
+		{
+		  "ColumnIndex": 11,
+		  "Field": "Email To",
+		  "ContainsID": false,
+		  "ContainsFilePath": false
+		}
+	  ]
+	},
+	"Folder": null,
+	"Other": null
+  },
+  "IsSuccess": true,
+  "ErrorMessage": null,
+  "ErrorCode": null,
+  "ImportJobID": "7ac85319-831c-4bfc-a8de-9d645c55fbd0"
+  */

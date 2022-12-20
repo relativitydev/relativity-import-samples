@@ -8,8 +8,6 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 	using System.Net.Http;
 	using System.Threading.Tasks;
 	using Relativity.Import.V1;
-	using Relativity.Import.V1.Builders.Documents;
-	using Relativity.Import.V1.Models.Settings;
 	using System.Net.Http.Json;
 	using Relativity.Import.V1.Models;
 	using Relativity.Import.Samples.Net7Client.Helpers;
@@ -25,30 +23,31 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample17_GetImportJobs()
 		{
+			Console.WriteLine($"Running {nameof(Sample17_GetImportJobs)}");
+
 			// Destination workspace artifact Id.
-			const int workspaceId = 1031725;
+			const int workspaceId = 1019056;
 
-			const int importCount = 10;
-			const int pageSize = 7;
-			const int filePathColumnIndex = 11;
-			const int fileNameColumnIndex = 13;
+			const int importCount = 7;
 
-			// Configuration settings for document import. Builder is used to create settings.
-			ImportDocumentSettings importSettings = ImportDocumentSettingsBuilder.Create()
-				.WithAppendMode()
-				.WithNatives(x => x
-					.WithFilePathDefinedInColumn(filePathColumnIndex)
-					.WithFileNameDefinedInColumn(fileNameColumnIndex))
-				.WithoutImages()
-				.WithoutFieldsMapped()
-				.WithoutFolders();
-
-
+			// Read import job collection (guid list) for particular workspace.
 			HttpClient httpClient = HttpClientHelper.CreateHttpClient();
 
-			// Create n import jobs.
-			for (int i = 0; i < importCount; i++)
+			var getJobsUri = RelativityImportEndpoints.GetImportUri(workspaceId, 0, 1);
+
+			var response = await httpClient.GetAsync(getJobsUri);
+			var valueResponse = await ImportJobSampleHelper.EnsureSuccessValueResponse<ImportJobs>(response);
+			if (valueResponse is {IsSuccess: true})
 			{
+				Console.WriteLine($"Import Jobs total count: {valueResponse.Value.TotalCount}");
+			}
+
+			const int length = 7;
+
+			// Create n import jobs.
+			for (var i = 0; i < importCount; i++)
+			{
+				Console.WriteLine($"Creating {importCount} jobs");
 				Guid importId = Guid.NewGuid();
 				var createImportJobUri = RelativityImportEndpoints.GetCreateImportUri(workspaceId, importId);
 				// Create payload for request.
@@ -60,39 +59,40 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 				// Create import job.
 				// endpoint: POST /import-jobs/{importId}
-				var response = await httpClient.PostAsJsonAsync(createImportJobUri, createJobPayload);
+				response = await httpClient.PostAsJsonAsync(createImportJobUri, createJobPayload);
 				await ImportJobSampleHelper.EnsureSuccessResponse(response);
-
-				// Start import job.
-				// endpoint: POST /import-jobs/{importId}/begin
-				var beginImportJobUri = RelativityImportEndpoints.GetBeginJobUri(workspaceId, importId);
-				response = await httpClient.PostAsync(beginImportJobUri, null);
-				await ImportJobSampleHelper.EnsureSuccessResponse(response);
-
 			}
 
 			// Read import job collection (guid list) for particular workspace. Paginating is supported thanks to dedicated parameters.
-			var getJobsUri = RelativityImportEndpoints.GetImportUri(workspaceId, 0, pageSize);
+			getJobsUri = RelativityImportEndpoints.GetImportUri(workspaceId, 0, length);
 
-			ValueResponse<ImportJobs>? valueResponse =
+			
+			valueResponse =
 				await httpClient.GetFromJsonAsync<ValueResponse<ImportJobs>>(getJobsUri);
 
 
 			if (valueResponse is {IsSuccess: true})
 			{
-				Console.WriteLine($"Total jobs amount: {valueResponse.Value.TotalCount}");
-
+				Console.WriteLine($"Jobs total count: {valueResponse.Value.TotalCount}");
+				Console.WriteLine($"ImportJobIds:");
 				foreach (var importJobId in valueResponse.Value.Jobs)
 				{
-					Console.WriteLine($"Job Id: {importJobId}");
-
-					// End jobs
-					var endImportJobUri = RelativityImportEndpoints.GetEndJobUri(workspaceId, importJobId);
-					var response = await httpClient.PostAsync(endImportJobUri, null);
-					await ImportJobSampleHelper.EnsureSuccessResponse(response);
+					Console.WriteLine(importJobId);
 				}
-
 			}
 		}
 	}
 }
+
+/* Example of console result 
+	Response.IsSuccess: True
+	Jobs total count: 15
+	ImportJobIds:
+	39753e22-a948-4c74-8ebd-3abd9fa47473
+	8986cb61-8f1f-4ad7-96c0-8dc3f229fd1c
+	33504c27-0bb2-46cd-9651-e539a4ae672f
+	b83d8a04-320e-4256-93dc-4957e9908d14
+	8b2ad1aa-c18e-4ccd-a1b3-9cacdf2d1ce6
+	1bac695d-bab2-41fb-a6f7-0d995c5e6871
+	a98b009e-01b1-4b3c-96b4-491d33fb5827
+*/

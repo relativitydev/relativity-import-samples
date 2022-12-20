@@ -28,13 +28,15 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample07_ImportDocumentSettingsForNatives()
 		{
+			Console.WriteLine($"Running {nameof(Sample07_ImportDocumentSettingsForNatives)}");
+
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace and folder artifact Ids.
 			const int workspaceId = 1019056;
-			const int rootFolderId = 1042316;
+			const int rootFolderId = 1040204;
 
 			// overlay keyField
 			const string keyField = "Control Number";
@@ -200,6 +202,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 		}
 	}
 }
-// Expected console output for provided sample load file.
-// Data source state: Completed
-// Import progress: Total records: 2, Imported records: 2, Records with errors: 0
+/* Expected console result:
+	Data source state: Completed
+	Import data source progress: Total records: 2, Imported records: 2, Records with errors: 0
+ */

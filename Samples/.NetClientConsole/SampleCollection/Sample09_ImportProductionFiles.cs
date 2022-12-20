@@ -30,6 +30,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 		/// </summary>
 		public async Task Sample09_ImportProductionFiles()
 		{
+			Console.WriteLine($"Running {nameof(Sample09_ImportProductionFiles)}");
+
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
@@ -38,7 +40,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			const int workspaceId = 1019056;
 
 			// destination production set artifact Id.
-			const int productionSetsArtifactId = 1042663;
+			const int productionSetsArtifactId = 1040546;
 
 			// Path to the file in opticon format used in data source settings.
 			const string opticonFilePath = "C:\\DefaultFileRepository\\samples\\opticon_02.opt";
@@ -125,7 +127,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			var dataSourceState = await ImportJobSampleHelper.WaitImportDataSourceToBeCompleted(
 				funcAsync: () =>
 					httpClient.GetFromJsonAsync<ValueResponse<DataSourceDetails>>(importSourceDetailsUri, options),
-				timeout: 10000);
+				timeout: 120000);
 
 			// Get current import progress for specific data source.
 			// endpoint: GET import-jobs/{importId}/sources/{sourceId}/progress"
@@ -145,3 +147,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 		}
 	}
 }
+
+/* Expected console result:
+	Data source state: Completed
+	Import data source progress: Total records: 5, Imported records: 5, Records with errors: 0
+ */
