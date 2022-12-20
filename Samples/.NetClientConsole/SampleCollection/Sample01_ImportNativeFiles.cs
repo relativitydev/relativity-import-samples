@@ -132,7 +132,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			{
 				Converters = { new JsonStringEnumConverter() }
 			};
-			var t = await httpClient.GetStringAsync(importSourceDetailsUri);
+
 			var dataSourceState = await ImportJobSampleHelper.WaitImportDataSourceToBeCompleted(
 				funcAsync: () => httpClient.GetFromJsonAsync<ValueResponse<DataSourceDetails>> (importSourceDetailsUri, options),
 				timeout: 10000);
@@ -152,3 +152,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 		}
 	}
 }
+
+/* Expected Console Result
+	Data source state: Completed
+	Import data source progress: Total records: 4, Imported records: 4, Records with errors: 0
+ */
