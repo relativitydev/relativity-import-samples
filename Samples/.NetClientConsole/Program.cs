@@ -23,7 +23,7 @@ namespace Relativity.Import.Samples.Net7Client
 			var task = Task.Run(
 				async () =>
 				{
-					 await sampleCollection.Sample01_ImportNativeFiles();
+					// await sampleCollection.Sample01_ImportNativeFiles();
 
 					// await sampleCollection.Sample02_ImportDocumentsInOverlayMode();
 
@@ -35,7 +35,7 @@ namespace Relativity.Import.Samples.Net7Client
 
 					await sampleCollection.Sample06_ImportDocumentsToSelectedFolder();
 
-					// await v.Sample07_ImportDocumentSettingsForNatives();
+					// await sampleCollection.Sample07_ImportDocumentSettingsForNatives();
 
 					// await sampleCollection.Sample08_ImportImages();
 

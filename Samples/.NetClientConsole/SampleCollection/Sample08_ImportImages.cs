@@ -43,7 +43,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			var createJobPayload = new
 			{
 				applicationName = "Import-service-sample-app",
-				correlationID = "Sample-job-0001"
+				correlationID = "Sample-job-0008"
 			};
 
 			// Configuration settings for images import. Builder is used to create settings.
@@ -59,7 +59,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 				.WithoutFolders();
 
 			// Create payload for request.
-			var importSettingPayload = new {importSettings};
+			var importSettingPayload = new { importSettings };
 
 			// Configuration settings for data source. Builder is used to create settings.
 			// ForOpticonFile(path) is used when importing images.
@@ -72,7 +72,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 				.WithDefaultCultureInfo();
 
 			// Create payload for request.
-			var dataSourceSettingsPayload = new {dataSourceSettings};
+			var dataSourceSettingsPayload = new { dataSourceSettings };
 
 			HttpClient httpClient = HttpClientHelper.CreateHttpClient();
 
