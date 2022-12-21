@@ -42,10 +42,12 @@ namespace Relativity.Import.Samples.Net7Client.Helpers
 
 		public static async Task<ValueResponse<T>> EnsureSuccessValueResponse<T>(HttpResponseMessage message)
 		{
-			var saveColor = Console.ForegroundColor;
-			Console.ForegroundColor = ConsoleColor.DarkGreen;
-			Console.WriteLine($"{message.RequestMessage?.Method} {message.RequestMessage?.RequestUri?.PathAndQuery}");
-			Console.ForegroundColor = saveColor;
+			ConsoleWriteLine($"{message.RequestMessage?.Method} {message.RequestMessage?.RequestUri?.PathAndQuery}",
+				ConsoleColor.DarkGreen);
+			//var saveColor = Console.ForegroundColor;
+			//Console.ForegroundColor = ConsoleColor.DarkGreen;
+			//Console.WriteLine($"{message.RequestMessage?.Method} {message.RequestMessage?.RequestUri?.PathAndQuery}");
+			//Console.ForegroundColor = saveColor;
 
 			message.EnsureSuccessStatusCode();
 			var response = await HttpClientHelper.DeserializeResponse<ValueResponse<T>>(message);
@@ -112,5 +114,14 @@ namespace Relativity.Import.Samples.Net7Client.Helpers
 
 			return state;
 		}
+
+		internal static void ConsoleWriteLine(string message, ConsoleColor color)
+		{
+			var saveColor = Console.ForegroundColor;
+			Console.ForegroundColor = color;
+			Console.WriteLine(message);
+			Console.ForegroundColor = saveColor;
+		}
+		
 	}
 }

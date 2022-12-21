@@ -66,10 +66,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			// Read import job collection (guid list) for particular workspace. Paginating is supported thanks to dedicated parameters.
 			getJobsUri = RelativityImportEndpoints.GetImportUri(workspaceId, 0, length);
 
-			
 			valueResponse =
 				await httpClient.GetFromJsonAsync<ValueResponse<ImportJobs>>(getJobsUri);
-
 
 			if (valueResponse is {IsSuccess: true})
 			{

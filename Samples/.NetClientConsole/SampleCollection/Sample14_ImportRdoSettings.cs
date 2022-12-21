@@ -39,7 +39,6 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// set of columns indexes in load file used in import settings.Example import of Domain RDO.
 			const int nameColumnIndex = 0;
-			const int domainEmailBccColumnIndex = 2;
 			const int domainEmailCcColumnIndex = 3;
 			const int domainEmailFromColumnIndex = 4;
 			const int domainEmailToColumnIndex = 5;
@@ -146,7 +145,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Add data source settings to existing import job.
 			// endpoint: POST /import-jobs/{importId}/sources/{sourceId}
-			var importSourcesUri = RelativityImportEndpoints.GetImportSourcesUri(workspaceId, importId, sourceId);
+			var importSourcesUri = RelativityImportEndpoints.GetImportSourceUri(workspaceId, importId, sourceId);
 			response = await httpClient.PostAsJsonAsync(importSourcesUri, dataSourceSettingsPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 

@@ -119,7 +119,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Add first data source settings to existing import job.
 			// endpoint: POST /import-jobs/{importId}/sources/{sourceId}
-			var importSourcesUri = RelativityImportEndpoints.GetImportSourcesUri(workspaceId, importId, source01Id);
+			var importSourcesUri = RelativityImportEndpoints.GetImportSourceUri(workspaceId, importId, source01Id);
 			response = await httpClient.PostAsJsonAsync(importSourcesUri, dataSourceSettingsPayload01);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
@@ -131,7 +131,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Add second data source settings to existing import job.
 			// Both data sources are added before job starts.
-			importSourcesUri = RelativityImportEndpoints.GetImportSourcesUri(workspaceId, importId, source02Id);
+			importSourcesUri = RelativityImportEndpoints.GetImportSourceUri(workspaceId, importId, source02Id);
 			response = await httpClient.PostAsJsonAsync(importSourcesUri, dataSourceSettingsPayload02);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 

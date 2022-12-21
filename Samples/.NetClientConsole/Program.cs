@@ -23,17 +23,17 @@ namespace Relativity.Import.Samples.Net7Client
 			var task = Task.Run(
 				async () =>
 				{
-					// await sampleCollection.Sample01_ImportNativeFiles();
+					//await sampleCollection.Sample01_ImportNativeFiles();
 
 					// await sampleCollection.Sample02_ImportDocumentsInOverlayMode();
 
-					//await sampleCollection.Sample03_ImportFromTwoDataSources();
+					// await sampleCollection.Sample03_ImportFromTwoDataSources();
 
-					//await sampleCollection.Sample04_AddDataSourceToRunningJob();
+					// await sampleCollection.Sample04_AddDataSourceToRunningJob();
 
 					// await sampleCollection.Sample05_ImportDocumentsWithExtractedText();
 
-					await sampleCollection.Sample06_ImportDocumentsToSelectedFolder();
+					// await sampleCollection.Sample06_ImportDocumentsToSelectedFolder();
 
 					// await sampleCollection.Sample07_ImportDocumentSettingsForNatives();
 
@@ -43,31 +43,31 @@ namespace Relativity.Import.Samples.Net7Client
 
 					// await sampleCollection.Sample10_ImportImagesInAppendOverlayMode();
 
-					// await sampleCollection.Sample11_ImportDocumentSettingsForImages();
+					//await sampleCollection.Sample11_ImportDocumentSettingsForImages();
 
 					// await sampleCollection.Sample12_ImportRelativityDynamicObject();
 
-					// await sampleCollection.Sample13_ImportRdoWithParent();
+					// todo await sampleCollection.Sample13_ImportRdoWithParent();
 
 					// await sampleCollection.Sample14_ImportRdoSettings();
 
-					//await sampleCollection.Sample15_ReadImportRdoSettings();
+					// await sampleCollection.Sample15_ReadImportRdoSettings();
 
 					// await sampleCollection.Sample16_ReadImportDocumentSettings();
 
 					// await sampleCollection.Sample17_GetImportJobs();
 
-					// todo await sampleCollection.Sample18_GetDataSource();
+					// await sampleCollection.Sample18_GetDataSource();
 
-					// todo await sampleCollection.Sample19_GetImportJobProgress();
+					// await sampleCollection.Sample19_GetImportJobProgress();
 
-					// todo await sampleCollection.Sample20_GetDataSourceProgress();
+					 // await sampleCollection.Sample20_GetDataSourceProgress();
 
 					// todo await sampleCollection.Sample21_CancelStartedJob();
 
-					// todo await sampleCollection.Sample22_ReadResponse();
+					// await sampleCollection.Sample22_ReadResponse();
 
-					// todo await sampleCollection.Sample23_GetDataSourceErrors();
+					await sampleCollection.Sample23_GetDataSourceErrors();
 				});
 
 			try
