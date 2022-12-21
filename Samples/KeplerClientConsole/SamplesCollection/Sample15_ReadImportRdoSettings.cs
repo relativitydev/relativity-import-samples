@@ -6,8 +6,8 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 {
 	using System;
 	using System.Threading.Tasks;
-    using Relativity.Import.V1;
-    using Relativity.Import.V1.Builders.Rdos;
+	using Relativity.Import.V1;
+	using Relativity.Import.V1.Builders.Rdos;
 	using Relativity.Import.V1.Models.Settings;
 
 	/// <summary>

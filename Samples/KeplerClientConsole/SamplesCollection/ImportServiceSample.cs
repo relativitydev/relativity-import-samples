@@ -8,8 +8,8 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 	using System.Linq;
 	using System.Threading;
 	using System.Threading.Tasks;
-    using Relativity.Import.V1;
-    using Relativity.Import.V1.Models;
+	using Relativity.Import.V1;
+	using Relativity.Import.V1.Models;
 	using Relativity.Import.V1.Models.Sources;
 	using Relativity.Services.ServiceProxy;
 
