@@ -8,6 +8,8 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 	using System.Linq;
 	using System.Threading;
 	using System.Threading.Tasks;
+
+	using Relativity.Import.Samples.NetFrameworkClient.ImportSampleHelpers;
 	using Relativity.Import.V1;
 	using Relativity.Import.V1.Models;
 	using Relativity.Import.V1.Models.Sources;
@@ -19,39 +21,13 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 	public partial class ImportServiceSample
 	{
 		private readonly IServiceFactory _serviceFactory;
-		private readonly string _host;
-		private readonly string _username;
-		private readonly string _password;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ImportServiceSample"/> class.
 		/// </summary>
-		/// <param name="host">relativity host.</param>
-		/// <param name="username">username.</param>
-		/// <param name="password">password.</param>
-		public ImportServiceSample(string host, string username, string password)
+		public ImportServiceSample()
 		{
-			this._host = host;
-			this._username = username;
-			this._password = password;
-
-			this._serviceFactory = this.GetServiceFactory();
-		}
-
-		/// <summary>
-		/// Helper method create ServiceFactory class.
-		/// Use the ServiceFactory class to create proxies for Kepler services. See documentation for details:
-		/// https://platform.relativity.com/RelativityOne/Content/Kepler_framework/Proxies_and_authentication.htm#Service .
-		/// </summary>
-		/// <returns>ServiceFactory instance.</returns>
-		protected IServiceFactory GetServiceFactory()
-		{
-			Uri relativityRestUri = new Uri($"{this._host}relativity.rest/api");
-			Credentials credentials = new UsernamePasswordCredentials(this._username, this._password);
-
-			ServiceFactorySettings settings = new ServiceFactorySettings(relativityRestUri, credentials);
-
-			return new ServiceFactory(settings);
+			this._serviceFactory = KeplerProxyHelper.GetServiceFactory();
 		}
 
 		/// <summary>
