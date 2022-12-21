@@ -25,6 +25,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 	{
 		/// <summary>
 		/// Example of import Relativity Dynamic Objects (RDO) with selecting its parent.
+		/// NOTE: Sample based on the Domain object with object imported in sample12.
+		/// It requires create descendant object for Domain object first. 
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample13_ImportRdoWithParent()
@@ -39,15 +41,14 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			const int workspaceId = 1019056;
 
 			// set of columns indexes in load file used in import settings.
-			const int nameIdColumnIndex = 2;
-			const int valueColumnIndex = 3;
-			const int parentObjectIdColumnIndex = 4;
+			const int nameColumnIndex = 0;
+			const int parentObjectIdColumnIndex = 2;
 
 			// RDO artifact type id
-			const int rdoArtifactTypeID = 1000027;
+			const int rdoArtifactTypeID = 1000056;
 
 			// Path to the load file used in data source settings.
-			const string rdoLoadFile = "C:\\DefaultFileRepository\\samples\\rdo_load_file_01.dat";
+			const string rdoLoadFile = "C:\\DefaultFileRepository\\samples\\rdo_load_file_03.dat";
 
 			// Create request's payload
 			var createJobPayload = new
@@ -60,8 +61,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			ImportRdoSettings importSettings = ImportRdoSettingsBuilder.Create()
 				.WithAppendMode()
 				.WithFieldsMapped(f => f
-					.WithObjectFieldContainsID(nameIdColumnIndex, "nameID")
-					.WithField(valueColumnIndex, "Value"))
+					.WithField(nameColumnIndex, "Name"))
 				.WithRdo(f => f
 					.WithArtifactTypeId(rdoArtifactTypeID)
 					.WithParentColumnIndex(parentObjectIdColumnIndex));
@@ -149,3 +149,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 		}
 	}
 }
+/* Expected console result:
+ Data source state: Completed
+ Import data source progress: Total records: 3, Imported records: 3, Records with errors: 0
+ */

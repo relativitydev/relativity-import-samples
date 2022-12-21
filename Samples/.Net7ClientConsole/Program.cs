@@ -17,13 +17,14 @@ namespace Relativity.Import.Samples.Net7Client
 
 			// Execute samples:
 			var sampleCollection = new SampleCollection.ImportServiceSample();
-			// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 			// Uncomment the samples you wish to run:
-			// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			// NOTE: Copy sample source files into destination location.
+			// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 			var task = Task.Run(
 				async () =>
 				{
-					//await sampleCollection.Sample01_ImportNativeFiles();
+					await sampleCollection.Sample01_ImportNativeFiles();
 
 					// await sampleCollection.Sample02_ImportDocumentsInOverlayMode();
 
@@ -47,7 +48,7 @@ namespace Relativity.Import.Samples.Net7Client
 
 					// await sampleCollection.Sample12_ImportRelativityDynamicObject();
 
-					// todo await sampleCollection.Sample13_ImportRdoWithParent();
+					// await sampleCollection.Sample13_ImportRdoWithParent();
 
 					// await sampleCollection.Sample14_ImportRdoSettings();
 
@@ -63,7 +64,7 @@ namespace Relativity.Import.Samples.Net7Client
 
 					 // await sampleCollection.Sample20_GetDataSourceProgress();
 
-					await sampleCollection.Sample21_CancelStartedJob();
+					// await sampleCollection.Sample21_CancelStartedJob();
 
 					// await sampleCollection.Sample22_ReadResponse();
 
