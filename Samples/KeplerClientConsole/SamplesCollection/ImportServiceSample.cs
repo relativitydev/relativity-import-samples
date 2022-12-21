@@ -2,7 +2,7 @@
 // © Relativity All Rights Reserved.
 // </copyright>
 
-namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
+namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 {
 	using System;
 	using System.Linq;

@@ -2,11 +2,11 @@
 // © Relativity All Rights Reserved.
 // </copyright>
 
-namespace Relativity.Import.Samples.dotNetWithKepler
+namespace Relativity.Import.Samples.NetFrameworkClient
 {
 	using System;
 	using System.Threading.Tasks;
-	using SamplesCollection;
+	using Relativity.Import.Samples.NetFrameworkClient.SamplesCollection;
 
 	/// <summary>
 	/// Console application presenting using Relativity.Import.sdk in samples.
