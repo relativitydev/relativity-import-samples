@@ -63,11 +63,11 @@ namespace Relativity.Import.Samples.Net7Client
 
 					 // await sampleCollection.Sample20_GetDataSourceProgress();
 
-					// todo await sampleCollection.Sample21_CancelStartedJob();
+					await sampleCollection.Sample21_CancelStartedJob();
 
 					// await sampleCollection.Sample22_ReadResponse();
 
-					await sampleCollection.Sample23_GetDataSourceErrors();
+					// await sampleCollection.Sample23_GetDataSourceErrors();
 				});
 
 			try

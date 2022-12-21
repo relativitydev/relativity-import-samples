@@ -13,6 +13,8 @@ namespace Relativity.Import.Samples.Net7Client.Helpers
 
 		public static string GetEndJobUri(int workspaceId, Guid importId) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/{importId}/end";
 
+		public static string GetCancelJobUri(int workspaceId, Guid importId) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/{importId}/cancel";
+
 		public static string GetImportDetailsUri(int workspaceId, Guid importId) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/{importId}/details";
 
 		public static string GetImportProgressUri(int workspaceId, Guid importId) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/{importId}/progress";
@@ -35,7 +37,6 @@ namespace Relativity.Import.Samples.Net7Client.Helpers
 		public static string GetImportSourceProgressUri(int workspaceId, Guid importId, Guid sourceId) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/{importId}/sources/{sourceId}/progress";
 		
 		public static string GetItemErrorUri(int workspaceId, Guid importId, Guid sourceId, int start, int length) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/{importId}/sources/{sourceId}/itemerrors?start={start}&length={length}";
-
 
 	}
 }
