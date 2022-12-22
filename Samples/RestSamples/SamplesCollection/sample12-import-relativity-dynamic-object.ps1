@@ -5,17 +5,20 @@
 $importId = New-Guid
 $sourceId = New-Guid
 $workspaceId = 1000000
-$loadFilePath = "C:\DefaultFileRepository\samples\load_file_01.dat"
+$rdoArtifactTypeID = 1000001
+$loadFilePath = "C:\DefaultFileRepository\samples\rdo_load_file_01.dat"
 $global:Endpoints = [Endpoints]::new($workspaceId)
 $global:WriteInformation = [WriteInformation]::new()
 
-Context "Sample01 Import native files" {
+# Example of import  Relativity Dynamic Object (RDO).
+# NOTE: Domain object is used in this example. Please insert document from sample01 first.
+Context "Sample12 Import relativity dynamic object" {
     Describe "Create job" {
         $uri = $global:Endpoints.importJobCreateUri($importId)
 
         $body = @{
             applicationName = "Import-service-sample-app"
-            correlationID = "Sample-job-0001"
+            correlationID = "Sample-job-import-0012"
         } | ConvertTo-Json -Depth 10
 		
         $response = $global:WebRequest.callPost($uri, $body)
@@ -23,49 +26,46 @@ Context "Sample01 Import native files" {
         Write-Information -MessageData "Job $importId created" -InformationAction Continue
     }
 
-    Describe "Create document configuration" {
-        $uri = $global:Endpoints.documentConfigurationUri($importId)
-        $jobConfigurationBody = '{
-            "importSettings" :
-            {
-                "Overlay":null,
-                "Native":{
-                    "FilePathColumnIndex": "22",
-                    "FileNameColumnIndex": "13"
-                },
-                "Image":null,
-                "Production":null,
-                "Fields": {
-                    "FieldMappings": [
-                        {
-                            "ColumnIndex": 0,
-                            "Field": "Control Number",
-                            "ContainsID": false,
-                            "ContainsFilePath": false
-                        },
-                        {
-                            "ColumnIndex": 1,
-                            "Field": "Custodian - Single Choice",
-                            "ContainsID": false,
-                            "ContainsFilePath": false
-                        },
-                        {
-                            "ColumnIndex": 11,
-                            "Field": "Email To",
-                            "ContainsID": false,
-                            "ContainsFilePath": false
-                        },
-                        {
-                            "ColumnIndex": 5,
-                            "Field": "Date Sent",
-                            "ContainsID": false,
-                            "ContainsFilePath": false
-                        }
-                    ]
-                },
-                "Folder":null
+    Describe "Create RDO configuration" {
+        $uri = $global:Endpoints.rdoConfigurationUri($importId)
+        $field1 = @{
+            ColumnIndex = 0
+            Field = "Name"
+            ContainsID = $false
+            ContainsFilePath = $false
+        }
+        $field2 = @{
+            ColumnIndex = 3
+            Field = "Domains (Email CC)"
+            ContainsID = $false
+            ContainsFilePath = $false
+        }
+        $field3 = @{
+            ColumnIndex = 4
+            Field = "Domains (Email From)"
+            ContainsID = $false
+            ContainsFilePath = $false
+        }
+        $field4 = @{
+            ColumnIndex = 5
+            Field = "Domains (Email To)"
+            ContainsID = $false
+            ContainsFilePath = $false
+        }
+        $fields = @($field1, $field2, $field3, $field4)
+
+        $jobConfigurationBody = @{
+            importSettings =
+            @{
+                Overlay = $null
+                Fields = @{
+                    FieldMappings = $fields
+                }
+                "Rdo" = @{
+                    ArtifactTypeID = $rdoArtifactTypeID
+                }
             }
-        }'
+        } | ConvertTo-Json -Depth 10
         $response = $global:WebRequest.callPost($uri, $jobConfigurationBody)
         $global:WebRequest.checkIfSuccess($response)
         Write-Information -MessageData "Job configuration created" -InformationAction Continue
@@ -73,22 +73,23 @@ Context "Sample01 Import native files" {
 
     Describe "Add Source" {
         $uri = $global:Endpoints.importSourceUri($importId, $sourceId)
+
+        $loadFilePath = $loadFilePath.replace('\','\\')
+
         $dataSourceConfigurationBody = @{
             dataSourceSettings = @{
                 path = $loadFilePath
                 firstLineContainsColumnNames = $true
+                columnDelimiter = "\u0014"
+                quoteDelimiter = "\u00fe"
+                newLineDelimiter = "\u00ae"
+                nestedValueDelimiter = "\u005c"
+                multiValueDelimiter = "\u003b"
                 startLine = 0
-                columnDelimiter = "|"
-                quoteDelimiter = "^"
-                newLineDelimiter = "#"
-                nestedValueDelimiter = "&"
-                multiValueDelimiter = "$"
                 endOfLine = 0
-                encoding = $null
-                cultureInfo = "en-us"
                 type = 2
             }
-        } | ConvertTo-Json -Depth 10
+        } | ConvertTo-Json -Depth 10 | Foreach {[System.Text.RegularExpressions.Regex]::Unescape($_)}
 		
         $response = $global:WebRequest.callPost($uri, $dataSourceConfigurationBody)
         $global:WebRequest.checkIfSuccess($response)
@@ -138,8 +139,9 @@ Context "Sample01 Import native files" {
         $uri = $global:Endpoints.importSourceProgressUri($importId, $sourceId)
         $global:WriteInformation.getDataSourceProgress($uri)
 
+
         #Expected output
         #Data source state: Completed
-        #Data source progress: Total records: 4, Imported records: 4, Records with errors: 0
+        #Data source progress: Total records: 3, Imported records: 3, Records with errors: 0
     }
 }

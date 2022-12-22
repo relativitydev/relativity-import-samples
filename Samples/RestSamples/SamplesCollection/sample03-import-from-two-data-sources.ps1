@@ -3,19 +3,21 @@
 . "$global:rootDir\Helpers\WriteInformationClass.ps1"
 
 $importId = New-Guid
-$sourceId = New-Guid
+$source01Id = New-Guid
+$source02Id = New-Guid
 $workspaceId = 1000000
-$loadFilePath = "C:\DefaultFileRepository\samples\load_file_01.dat"
+$loadFile01Path = "C:\DefaultFileRepository\samples\load_file_01.dat"
+$loadFile02Path = "C:\DefaultFileRepository\samples\load_file_02.dat"
 $global:Endpoints = [Endpoints]::new($workspaceId)
 $global:WriteInformation = [WriteInformation]::new()
 
-Context "Sample01 Import native files" {
+Context "Sample03 Import from two data sources" {
     Describe "Create job" {
         $uri = $global:Endpoints.importJobCreateUri($importId)
 
         $body = @{
             applicationName = "Import-service-sample-app"
-            correlationID = "Sample-job-0001"
+            correlationID = "Sample-job-0003"
         } | ConvertTo-Json -Depth 10
 		
         $response = $global:WebRequest.callPost($uri, $body)
@@ -42,24 +44,6 @@ Context "Sample01 Import native files" {
                             "Field": "Control Number",
                             "ContainsID": false,
                             "ContainsFilePath": false
-                        },
-                        {
-                            "ColumnIndex": 1,
-                            "Field": "Custodian - Single Choice",
-                            "ContainsID": false,
-                            "ContainsFilePath": false
-                        },
-                        {
-                            "ColumnIndex": 11,
-                            "Field": "Email To",
-                            "ContainsID": false,
-                            "ContainsFilePath": false
-                        },
-                        {
-                            "ColumnIndex": 5,
-                            "Field": "Date Sent",
-                            "ContainsID": false,
-                            "ContainsFilePath": false
                         }
                     ]
                 },
@@ -71,12 +55,36 @@ Context "Sample01 Import native files" {
         Write-Information -MessageData "Job configuration created" -InformationAction Continue
     }
 
-    Describe "Add Source" {
-        $uri = $global:Endpoints.importSourceUri($importId, $sourceId)
+    Describe "Add Source 01" {
+        $uri = $global:Endpoints.importSourceUri($importId, $source01Id)
         $dataSourceConfigurationBody = @{
             dataSourceSettings = @{
-                path = $loadFilePath
+                path = $loadFile01Path
                 firstLineContainsColumnNames = $true
+                startLine = 0
+                columnDelimiter = "|"
+                quoteDelimiter = "^"
+                newLineDelimiter = "#"
+                nestedValueDelimiter = "&"
+                multiValueDelimiter = "$"
+                endOfLine = 0
+                encoding = $null
+                cultureInfo = "en-us"
+                type = 2
+            }
+        } | ConvertTo-Json -Depth 10
+		
+        $response = $global:WebRequest.callPost($uri, $dataSourceConfigurationBody)
+        $global:WebRequest.checkIfSuccess($response)
+        Write-Information -MessageData "Source $sourceId added" -InformationAction Continue
+    }
+
+    Describe "Add Source 02" {
+        $uri = $global:Endpoints.importSourceUri($importId, $source02Id)
+        $dataSourceConfigurationBody = @{
+            dataSourceSettings = @{
+                path = $loadFile02Path
+                firstLineContainsColumnNames = $false
                 startLine = 0
                 columnDelimiter = "|"
                 quoteDelimiter = "^"
@@ -131,15 +139,25 @@ Context "Sample01 Import native files" {
     }
 
     Describe "Imported records info" {
-        $uri = $global:Endpoints.importSourceDetailsUri($importId, $sourceId)
-        $sourceDetailsResponse = $global:WebRequest.callGet($uri)
-        $state = $sourceDetailsResponse."Value"."State"
-        Write-Information -MessageData "Data source state: $state" -InformationAction Continue
-        $uri = $global:Endpoints.importSourceProgressUri($importId, $sourceId)
+        $uri = $global:Endpoints.importSourceDetailsUri($importId, $source01Id)
+        $source01DetailsResponse = $global:WebRequest.callGet($uri)
+        $state01 = $source01DetailsResponse."Value"."State"
+        Write-Information -MessageData "Data source state: $state01" -InformationAction Continue
+        $uri = $global:Endpoints.importSourceProgressUri($importId, $source01Id)
         $global:WriteInformation.getDataSourceProgress($uri)
 
+        $uri02 = $global:Endpoints.importSourceDetailsUri($importId, $source02Id)
+        $source02DetailsResponse = $global:WebRequest.callGet($uri02)
+        $state02 = $source02DetailsResponse."Value"."State"
+        Write-Information -MessageData "Data source state: $state02" -InformationAction Continue
+        $uri02 = $global:Endpoints.importSourceProgressUri($importId, $source02Id)
+        $global:WriteInformation.getDataSourceProgress($uri02)
+
         #Expected output
-        #Data source state: Completed
+        #Example console output for sample files
+        #Data source [Id01] state: Completed
         #Data source progress: Total records: 4, Imported records: 4, Records with errors: 0
+        #Data source [Id02] state: Completed
+        #Data source progress: Total records: 2, Imported records: 2, Records with errors: 0
     }
 }

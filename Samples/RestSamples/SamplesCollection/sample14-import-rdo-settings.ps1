@@ -5,17 +5,20 @@
 $importId = New-Guid
 $sourceId = New-Guid
 $workspaceId = 1000000
-$loadFilePath = "C:\DefaultFileRepository\samples\load_file_01.dat"
+$rdoArtifactTypeID = 1000001
+$loadFilePath = "C:\DefaultFileRepository\samples\rdo_load_file_02.dat"
 $global:Endpoints = [Endpoints]::new($workspaceId)
 $global:WriteInformation = [WriteInformation]::new()
 
-Context "Sample01 Import native files" {
+# Example of import  Relativity Dynamic Object (RDO).
+# NOTE: Domain object is used in this example. Please insert document from sample01 first.
+Context "Sample14 Import RDO settings" {
     Describe "Create job" {
         $uri = $global:Endpoints.importJobCreateUri($importId)
 
         $body = @{
             applicationName = "Import-service-sample-app"
-            correlationID = "Sample-job-0001"
+            correlationID = "Sample-job-import-00014"
         } | ConvertTo-Json -Depth 10
 		
         $response = $global:WebRequest.callPost($uri, $body)
@@ -23,49 +26,51 @@ Context "Sample01 Import native files" {
         Write-Information -MessageData "Job $importId created" -InformationAction Continue
     }
 
-    Describe "Create document configuration" {
-        $uri = $global:Endpoints.documentConfigurationUri($importId)
-        $jobConfigurationBody = '{
-            "importSettings" :
-            {
-                "Overlay":null,
-                "Native":{
-                    "FilePathColumnIndex": "22",
-                    "FileNameColumnIndex": "13"
-                },
-                "Image":null,
-                "Production":null,
-                "Fields": {
-                    "FieldMappings": [
-                        {
-                            "ColumnIndex": 0,
-                            "Field": "Control Number",
-                            "ContainsID": false,
-                            "ContainsFilePath": false
-                        },
-                        {
-                            "ColumnIndex": 1,
-                            "Field": "Custodian - Single Choice",
-                            "ContainsID": false,
-                            "ContainsFilePath": false
-                        },
-                        {
-                            "ColumnIndex": 11,
-                            "Field": "Email To",
-                            "ContainsID": false,
-                            "ContainsFilePath": false
-                        },
-                        {
-                            "ColumnIndex": 5,
-                            "Field": "Date Sent",
-                            "ContainsID": false,
-                            "ContainsFilePath": false
-                        }
-                    ]
-                },
-                "Folder":null
+    Describe "Create RDO configuration" {
+        $uri = $global:Endpoints.rdoConfigurationUri($importId)
+        $field1 = @{
+            ColumnIndex = 0
+            Field = "Name"
+            ContainsID = $false
+            ContainsFilePath = $false
+        }
+        $field2 = @{
+            ColumnIndex = 3
+            Field = "Domains (Email CC)"
+            ContainsID = $false
+            ContainsFilePath = $false
+        }
+        $field3 = @{
+            ColumnIndex = 4
+            Field = "Domains (Email From)"
+            ContainsID = $false
+            ContainsFilePath = $false
+        }
+        $field4 = @{
+            ColumnIndex = 5
+            Field = "Domains (Email To)"
+            ContainsID = $false
+            ContainsFilePath = $false
+        }
+        $fields = @($field1, $field2, $field3, $field4)
+
+        $jobConfigurationBody = @{
+            importSettings =
+            @{
+                Overlay = @{
+                    Mode = 3
+                    KeyField = "Name"
+                    MultiFieldOverlayBehaviour = 1
+                }
+                Fields = @{
+                    FieldMappings = $fields
+                }
+                "Rdo" = @{
+                    ArtifactTypeID = $rdoArtifactTypeID
+                    ParentColumnIndex = $null
+                }
             }
-        }'
+        } | ConvertTo-Json -Depth 10
         $response = $global:WebRequest.callPost($uri, $jobConfigurationBody)
         $global:WebRequest.checkIfSuccess($response)
         Write-Information -MessageData "Job configuration created" -InformationAction Continue
@@ -76,16 +81,16 @@ Context "Sample01 Import native files" {
         $dataSourceConfigurationBody = @{
             dataSourceSettings = @{
                 path = $loadFilePath
-                firstLineContainsColumnNames = $true
-                startLine = 0
-                columnDelimiter = "|"
-                quoteDelimiter = "^"
-                newLineDelimiter = "#"
-                nestedValueDelimiter = "&"
-                multiValueDelimiter = "$"
-                endOfLine = 0
-                encoding = $null
-                cultureInfo = "en-us"
+                NewLineDelimiter = '#'
+				ColumnDelimiter = '|'
+				QuoteDelimiter = '^'
+				MultiValueDelimiter = '$'
+				NestedValueDelimiter = '&'
+				Encoding = $null
+				CultureInfo = "en-us"
+				EndOfLine = 0
+				FirstLineContainsColumnNames = $true
+				StartLine = 0
                 type = 2
             }
         } | ConvertTo-Json -Depth 10
@@ -140,6 +145,6 @@ Context "Sample01 Import native files" {
 
         #Expected output
         #Data source state: Completed
-        #Data source progress: Total records: 4, Imported records: 4, Records with errors: 0
+        #Data source progress: Total records: 3, Imported records: 3, Records with errors: 0
     }
 }
