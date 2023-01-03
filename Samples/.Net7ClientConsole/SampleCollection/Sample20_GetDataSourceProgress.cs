@@ -127,8 +127,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			// endpoint: GET import-jobs/{importId}/sources/{sourceId}/progress"
 			var importSourceProgressUri = RelativityImportEndpoints.GetImportSourceProgressUri(workspaceId, importId, sourceId);
 
-			
-			await ReadImportJobProgress();
+			await ReadDataSourceProgress();
 
 			// It may take some time for import job to be completed. Request data source details to monitor the current state.
 			// endpoint: GET import-jobs/{importId}/sources/{sourceId}/details"
@@ -139,14 +138,14 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 				Converters = { new JsonStringEnumConverter() }
 			};
 
-			var dataSourceState = await ImportJobSampleHelper.WaitImportDataSourceToBeCompleted(
+			await ImportJobSampleHelper.WaitImportDataSourceToBeCompleted(
 				funcAsync: () => httpClient.GetFromJsonAsync<ValueResponse<DataSourceDetails>> (importSourceDetailsUri, options),
 				timeout: 10000);
 
 			// Read data source progress.
-			await ReadImportJobProgress();
+			await ReadDataSourceProgress();
 
-			async Task ReadImportJobProgress()
+			async Task ReadDataSourceProgress()
 			{
 				var valueResponse = await httpClient.GetFromJsonAsync<ValueResponse<ImportProgress>>(importSourceProgressUri);
 

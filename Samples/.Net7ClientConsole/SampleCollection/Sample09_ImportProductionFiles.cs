@@ -127,7 +127,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			var dataSourceState = await ImportJobSampleHelper.WaitImportDataSourceToBeCompleted(
 				funcAsync: () =>
 					httpClient.GetFromJsonAsync<ValueResponse<DataSourceDetails>>(importSourceDetailsUri, options),
-				timeout: 120000);
+				timeout: 10000);
 
 			// Get current import progress for specific data source.
 			// endpoint: GET import-jobs/{importId}/sources/{sourceId}/progress"

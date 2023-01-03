@@ -13,7 +13,6 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 	using Relativity.Import.Samples.Net7Client.Helpers;
 	using Relativity.Import.V1.Builders.Documents;
 	using Relativity.Import.V1.Models.Settings;
-	using Relativity.Import.V1.Models.Sources;
 	using Relativity.Import.V1.Builders.DataSource;
 
 	/// <summary>

@@ -123,7 +123,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			response = await httpClient.PostAsync(endImportJobUri, null);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
-			// It may take some time for import job to be completed. Request data source details to monitor the current state.
+			// It may take some time for import job to be completed. Request import job details to monitor the current state.
 			// endpoint: GET import-jobs/{importId}/details"
 			var importJobDetailsUri = RelativityImportEndpoints.GetImportDetailsUri(workspaceId, importId);
 
@@ -136,7 +136,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 				funcAsync: () => httpClient.GetFromJsonAsync<ValueResponse<ImportDetails>> (importJobDetailsUri, options),
 				timeout: 10000);
 
-			Console.WriteLine($"Current import state: {importState}");
+			Console.WriteLine($"Import job state: {importState}");
 
 			// Get current import progress for specific job.
 			// endpoint: GET import-jobs/{importId}/progress"
@@ -156,7 +156,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 }
 
 /* Expected console result:
-	Current import state: Completed
+	Import job state: Completed
 
 	IsSuccess: True
 	Import job Id: dc126168-abc7-49e6-b329-d1721f27f67b

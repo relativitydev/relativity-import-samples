@@ -150,8 +150,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			response = await httpClient.PostAsync(endImportJobUri, null);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
-			// It may take some time for import job to be completed. Request data source details to monitor the current state.
-			// You can get job details to verify if job is finished.
+			// It may take some time for import job to be completed. Request job details to monitor the current state.
+			// You can also get data source details to verify if importing source is finished.
 			var importDetailsUri = RelativityImportEndpoints.GetImportDetailsUri(workspaceId, importId);
 
 			JsonSerializerOptions options = new()
@@ -159,7 +159,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 				Converters = { new JsonStringEnumConverter() }
 			};
 
-			var dataSourceState = await ImportJobSampleHelper.WaitImportJobToBeFinished(
+			await ImportJobSampleHelper.WaitImportJobToBeFinished(
 				funcAsync: () => httpClient.GetFromJsonAsync<ValueResponse<ImportDetails>>(importDetailsUri, options));
 
 
