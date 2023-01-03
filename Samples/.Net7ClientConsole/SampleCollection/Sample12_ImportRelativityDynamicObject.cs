@@ -25,7 +25,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 	{
 		/// <summary>
 		/// Example of import  Relativity Dynamic Object (RDO).
-		/// NOTE: Domain object is used in this example. Please insert document from sample01 first.
+		/// NOTE: Existing RDO "Domain" is used in this example. Please insert document from sample01 first.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample12_ImportRelativityDynamicObject()
@@ -64,7 +64,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 				.WithFieldsMapped(f => f
 					.WithField(nameColumnIndex, "Name")
 					// Use sample01 and load_file_01.dat first to import document. The following fields have reference to these documents.
-					// If you do not use these field please just comment them.
+					// If you do not use these fields please just comment them.
 					.WithField(domainEmailCcColumnIndex, "Domains (Email CC)")
 					.WithField(domainEmailFromColumnIndex, "Domains (Email From)")
 					.WithField(domainEmailToColumnIndex, "Domains (Email To)"))

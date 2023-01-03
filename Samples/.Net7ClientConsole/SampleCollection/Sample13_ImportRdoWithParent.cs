@@ -25,8 +25,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 	{
 		/// <summary>
 		/// Example of import Relativity Dynamic Objects (RDO) with selecting its parent.
-		/// NOTE: Sample based on the Domain object with object imported in sample12.
-		/// It requires create descendant object for Domain object first. 
+		/// NOTE: Sample is based on the existing RDO "Domain" and records imported in sample12.
+		/// It requires to create descendant object for Domain object first. 
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample13_ImportRdoWithParent()

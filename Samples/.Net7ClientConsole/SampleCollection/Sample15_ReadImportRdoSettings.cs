@@ -31,7 +31,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			// destination workspace artifact Id.
 			const int workspaceId = 1019056;
 
-			// set of columns indexes in load file used in import settings.Example import of Domain RDO.
+			// set of columns indexes in load file used in import settings.
 			const int nameColumnIndex = 2;
 			const int valueColumnIndex = 3;
 			const int parentObjectIdColumnIndex = 4;
