@@ -3,8 +3,8 @@
 
 $importId = New-Guid
 $sourceId = New-Guid
-$workspaceId = 1031634
-$loadFilePath = "\\emttest\DefaultFileRepository\SampleDataSources\load_file_01.dat" #"C:\DefaultFileRepository\samples\load_file_01.dat"
+$workspaceId = 1000000
+$loadFilePath = "C:\DefaultFileRepository\samples\load_file_01.dat"
 $global:Endpoints = [Endpoints]::new($workspaceId)
 
 Context "Sample20 Get data source details" {
