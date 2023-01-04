@@ -65,7 +65,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Create import job.
 			// endpoint: POST /import-jobs/{importId}
-			var createImportJobUri = RelativityImportEndpoints.GetCreateImportUri(workspaceId, importId);
+			var createImportJobUri = RelativityImportEndpoints.GetImportJobCreateUri(workspaceId, importId);
 
 			var response = await httpClient.PostAsJsonAsync(createImportJobUri, createJobPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);

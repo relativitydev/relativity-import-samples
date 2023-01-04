@@ -66,7 +66,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Create import job.
 			// endpoint: POST /import-jobs/{importId}
-			var createImportJobUri = RelativityImportEndpoints.GetCreateImportUri(workspaceId, importId);
+			var createImportJobUri = RelativityImportEndpoints.GetImportJobCreateUri(workspaceId, importId);
 
 			var response = await httpClient.PostAsJsonAsync(createImportJobUri, createJobPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
@@ -103,7 +103,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			}
 
 			// Read collection of data sources for particular import job.
-			var importSourcesUri = RelativityImportEndpoints.GetImportSourcesUri(workspaceId, importId);
+			var importSourcesUri = RelativityImportEndpoints.GetImportSourcesForJobUri(workspaceId, importId);
 			ValueResponse<DataSources>? valueResponse =
 				await httpClient.GetFromJsonAsync<ValueResponse<DataSources>>(importSourcesUri);
 

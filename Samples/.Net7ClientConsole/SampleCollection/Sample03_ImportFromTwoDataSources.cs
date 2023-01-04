@@ -107,7 +107,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Create import job.
 			// endpoint: POST /import-jobs/{importId}
-			var createImportJobUri = RelativityImportEndpoints.GetCreateImportUri(workspaceId, importId);
+			var createImportJobUri = RelativityImportEndpoints.GetImportJobCreateUri(workspaceId, importId);
 			var response = await httpClient.PostAsJsonAsync(createImportJobUri, createJobPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
@@ -131,19 +131,19 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Start import job.
 			// endpoint: POST /import-jobs/{importId}/begin
-			var beginImportJobUri = RelativityImportEndpoints.GetBeginJobUri(workspaceId, importId);
+			var beginImportJobUri = RelativityImportEndpoints.GetImportJobBeginUri(workspaceId, importId);
 			response = await httpClient.PostAsync(beginImportJobUri, null);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
 			// End import job.
 			// endpoint: POST /import-jobs/{importId}/end
-			var endImportJobUri = RelativityImportEndpoints.GetEndJobUri(workspaceId, importId);
+			var endImportJobUri = RelativityImportEndpoints.GetImportJobEndUri(workspaceId, importId);
 			response = await httpClient.PostAsync(endImportJobUri, null);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
 			// It may take some time for import job to be completed. Request import job details to monitor the current state.
 			// You can also get data sources details to verify if all sources are imported.
-			var importDetailsUri = RelativityImportEndpoints.GetImportDetailsUri(workspaceId, importId);
+			var importDetailsUri = RelativityImportEndpoints.GetImportJobDetailsUri(workspaceId, importId);
 
 			JsonSerializerOptions options = new()
 			{

@@ -33,7 +33,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			// Read import job collection (guid list) for particular workspace.
 			HttpClient httpClient = HttpClientHelper.CreateHttpClient();
 
-			var getJobsUri = RelativityImportEndpoints.GetImportUri(workspaceId, 0, 1);
+			var getJobsUri = RelativityImportEndpoints.GetImportJobsForWorkspaceUri(workspaceId, 0, 1);
 
 			var response = await httpClient.GetAsync(getJobsUri);
 			var valueResponse = await ImportJobSampleHelper.EnsureSuccessValueResponse<ImportJobs>(response);
@@ -49,7 +49,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			{
 				Console.WriteLine($"Creating {importCount} jobs");
 				Guid importId = Guid.NewGuid();
-				var createImportJobUri = RelativityImportEndpoints.GetCreateImportUri(workspaceId, importId);
+				var createImportJobUri = RelativityImportEndpoints.GetImportJobCreateUri(workspaceId, importId);
 				// Create payload for request.
 				var createJobPayload = new
 				{
@@ -64,7 +64,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			}
 
 			// Read import job collection (guid list) for particular workspace. Paginating is supported thanks to dedicated parameters.
-			getJobsUri = RelativityImportEndpoints.GetImportUri(workspaceId, 0, length);
+			getJobsUri = RelativityImportEndpoints.GetImportJobsForWorkspaceUri(workspaceId, 0, length);
 
 			valueResponse =
 				await httpClient.GetFromJsonAsync<ValueResponse<ImportJobs>>(getJobsUri);
