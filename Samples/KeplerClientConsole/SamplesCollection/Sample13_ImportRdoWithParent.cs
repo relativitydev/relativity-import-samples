@@ -24,19 +24,21 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample13_ImportRdoWithParent()
 		{
+			Console.WriteLine($"Running {nameof(Sample13_ImportRdoWithParent)}");
+
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			// set of columns indexes in load file used in import settings.
 			const int nameColumnIndex = 0;
 			const int parentObjectIdColumnIndex = 2;
 
 			// RDO artifact type id
-			const int rdoArtifactTypeID = 1000056;
+			const int rdoArtifactTypeID = 1000000;
 
 			// Path to the load file used in data source settings.
 			const string rdoLoadFile = "C:\\DefaultFileRepository\\samples\\rdo_load_file_03.dat";

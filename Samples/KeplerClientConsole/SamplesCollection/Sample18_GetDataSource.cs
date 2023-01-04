@@ -25,8 +25,10 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample18_GetDataSource()
 		{
+			Console.WriteLine($"Running {nameof(Sample18_GetDataSource)}");
+
 			// destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			const int dataSourceCount = 10;
 

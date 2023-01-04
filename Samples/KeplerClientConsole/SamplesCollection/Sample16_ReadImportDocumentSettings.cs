@@ -22,11 +22,13 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample16_ReadImportDocumentSettings()
 		{
+			Console.WriteLine($"Running {nameof(Sample16_ReadImportDocumentSettings)}");
+
 			// GUID identifiers for import job.
 			Guid importId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			const int controlNumberColumnIndex = 0;
 			const int emailToColumnIndex = 11;

@@ -23,13 +23,15 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample07_ImportDocumentSettingsForNatives()
 		{
+			Console.WriteLine($"Running {nameof(Sample07_ImportDocumentSettingsForNatives)}");
+
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace and folder artifact Ids.
-			const int workspaceId = 1019056;
-			const int rootFolderId = 1040204;
+			const int workspaceId = 1000000;
+			const int rootFolderId = 2000000;
 
 			// overlay keyField
 			const string keyField = "Control Number";

@@ -24,12 +24,14 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample08_ImportImages()
 		{
+			Console.WriteLine($"Running {nameof(Sample08_ImportImages)}");
+
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			// Path to the file in opticon format used in data source settings.
 			const string opticonFilePath = "C:\\DefaultFileRepository\\samples\\opticon_01.opt";
@@ -89,7 +91,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.EndAsync");
 
 				// It may take some time for import job to be completed. Request data source details to monitor the current state.
-				// NOTE: You can also request job details to verify if job is finished - see appropriate sample.
+				// NOTE: You can also request job details to verify if job is finished - see appropriate sample (sample_19).
 				var dataSourceState = await this.WaitImportDataSourceToBeCompleted(
 					funcAsync: () => importSourceController.GetDetailsAsync(workspaceId, importId, sourceId),
 					timeout: 10000);

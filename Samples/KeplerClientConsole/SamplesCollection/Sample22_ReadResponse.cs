@@ -22,12 +22,14 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample22_ReadResponse()
 		{
+			Console.WriteLine($"Running {nameof(Sample22_ReadResponse)}");
+
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			ImportDocumentSettings invalidConfiguration = new ImportDocumentSettings();
 			DataSourceSettings dataSourceSettings = new DataSourceSettings();

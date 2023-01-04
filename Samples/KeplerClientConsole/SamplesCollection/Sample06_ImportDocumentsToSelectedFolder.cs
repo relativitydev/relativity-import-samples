@@ -24,15 +24,17 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample06_ImportDocumentsToSelectedFolder()
 		{
+			Console.WriteLine($"Running {nameof(Sample06_ImportDocumentsToSelectedFolder)}");
+
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			// destination folder artifact id.
-			const int rootFolderId = 1040204;
+			const int rootFolderId = 2000000;
 
 			// set of columns indexes in load file used in import settings.
 			const int folderPathColumnIndex = 15;
@@ -97,7 +99,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.EndAsync");
 
 				// It may take some time for import job to be completed. Request data source details to monitor the current state.
-				// NOTE: You can also request job details to verify if job is finished - see appropriate sample.
+				// NOTE: You can also request job details to verify if job is finished - see appropriate sample (sample_19).
 				var dataSourceState = await this.WaitImportDataSourceToBeCompleted(
 					funcAsync: () => importSourceController.GetDetailsAsync(workspaceId, importId, sourceId),
 					timeout: 10000);

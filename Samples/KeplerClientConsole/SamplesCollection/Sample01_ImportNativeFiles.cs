@@ -31,7 +31,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			// set of columns indexes in load file used in import settings.
 			const int controlNumberColumnIndex = 0;
@@ -108,7 +108,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.EndAsync");
 
 				// It may take some time for import job to be completed. Request data source details to monitor the current state.
-				// NOTE: You can also request job details to verify if job is finished - see appropriate sample.
+				// NOTE: You can also request job details to verify if job is finished - see appropriate sample (sample_19).
 				var dataSourceState = await this.WaitImportDataSourceToBeCompleted(
 					funcAsync: () => importSourceController.GetDetailsAsync(workspaceId, importId, sourceId),
 					timeout: 10000);

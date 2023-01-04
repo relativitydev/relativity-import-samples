@@ -24,12 +24,14 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample05_ImportDocumentsWithExtractedText()
 		{
+			Console.WriteLine($"Running {nameof(Sample05_ImportDocumentsWithExtractedText)}");
+
 			// GUID identifiers for import job and data sources.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
 
 			// Destination workspace artifact Id
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			// set of columns indexes in load file used in import settings.
 			const int controlNumberColumnIndex = 0;

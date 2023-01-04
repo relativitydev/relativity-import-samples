@@ -1,4 +1,4 @@
-﻿// <copyright file="Sample19_GetImportJobProgress.cs" company="Relativity ODA LLC">
+﻿// <copyright file="Sample19_GetImportJobDetailsAndProgress.cs" company="Relativity ODA LLC">
 // © Relativity All Rights Reserved.
 // </copyright>
 
@@ -23,14 +23,16 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 		/// Example of reading all data sources Ids for particular job.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-		public async Task Sample19_GetImportJobProgress()
+		public async Task Sample19_GetImportJobDetailsAndProgress()
 		{
+			Console.WriteLine($"Running {nameof(Sample19_GetImportJobDetailsAndProgress)}");
+
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			// set of columns indexes in load file used in import settings.
 			const int controlNumberColumnIndex = 0;

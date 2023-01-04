@@ -26,15 +26,17 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample09_ImportProductionFiles()
 		{
+			Console.WriteLine($"Running {nameof(Sample09_ImportProductionFiles)}");
+
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			// destination production set artifact Id.
-			const int productionSetsArtifactId = 1040546;
+			const int productionSetsArtifactId = 1000000;
 
 			// Path to the file in opticon format used in data source settings.
 			const string filePath = "C:\\DefaultFileRepository\\samples\\opticon_02.opt";

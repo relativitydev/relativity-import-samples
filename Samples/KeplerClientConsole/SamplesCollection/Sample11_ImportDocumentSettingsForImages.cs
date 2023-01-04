@@ -23,13 +23,15 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample11_ImportDocumentSettingsForImages()
 		{
+			Console.WriteLine($"Running {nameof(Sample11_ImportDocumentSettingsForImages)}");
+
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace and root folder artifact Ids.
-			const int workspaceId = 1019056;
-			const int rootFolderId = 1040204;
+			const int workspaceId = 1000000;
+			const int rootFolderId = 2000000;
 
 			// Example of configuration settings for images import created without ImportDocumentSettingsBuilder.
 			ImportDocumentSettings importSettings = new ImportDocumentSettings()

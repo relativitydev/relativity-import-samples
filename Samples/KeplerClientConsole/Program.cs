@@ -27,9 +27,9 @@ namespace Relativity.Import.Samples.NetFrameworkClient
 				{
 					await sampleCollection.Sample01_ImportNativeFiles();
 
-					await sampleCollection.Sample02_ImportDocumentsInOverlayMode();
+					// await sampleCollection.Sample02_ImportDocumentsInOverlayMode();
 
-					await sampleCollection.Sample03_ImportFromTwoDataSources();
+					// await sampleCollection.Sample03_ImportFromTwoDataSources();
 
 					// await sampleCollection.Sample04_AddDataSourceToRunningJob();
 
@@ -61,9 +61,9 @@ namespace Relativity.Import.Samples.NetFrameworkClient
 
 					// await sampleCollection.Sample18_GetDataSource();
 
-					// await sampleCollection.Sample19_GetImportJobProgress();
+					// await sampleCollection.Sample19_GetImportJobDetailsAndProgress();
 
-					// await sampleCollection.Sample20_GetDataSourceProgress();
+					// await sampleCollection.Sample20_GetDataSourceDetailsAndProgress();
 
 					// await sampleCollection.Sample21_CancelStartedJob();
 
