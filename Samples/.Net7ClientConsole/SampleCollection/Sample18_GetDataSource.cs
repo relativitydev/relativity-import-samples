@@ -32,7 +32,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			Guid importId = Guid.NewGuid();
 
 			// Destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			// set of columns indexes in load file used in import settings.
 			const int controlNumberColumnIndex = 0;

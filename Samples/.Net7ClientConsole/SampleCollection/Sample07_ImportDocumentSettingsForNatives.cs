@@ -35,8 +35,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace and folder artifact Ids.
-			const int workspaceId = 1019056;
-			const int rootFolderId = 1040204;
+			const int workspaceId = 1000000;
+			const int rootFolderId = 2000000;
 
 			// overlay keyField
 			const string keyField = "Control Number";

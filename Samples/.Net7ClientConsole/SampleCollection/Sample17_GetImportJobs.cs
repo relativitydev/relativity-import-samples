@@ -26,7 +26,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			Console.WriteLine($"Running {nameof(Sample17_GetImportJobs)}");
 
 			// Destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			const int importCount = 7;
 

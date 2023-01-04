@@ -34,8 +34,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace and root folder artifact Ids.
-			const int workspaceId = 1019056;
-			const int rootFolderId = 1042316;
+			const int workspaceId = 1000000;
+			const int rootFolderId = 2000000;
 
 			// Create request's payload
 			var createJobPayload = new

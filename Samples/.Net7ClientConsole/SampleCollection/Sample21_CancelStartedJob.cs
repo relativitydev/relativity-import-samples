@@ -34,7 +34,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			Guid importId = Guid.NewGuid();
 
 			// Destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			const string loadFile07PathTemplate = "C:\\DefaultFileRepository\\samples\\load_file_07{0}.dat";
 

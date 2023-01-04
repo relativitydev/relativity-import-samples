@@ -38,14 +38,14 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			// set of columns indexes in load file used in import settings.
 			const int nameColumnIndex = 0;
 			const int parentObjectIdColumnIndex = 2;
 
 			// RDO artifact type id
-			const int rdoArtifactTypeID = 1000056;
+			const int rdoArtifactTypeID = 1000000;
 
 			// Path to the load file used in data source settings.
 			const string rdoLoadFile = "C:\\DefaultFileRepository\\samples\\rdo_load_file_03.dat";
