@@ -1,4 +1,4 @@
-﻿// <copyright file="Sample20_GetDataSourceProgress.cs" company="Relativity ODA LLC">
+﻿// <copyright file="Sample19_GetImportJobDetailsAndProgress.cs" company="Relativity ODA LLC">
 // © Relativity All Rights Reserved.
 // </copyright>
 
@@ -24,12 +24,12 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 	public partial class ImportServiceSample
 	{
 		/// <summary>
-		/// Example of simple import native files.
+		/// Example of reading job progress.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-		public async Task Sample20_GetDataSourceProgress()
+		public async Task Sample19_GetImportJobDetailsAndProgress()
 		{
-			Console.WriteLine($"Running {nameof(Sample20_GetDataSourceProgress)}");
+			Console.WriteLine($"Running {nameof(Sample19_GetImportJobDetailsAndProgress)}");
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
@@ -52,7 +52,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			var createJobPayload = new
 			{
 				applicationName = "Import-service-sample-app",
-				correlationID = "Sample-job-0020"
+				correlationID = "Sample-job-0019"
 			};
 
 			// Configuration settings for document import. Builder is used to create settings.
@@ -123,49 +123,43 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			response = await httpClient.PostAsync(endImportJobUri, null);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
-			// Get current import progress for specific data source.
-			// endpoint: GET import-jobs/{importId}/sources/{sourceId}/progress"
-			var importSourceProgressUri = RelativityImportEndpoints.GetImportSourceProgressUri(workspaceId, importId, sourceId);
-
-			await ReadDataSourceProgress();
-
-			// It may take some time for import job to be completed. Request data source details to monitor the current state.
-			// endpoint: GET import-jobs/{importId}/sources/{sourceId}/details"
-			var importSourceDetailsUri = RelativityImportEndpoints.GetImportSourceDetailsUri(workspaceId, importId, sourceId);
+			// It may take some time for import job to be completed. Request import job details to monitor the current state.
+			// endpoint: GET import-jobs/{importId}/details"
+			var importJobDetailsUri = RelativityImportEndpoints.GetImportDetailsUri(workspaceId, importId);
 
 			JsonSerializerOptions options = new()
 			{
 				Converters = { new JsonStringEnumConverter() }
 			};
 
-			await ImportJobSampleHelper.WaitImportDataSourceToBeCompleted(
-				funcAsync: () => httpClient.GetFromJsonAsync<ValueResponse<DataSourceDetails>> (importSourceDetailsUri, options),
+			var importState = await ImportJobSampleHelper.WaitImportJobToBeFinished(
+				funcAsync: () => httpClient.GetFromJsonAsync<ValueResponse<ImportDetails>> (importJobDetailsUri, options),
 				timeout: 10000);
 
-			// Read data source progress.
-			await ReadDataSourceProgress();
+			Console.WriteLine($"Import job state: {importState}");
 
-			async Task ReadDataSourceProgress()
+			// Get current import progress for specific job.
+			// endpoint: GET import-jobs/{importId}/progress"
+			var importJobProgressUri = RelativityImportEndpoints.GetImportProgressUri(workspaceId, importId);
+
+			var valueResponse = await httpClient.GetFromJsonAsync<ValueResponse<ImportProgress>>(importJobProgressUri);
+			
+			if (valueResponse?.IsSuccess ?? false)
 			{
-				var valueResponse = await httpClient.GetFromJsonAsync<ValueResponse<ImportProgress>>(importSourceProgressUri);
-
-				if (valueResponse?.IsSuccess ?? false)
-				{
-					Console.WriteLine("\n");
-					Console.WriteLine($"Import data source progress: Total records: {valueResponse.Value.TotalRecords}, Imported records: {valueResponse.Value.ImportedRecords}, Records with errors: {valueResponse.Value.ErroredRecords}");
-				}
+				Console.WriteLine("\n");
+				Console.WriteLine($"IsSuccess: {valueResponse.IsSuccess}");
+				Console.WriteLine($"Import job Id: {valueResponse.ImportJobID}");
+				Console.WriteLine($"Import job progress: Total records: {valueResponse.Value.TotalRecords}, Imported records: {valueResponse.Value.ImportedRecords}, Records with errors: {valueResponse.Value.ErroredRecords}");
 			}
 		}
 	}
 }
 
 /* Expected console result:
+	Import job state: Completed
 
-	Import data source progress: Total records: 0, Imported records: 0, Records with errors: 0
+	IsSuccess: True
+	Import job Id: dc126168-abc7-49e6-b329-d1721f27f67b
+	Import job progress: Total records: 4, Imported records: 0, Records with errors: 4
 
-	DataSource state: Inserting
-	DataSource state: Inserting
-	DataSource state: Completed
-
-	Import data source progress: Total records: 4, Imported records: 4, Records with errors: 0	
  */
