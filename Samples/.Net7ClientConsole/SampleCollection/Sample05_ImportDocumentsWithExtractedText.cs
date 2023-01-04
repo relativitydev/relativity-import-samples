@@ -35,7 +35,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			// set of columns indexes in load file used in import settings.
 			const int controlNumberColumnIndex = 0;
@@ -92,7 +92,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Create import job.
 			// endpoint: POST /import-jobs/{importId}
-			var createImportJobUri = RelativityImportEndpoints.GetCreateImportUri(workspaceId, importId);
+			var createImportJobUri = RelativityImportEndpoints.GetImportJobCreateUri(workspaceId, importId);
 
 			var response = await httpClient.PostAsJsonAsync(createImportJobUri, createJobPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
@@ -111,27 +111,27 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Start import job.
 			// endpoint: POST /import-jobs/{importId}/begin
-			var beginImportJobUri = RelativityImportEndpoints.GetBeginJobUri(workspaceId, importId);
+			var beginImportJobUri = RelativityImportEndpoints.GetImportJobBeginUri(workspaceId, importId);
 			response = await httpClient.PostAsync(beginImportJobUri, null);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
 			// End import job.
 			// endpoint: POST /import-jobs/{importId}/end
-			var endImportJobUri = RelativityImportEndpoints.GetEndJobUri(workspaceId, importId);
+			var endImportJobUri = RelativityImportEndpoints.GetImportJobEndUri(workspaceId, importId);
 			response = await httpClient.PostAsync(endImportJobUri, null);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
 			// It may take some time for import job to be completed. Request data source details to monitor the current state.
-			// You can get job details to verify if job is finished.
-			var importSourceDetailsUri = RelativityImportEndpoints.GetImportDetailsUri(workspaceId, importId);
+			// You can also get job details to verify if job is finished.
+			var importSourceDetailsUri = RelativityImportEndpoints.GetImportSourceDetailsUri(workspaceId, importId, sourceId);
 
 			JsonSerializerOptions options = new()
 			{
 				Converters = { new JsonStringEnumConverter() }
 			};
 
-			var dataSourceState = await ImportJobSampleHelper.WaitImportJobToBeFinished(
-				funcAsync: () => httpClient.GetFromJsonAsync<ValueResponse<ImportDetails>>(importSourceDetailsUri, options),
+			var dataSourceState = await ImportJobSampleHelper.WaitImportDataSourceToBeCompleted(
+				funcAsync: () => httpClient.GetFromJsonAsync<ValueResponse<DataSourceDetails>>(importSourceDetailsUri, options),
 				timeout: 10000);
 
 			// Get current import progress for specific data source.

@@ -37,10 +37,10 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			// destination production set artifact Id.
-			const int productionSetsArtifactId = 1040546;
+			const int productionSetsArtifactId = 1000001;
 
 			// Path to the file in opticon format used in data source settings.
 			const string opticonFilePath = "C:\\DefaultFileRepository\\samples\\opticon_02.opt";
@@ -84,7 +84,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Create import job.
 			// endpoint: POST /import-jobs/{importId}
-			var createImportJobUri = RelativityImportEndpoints.GetCreateImportUri(workspaceId, importId);
+			var createImportJobUri = RelativityImportEndpoints.GetImportJobCreateUri(workspaceId, importId);
 
 			var response = await httpClient.PostAsJsonAsync(createImportJobUri, createJobPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
@@ -103,13 +103,13 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Start import job.
 			// endpoint: POST /import-jobs/{importId}/begin
-			var beginImportJobUri = RelativityImportEndpoints.GetBeginJobUri(workspaceId, importId);
+			var beginImportJobUri = RelativityImportEndpoints.GetImportJobBeginUri(workspaceId, importId);
 			response = await httpClient.PostAsync(beginImportJobUri, null);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
 			// End import job.
 			// endpoint: POST /import-jobs/{importId}/end
-			var endImportJobUri = RelativityImportEndpoints.GetEndJobUri(workspaceId, importId);
+			var endImportJobUri = RelativityImportEndpoints.GetImportJobEndUri(workspaceId, importId);
 			response = await httpClient.PostAsync(endImportJobUri, null);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
@@ -127,7 +127,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			var dataSourceState = await ImportJobSampleHelper.WaitImportDataSourceToBeCompleted(
 				funcAsync: () =>
 					httpClient.GetFromJsonAsync<ValueResponse<DataSourceDetails>>(importSourceDetailsUri, options),
-				timeout: 120000);
+				timeout: 10000);
 
 			// Get current import progress for specific data source.
 			// endpoint: GET import-jobs/{importId}/sources/{sourceId}/progress"

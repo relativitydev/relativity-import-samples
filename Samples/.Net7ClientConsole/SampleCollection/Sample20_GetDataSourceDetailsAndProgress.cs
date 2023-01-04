@@ -1,4 +1,4 @@
-﻿// <copyright file="Sample20_GetDataSourceProgress.cs" company="Relativity ODA LLC">
+﻿// <copyright file="Sample20_GetDataSourceDetailsAndProgress.cs" company="Relativity ODA LLC">
 // © Relativity All Rights Reserved.
 // </copyright>
 
@@ -27,15 +27,15 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 		/// Example of simple import native files.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-		public async Task Sample20_GetDataSourceProgress()
+		public async Task Sample20_GetDataSourceDetailsAndProgress()
 		{
-			Console.WriteLine($"Running {nameof(Sample20_GetDataSourceProgress)}");
+			Console.WriteLine($"Running {nameof(Sample20_GetDataSourceDetailsAndProgress)}");
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			// set of columns indexes in load file used in import settings.
 			const int controlNumberColumnIndex = 0;
@@ -52,7 +52,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			var createJobPayload = new
 			{
 				applicationName = "Import-service-sample-app",
-				correlationID = "Sample-job-0001"
+				correlationID = "Sample-job-0020"
 			};
 
 			// Configuration settings for document import. Builder is used to create settings.
@@ -94,7 +94,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Create import job.
 			// endpoint: POST /import-jobs/{importId}
-			var createImportJobUri = RelativityImportEndpoints.GetCreateImportUri(workspaceId, importId);
+			var createImportJobUri = RelativityImportEndpoints.GetImportJobCreateUri(workspaceId, importId);
 
 			var response = await httpClient.PostAsJsonAsync(createImportJobUri,createJobPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
@@ -113,13 +113,13 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Start import job.
 			// endpoint: POST /import-jobs/{importId}/begin
-			var beginImportJobUri = RelativityImportEndpoints.GetBeginJobUri(workspaceId, importId);
+			var beginImportJobUri = RelativityImportEndpoints.GetImportJobBeginUri(workspaceId, importId);
 			response = await httpClient.PostAsync(beginImportJobUri, null);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
 			// End import job.
 			// endpoint: POST /import-jobs/{importId}/end
-			var endImportJobUri = RelativityImportEndpoints.GetEndJobUri(workspaceId, importId);
+			var endImportJobUri = RelativityImportEndpoints.GetImportJobEndUri(workspaceId, importId);
 			response = await httpClient.PostAsync(endImportJobUri, null);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
@@ -127,8 +127,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			// endpoint: GET import-jobs/{importId}/sources/{sourceId}/progress"
 			var importSourceProgressUri = RelativityImportEndpoints.GetImportSourceProgressUri(workspaceId, importId, sourceId);
 
-			
-			await ReadImportJobProgress();
+			await ReadDataSourceProgress();
 
 			// It may take some time for import job to be completed. Request data source details to monitor the current state.
 			// endpoint: GET import-jobs/{importId}/sources/{sourceId}/details"
@@ -139,14 +138,14 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 				Converters = { new JsonStringEnumConverter() }
 			};
 
-			var dataSourceState = await ImportJobSampleHelper.WaitImportDataSourceToBeCompleted(
+			await ImportJobSampleHelper.WaitImportDataSourceToBeCompleted(
 				funcAsync: () => httpClient.GetFromJsonAsync<ValueResponse<DataSourceDetails>> (importSourceDetailsUri, options),
 				timeout: 10000);
 
 			// Read data source progress.
-			await ReadImportJobProgress();
+			await ReadDataSourceProgress();
 
-			async Task ReadImportJobProgress()
+			async Task ReadDataSourceProgress()
 			{
 				var valueResponse = await httpClient.GetFromJsonAsync<ValueResponse<ImportProgress>>(importSourceProgressUri);
 

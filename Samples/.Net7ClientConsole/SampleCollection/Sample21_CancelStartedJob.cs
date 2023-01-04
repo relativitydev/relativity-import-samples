@@ -34,9 +34,9 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			Guid importId = Guid.NewGuid();
 
 			// Destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
-			const string loadFile07PathTemplate = "C:\\DefaultFileRepository\\samples\\load_file_07{0}.dat";
+			const string loadFile07PathTemplate = "C:\\DefaultFileRepository\\samples\\load_file_07_{0}.dat";
 
 			// set of columns indexes in load file used in import settings.
 			const int controlNumberColumnIndex = 0;
@@ -70,7 +70,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Create import job.
 			// endpoint: POST /import-jobs/{importId}
-			var createImportJobUri = RelativityImportEndpoints.GetCreateImportUri(workspaceId, importId);
+			var createImportJobUri = RelativityImportEndpoints.GetImportJobCreateUri(workspaceId, importId);
 
 			var response = await httpClient.PostAsJsonAsync(createImportJobUri, createJobPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
@@ -108,7 +108,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Start import job.
 			// endpoint: POST /import-jobs/{importId}/begin
-			var beginImportJobUri = RelativityImportEndpoints.GetBeginJobUri(workspaceId, importId);
+			var beginImportJobUri = RelativityImportEndpoints.GetImportJobBeginUri(workspaceId, importId);
 			response = await httpClient.PostAsync(beginImportJobUri, null);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 				
@@ -117,7 +117,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Cancel Job
 			// endpoint: POST /import-jobs/{importId}/cancel
-			var cancelJobUri = RelativityImportEndpoints.GetCancelJobUri(workspaceId, importId);
+			var cancelJobUri = RelativityImportEndpoints.GetImportJobCancelUri(workspaceId, importId);
 			response = await httpClient.PostAsync(cancelJobUri, null);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
@@ -130,7 +130,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 				Console.WriteLine("Import Job Status");
 				
 				// endpoint: GET import-jobs/{importId}/details"
-				var importJobDetailsUri = RelativityImportEndpoints.GetImportDetailsUri(workspaceId, importId);
+				var importJobDetailsUri = RelativityImportEndpoints.GetImportJobDetailsUri(workspaceId, importId);
 
 				JsonSerializerOptions options = new()
 				{

@@ -37,7 +37,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			Guid source02Id = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			// set of columns indexes in load file used in import settings.
 			const int controlNumberColumnIndex = 0;
@@ -107,7 +107,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Create import job.
 			// endpoint: POST /import-jobs/{importId}
-			var createImportJobUri = RelativityImportEndpoints.GetCreateImportUri(workspaceId, importId);
+			var createImportJobUri = RelativityImportEndpoints.GetImportJobCreateUri(workspaceId, importId);
 			var response = await httpClient.PostAsJsonAsync(createImportJobUri, createJobPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
@@ -125,7 +125,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Start import job.
 			// endpoint: POST /import-jobs/{importId}/begin
-			var beginImportJobUri = RelativityImportEndpoints.GetBeginJobUri(workspaceId, importId);
+			var beginImportJobUri = RelativityImportEndpoints.GetImportJobBeginUri(workspaceId, importId);
 			response = await httpClient.PostAsync(beginImportJobUri, null);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
@@ -137,22 +137,24 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// End import job.
 			// endpoint: POST /import-jobs/{importId}/end
-			var endImportJobUri = RelativityImportEndpoints.GetEndJobUri(workspaceId, importId);
+			var endImportJobUri = RelativityImportEndpoints.GetImportJobEndUri(workspaceId, importId);
 			response = await httpClient.PostAsync(endImportJobUri, null);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
-			// It may take some time for import job to be completed. Request data source details to monitor the current state.
-			// You can get job details to verify if job is finished.
-			var importSourceDetailsUri = RelativityImportEndpoints.GetImportDetailsUri(workspaceId, importId);
+			// It may take some time for import job to be completed. Request import job details to monitor the current state.
+			// You can also get data sources details to verify if all sources are imported.
+			var importDetailsUri = RelativityImportEndpoints.GetImportJobDetailsUri(workspaceId, importId);
 
 			JsonSerializerOptions options = new()
 			{
 				Converters = { new JsonStringEnumConverter() }
 			};
 
-			var dataSourceState = await ImportJobSampleHelper.WaitImportJobToBeFinished(
-				funcAsync: () => httpClient.GetFromJsonAsync<ValueResponse<ImportDetails>>(importSourceDetailsUri, options),
+			var importState = await ImportJobSampleHelper.WaitImportJobToBeFinished(
+				funcAsync: () => httpClient.GetFromJsonAsync<ValueResponse<ImportDetails>>(importDetailsUri, options),
 				timeout: 10000);
+
+			Console.WriteLine($"\nImport job state: {importState}");
 
 			// Get current import progress for specific data source.
 			// endpoint: GET import-jobs/{importId}/sources/{sourceId}/progress"
@@ -164,18 +166,14 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 				if (valueResponse?.IsSuccess ?? false)
 				{
-					Console.WriteLine("\n");
-					Console.WriteLine($"Data source state: {dataSourceState}");
-					Console.WriteLine($"Import data source progress: Total records: {valueResponse.Value.TotalRecords}, Imported records: {valueResponse.Value.ImportedRecords}, Records with errors: {valueResponse.Value.ErroredRecords}");
+					Console.WriteLine($"Import data source progress (sourceID: {sourceId}) - Total records: {valueResponse.Value.TotalRecords}, Imported records: {valueResponse.Value.ImportedRecords}, Records with errors: {valueResponse.Value.ErroredRecords}");
 				}
 			}
 		}
 	}
 }
 /* Expected console result:
-	Data source 01 state: Completed
-	Import data source progress: Total records: 4, Imported records: 4, Records with errors: 0
-
-	Data source 02 state: Completed
-	Import data source progress: Total records: 2, Imported records: 2, Records with errors: 0
- */
+	Import job state: Completed
+	Import data source progress (sourceID: 412d8422-7b12-4cb1-9390-9f55858f98c9) - Total records: 4, Imported records: 4, Records with errors: 0
+	Import data source progress (sourceID: 2819f6d0-2ec0-470c-aa02-d96b3ee082a1) - Total records: 2, Imported records: 2, Records with errors: 0
+*/

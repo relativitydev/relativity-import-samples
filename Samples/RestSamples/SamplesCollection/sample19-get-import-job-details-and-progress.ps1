@@ -1,6 +1,5 @@
 #import
 . "$global:rootDir\Helpers\EndpointsClass.ps1"
-. "$global:rootDir\Helpers\WriteInformationClass.ps1"
 
 $workspaceId = 1000000
 $loadFilePath = "C:\DefaultFileRepository\samples\load_file_01.dat"
@@ -8,15 +7,14 @@ $loadFilePath = "C:\DefaultFileRepository\samples\load_file_01.dat"
 $importId = New-Guid
 $sourceId = New-Guid
 $global:Endpoints = [Endpoints]::new($workspaceId)
-$global:WriteInformation = [WriteInformation]::new()
 
-Context "Sample01 Import native files" {
+Context "Sample19 Get import job progress" {
     Describe "Create job" {
         $uri = $global:Endpoints.importJobCreateUri($importId)
 
         $body = @{
             applicationName = "Import-service-sample-app"
-            correlationID = "Sample-job-0001"
+            correlationID = "Sample-job-0019"
         } | ConvertTo-Json -Depth 10
 		
         $response = $global:WebRequest.callPost($uri, $body)
@@ -129,18 +127,22 @@ Context "Sample01 Import native files" {
             $state = $jobDetailsResponse."Value"."State"
             Write-Information -MessageData "Current job status: $state" -InformationAction Continue
         }
+
+        $name = $jobDetailsResponse."Value"."ApplicationName"
+        Write-Information -MessageData "Job status: $state, Application Name: $name" -InformationAction Continue
     }
 
     Describe "Imported records info" {
-        $uri = $global:Endpoints.importSourceDetailsUri($importId, $sourceId)
-        $sourceDetailsResponse = $global:WebRequest.callGet($uri)
-        $state = $sourceDetailsResponse."Value"."State"
-        Write-Information -MessageData "Data source state: $state" -InformationAction Continue
-        $uri = $global:Endpoints.importSourceProgressUri($importId, $sourceId)
-        $global:WriteInformation.getDataSourceProgress($uri)
+        $uri = $global:Endpoints.importJobProgressUri($importId)
+        $jobDetailsResponse = $global:WebRequest.callGet($uri)
+        $totalRecords = $jobDetailsResponse."Value"."TotalRecords"
+        $importedRecords = $jobDetailsResponse."Value"."ImportedRecords"
+        $erroredRecords = $jobDetailsResponse."Value"."ErroredRecords"
+
+        Write-Information -MessageData "Import progress: Total records: $totalRecords, Imported records: $importedRecords, Records with errors: $erroredRecords" -InformationAction Continue
 
         #Expected output
-        #Data source state: Completed
-        #Data source progress: Total records: 4, Imported records: 4, Records with errors: 0
+        #Job status: Completed, Application Name: Import-service-sample-app
+        #Import progress: Total records: 4, Imported records: 4, Records with errors: 0
     }
 }

@@ -3,20 +3,21 @@
 . "$global:rootDir\Helpers\WriteInformationClass.ps1"
 
 $workspaceId = 1000000
-$loadFilePath = "C:\DefaultFileRepository\samples\load_file_01.dat"
+$rootFolderId = 1000001
+$loadFilePath = "C:\DefaultFileRepository\samples\load_file_04.dat"
 
 $importId = New-Guid
 $sourceId = New-Guid
 $global:Endpoints = [Endpoints]::new($workspaceId)
 $global:WriteInformation = [WriteInformation]::new()
 
-Context "Sample01 Import native files" {
+Context "Sample07 Import document settings for natives" {
     Describe "Create job" {
         $uri = $global:Endpoints.importJobCreateUri($importId)
 
         $body = @{
             applicationName = "Import-service-sample-app"
-            correlationID = "Sample-job-0001"
+            correlationID = "Sample-job-0007-doc-settings"
         } | ConvertTo-Json -Depth 10
 		
         $response = $global:WebRequest.callPost($uri, $body)
@@ -26,47 +27,59 @@ Context "Sample01 Import native files" {
 
     Describe "Create document configuration" {
         $uri = $global:Endpoints.documentConfigurationUri($importId)
-        $jobConfigurationBody = '{
-            "importSettings" :
-            {
-                "Overlay":null,
-                "Native":{
-                    "FilePathColumnIndex": "22",
-                    "FileNameColumnIndex": "13"
-                },
-                "Image":null,
-                "Production":null,
-                "Fields": {
-                    "FieldMappings": [
-                        {
-                            "ColumnIndex": 0,
-                            "Field": "Control Number",
-                            "ContainsID": false,
-                            "ContainsFilePath": false
-                        },
-                        {
-                            "ColumnIndex": 1,
-                            "Field": "Custodian - Single Choice",
-                            "ContainsID": false,
-                            "ContainsFilePath": false
-                        },
-                        {
-                            "ColumnIndex": 11,
-                            "Field": "Email To",
-                            "ContainsID": false,
-                            "ContainsFilePath": false
-                        },
-                        {
-                            "ColumnIndex": 5,
-                            "Field": "Date Sent",
-                            "ContainsID": false,
-                            "ContainsFilePath": false
-                        }
-                    ]
-                },
-                "Folder":null
+        $field1 = @{
+            ColumnIndex = 0
+            Field = "Control Number"
+            ContainsID = $false
+            ContainsFilePath = $false
+        }
+        $field2 = @{
+            ColumnIndex = 1
+            Field = "Custodian - Single Choice"
+            ContainsID = $false
+            ContainsFilePath = $false
+        }
+        $field3 = @{
+            ColumnIndex = 11
+            Field = "Email To"
+            ContainsID = $false
+            ContainsFilePath = $false
+        }
+        $field4 = @{
+            ColumnIndex = 12
+            Field = "Extracted Text"
+            ContainsID = $false
+            ContainsFilePath = $true
+        }
+        $fields = @($field1, $field2, $field3, $field4)
+        $jobConfigurationBody = @{
+            importSettings =
+            @{
+                Overlay = @{
+                    Mode = 3
+                    KeyField = "Control Number"
+                    MultiFieldOverlayBehaviour = 1
+                }
+                Native = @{
+                    FilePathColumnIndex =  22
+                    FileNameColumnIndex = 13
+                }
+                Image = $null
+                Fields = @{
+                    FieldMappings = $fields
+                }
+                Folder = @{
+                    RootFolderID = $rootFolderId
+                    FolderPathColumnIndex = $null
+                }
+                Other = @{
+                    ExtractedText = @{
+                        Encoding = $null
+						ValidateEncoding = $true
+                    }
+                }
             }
-        }'
+        } | ConvertTo-Json -Depth 10
         $response = $global:WebRequest.callPost($uri, $jobConfigurationBody)
         $global:WebRequest.checkIfSuccess($response)
         Write-Information -MessageData "Job configuration created" -InformationAction Continue
@@ -141,6 +154,6 @@ Context "Sample01 Import native files" {
 
         #Expected output
         #Data source state: Completed
-        #Data source progress: Total records: 4, Imported records: 4, Records with errors: 0
+        #Data source progress: Total records: 2, Imported records: 2, Records with errors: 0
     }
 }

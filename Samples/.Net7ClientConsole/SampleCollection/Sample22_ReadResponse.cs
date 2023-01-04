@@ -30,7 +30,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			// set of columns indexes in load file used in import settings.
 			const int fileNameColumnIndex = 13;
@@ -40,7 +40,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			var createJobPayload = new
 			{
 				applicationName = "Import-service-sample-app",
-				correlationID = "Sample-job-0001"
+				correlationID = "Sample-job-0022"
 			};
 
 			// Configuration settings for document import. Builder is used to create settings.
@@ -66,7 +66,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Create import job.
 			// endpoint: POST /import-jobs/{importId}
-			var createImportJobUri = RelativityImportEndpoints.GetCreateImportUri(workspaceId, importId);
+			var createImportJobUri = RelativityImportEndpoints.GetImportJobCreateUri(workspaceId, importId);
 
 			var responseMessage = await httpClient.PostAsJsonAsync(createImportJobUri,createJobPayload);
 			var response = await HttpClientHelper.DeserializeResponse<Response>(responseMessage);
@@ -107,7 +107,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Start import job.
 			// endpoint: POST /import-jobs/{importId}/begin
-			var beginImportJobUri = RelativityImportEndpoints.GetBeginJobUri(workspaceId, importId);
+			var beginImportJobUri = RelativityImportEndpoints.GetImportJobBeginUri(workspaceId, importId);
 			responseMessage = await httpClient.PostAsync(beginImportJobUri, null);
 			response = await HttpClientHelper.DeserializeResponse<Response>(responseMessage);
 
@@ -123,6 +123,27 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 }
 
 /* Expected console result:
-	Data source state: Completed
-	Import data source progress: Total records: 4, Imported records: 4, Records with errors: 0
+	Create import job response:
+	IsSuccess:True
+	ImportJobID:bf272e8c-c26b-435f-a21b-14a3f46661e2
+	ErrorCode:
+	ErrorMessage:
+
+	Add document configuration response
+	IsSuccess:False
+	ImportJobID:bf272e8c-c26b-435f-a21b-14a3f46661e2
+	ErrorCode:C.CR.VLD.2001
+	ErrorMessage:Cannot create Job Configuration. Invalid import job configuration: Nothing is imported; Fields property is not set when importing Natives.
+	
+	Add Data source response:
+	IsSuccess:False
+	ImportJobID:bf272e8c-c26b-435f-a21b-14a3f46661e2
+	ErrorCode:S.CR.VLD.3001
+	ErrorMessage:Cannot create Data Source. Invalid load file settings: Delimiters are non-unique.
+	
+	Begin job response:
+	IsSuccess:False
+	ImportJobID:bf272e8c-c26b-435f-a21b-14a3f46661e2
+	ErrorCode:J.BEG.VLD.1508
+	ErrorMessage:Cannot begin Import Job. Job is not configured. Current Job state: New
  */

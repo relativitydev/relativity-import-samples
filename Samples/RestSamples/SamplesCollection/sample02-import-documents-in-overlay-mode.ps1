@@ -10,13 +10,13 @@ $sourceId = New-Guid
 $global:Endpoints = [Endpoints]::new($workspaceId)
 $global:WriteInformation = [WriteInformation]::new()
 
-Context "Sample01 Import native files" {
+Context "Sample 02 Import documents in overlay mode" {
     Describe "Create job" {
         $uri = $global:Endpoints.importJobCreateUri($importId)
 
         $body = @{
             applicationName = "Import-service-sample-app"
-            correlationID = "Sample-job-0001"
+            correlationID = "Sample-job-0002"
         } | ConvertTo-Json -Depth 10
 		
         $response = $global:WebRequest.callPost($uri, $body)
@@ -29,7 +29,11 @@ Context "Sample01 Import native files" {
         $jobConfigurationBody = '{
             "importSettings" :
             {
-                "Overlay":null,
+                "Overlay": {
+                            "Mode" : 2,
+                            "KeyField" : "Control Number",
+                            "MultiFieldOverlayBehaviour" : 2
+                        },
                 "Native":{
                     "FilePathColumnIndex": "22",
                     "FileNameColumnIndex": "13"
@@ -59,6 +63,12 @@ Context "Sample01 Import native files" {
                         {
                             "ColumnIndex": 5,
                             "Field": "Date Sent",
+                            "ContainsID": false,
+                            "ContainsFilePath": false
+                        },
+                        {
+                            "ColumnIndex": 4,
+                            "Field": "Date Received",
                             "ContainsID": false,
                             "ContainsFilePath": false
                         }

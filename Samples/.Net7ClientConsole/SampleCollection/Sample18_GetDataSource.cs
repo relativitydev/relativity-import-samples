@@ -13,7 +13,6 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 	using Relativity.Import.Samples.Net7Client.Helpers;
 	using Relativity.Import.V1.Builders.Documents;
 	using Relativity.Import.V1.Models.Settings;
-	using Relativity.Import.V1.Models.Sources;
 	using Relativity.Import.V1.Builders.DataSource;
 
 	/// <summary>
@@ -33,7 +32,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			Guid importId = Guid.NewGuid();
 
 			// Destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			// set of columns indexes in load file used in import settings.
 			const int controlNumberColumnIndex = 0;
@@ -67,7 +66,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Create import job.
 			// endpoint: POST /import-jobs/{importId}
-			var createImportJobUri = RelativityImportEndpoints.GetCreateImportUri(workspaceId, importId);
+			var createImportJobUri = RelativityImportEndpoints.GetImportJobCreateUri(workspaceId, importId);
 
 			var response = await httpClient.PostAsJsonAsync(createImportJobUri, createJobPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
@@ -104,7 +103,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			}
 
 			// Read collection of data sources for particular import job.
-			var importSourcesUri = RelativityImportEndpoints.GetImportSourcesUri(workspaceId, importId);
+			var importSourcesUri = RelativityImportEndpoints.GetImportSourcesForJobUri(workspaceId, importId);
 			ValueResponse<DataSources>? valueResponse =
 				await httpClient.GetFromJsonAsync<ValueResponse<DataSources>>(importSourcesUri);
 

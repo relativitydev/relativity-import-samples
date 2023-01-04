@@ -60,9 +60,9 @@ namespace Relativity.Import.Samples.Net7Client
 
 					// await sampleCollection.Sample18_GetDataSource();
 
-					// await sampleCollection.Sample19_GetImportJobProgress();
+					// await sampleCollection.Sample19_GetImportJobDetailsAndProgress();
 
-					 // await sampleCollection.Sample20_GetDataSourceProgress();
+					// await sampleCollection.Sample20_GetDataSourceDetailsAndProgress();
 
 					// await sampleCollection.Sample21_CancelStartedJob();
 

@@ -29,9 +29,9 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			Guid importId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
-			// set of columns indexes in load file used in import settings.Example import of Domain RDO.
+			// set of columns indexes in load file used in import settings.
 			const int nameColumnIndex = 2;
 			const int valueColumnIndex = 3;
 			const int parentObjectIdColumnIndex = 4;
@@ -62,7 +62,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Create import job.
 			// endpoint: POST /import-jobs/{importId}
-			var createImportJobUri = RelativityImportEndpoints.GetCreateImportUri(workspaceId, importId);
+			var createImportJobUri = RelativityImportEndpoints.GetImportJobCreateUri(workspaceId, importId);
 
 			var response = await httpClient.PostAsJsonAsync(createImportJobUri, createJobPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
@@ -76,7 +76,11 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			var getResponse = await httpClient.GetAsync(rdoConfigurationUri);
 			var valueResponse = await ImportJobSampleHelper.EnsureSuccessValueResponse<ImportRdoSettings>(getResponse);
 
-			Console.WriteLine($"Read RDO settings: {valueResponse?.Value.Rdo.ArtifactTypeID} {valueResponse?.Value.Rdo.ParentColumnIndex}");
+			Console.WriteLine($"Read RDO settings: ArtifactTypeID:{valueResponse?.Value.Rdo.ArtifactTypeID}, ParentColumnIndex:{valueResponse?.Value.Rdo.ParentColumnIndex}");
 		}
 	}
 }
+
+/* Expected console result:
+	Read RDO settings: ArtifactTypeID:100222, ParentColumnIndex:4
+*/

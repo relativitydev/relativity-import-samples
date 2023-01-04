@@ -39,7 +39,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			Guid source02Id = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			// set of columns indexes in load file used in import settings.
 			// set of columns indexes in load file used in import settings.
@@ -59,7 +59,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			var createJobPayload = new
 			{
 				applicationName = "Import-service-sample-app",
-				correlationID = "Sample-job-0003"
+				correlationID = "Sample-job-0023"
 			};
 
 			// Configuration settings for document import. Builder is used to create settings.
@@ -117,7 +117,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Create import job.
 			// endpoint: POST /import-jobs/{importId}
-			var createImportJobUri = RelativityImportEndpoints.GetCreateImportUri(workspaceId, importId);
+			var createImportJobUri = RelativityImportEndpoints.GetImportJobCreateUri(workspaceId, importId);
 			var response = await httpClient.PostAsJsonAsync(createImportJobUri, createJobPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
@@ -140,31 +140,31 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Start import job.
 			// endpoint: POST /import-jobs/{importId}/begin
-			var beginImportJobUri = RelativityImportEndpoints.GetBeginJobUri(workspaceId, importId);
+			var beginImportJobUri = RelativityImportEndpoints.GetImportJobBeginUri(workspaceId, importId);
 			response = await httpClient.PostAsync(beginImportJobUri, null);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
 			// End import job.
 			// endpoint: POST /import-jobs/{importId}/end
-			var endImportJobUri = RelativityImportEndpoints.GetEndJobUri(workspaceId, importId);
+			var endImportJobUri = RelativityImportEndpoints.GetImportJobEndUri(workspaceId, importId);
 			response = await httpClient.PostAsync(endImportJobUri, null);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
-			// It may take some time for import job to be completed. Request data source details to monitor the current state.
-			// You can get job details to verify if job is finished.
-			var importDetailsUri = RelativityImportEndpoints.GetImportDetailsUri(workspaceId, importId);
+			// It may take some time for import job to be completed. Request job details to monitor the current state.
+			// You can also get data source details to verify if importing source is finished.
+			var importDetailsUri = RelativityImportEndpoints.GetImportJobDetailsUri(workspaceId, importId);
 
 			JsonSerializerOptions options = new()
 			{
 				Converters = { new JsonStringEnumConverter() }
 			};
 
-			var dataSourceState = await ImportJobSampleHelper.WaitImportJobToBeFinished(
+			await ImportJobSampleHelper.WaitImportJobToBeFinished(
 				funcAsync: () => httpClient.GetFromJsonAsync<ValueResponse<ImportDetails>>(importDetailsUri, options));
 
 
 			// Get import Progress (see sample 19)
-			var importJobProgressUri = RelativityImportEndpoints.GetImportProgressUri(workspaceId, importId);
+			var importJobProgressUri = RelativityImportEndpoints.GetImportJobProgressUri(workspaceId, importId);
 
 			var valueResponse = await httpClient.GetFromJsonAsync<ValueResponse<ImportProgress>>(importJobProgressUri);
 
@@ -197,7 +197,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 						// Get Item Errors for each source.
 						// GET import-jobs/{importId}/sources/{sourceId}/itemerrors?{start}&{length}"
-						var getItemErrorUrl = RelativityImportEndpoints.GetItemErrorUri(workspaceId, importId, sourceId,0 , 20);
+						var getItemErrorUrl = RelativityImportEndpoints.GetImportSourcesItemErrorsUri(workspaceId, importId, sourceId,0 , 20);
 						ValueResponse<ImportErrors>? valueResponseErrors = await httpClient.GetFromJsonAsync<ValueResponse<ImportErrors>>(getItemErrorUrl);
 
 						if (valueResponseErrors is {IsSuccess: true})

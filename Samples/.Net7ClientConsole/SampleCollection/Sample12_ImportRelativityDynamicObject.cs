@@ -25,7 +25,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 	{
 		/// <summary>
 		/// Example of import  Relativity Dynamic Object (RDO).
-		/// NOTE: Domain object is used in this example. Please insert document from sample01 first.
+		/// NOTE: Existing RDO "Domain" is used in this example. Please insert documents from sample01 first.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample12_ImportRelativityDynamicObject()
@@ -37,7 +37,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			// set of columns indexes in load file used in import settings.Example import of Domain RDO.
 			const int nameColumnIndex = 0;
@@ -63,8 +63,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 				.WithAppendMode()
 				.WithFieldsMapped(f => f
 					.WithField(nameColumnIndex, "Name")
-					// Use sample01 and load_file_01.dat first to import document. The following fields have reference to these documents.
-					// If you do not use these field please just comment them.
+					// Use sample01 and load_file_01.dat first to import documents. The following fields have reference to these documents.
+					// If you do not use these fields please just comment them.
 					.WithField(domainEmailCcColumnIndex, "Domains (Email CC)")
 					.WithField(domainEmailFromColumnIndex, "Domains (Email From)")
 					.WithField(domainEmailToColumnIndex, "Domains (Email To)"))
@@ -92,7 +92,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Create import job.
 			// endpoint: POST /import-jobs/{importId}
-			var createImportJobUri = RelativityImportEndpoints.GetCreateImportUri(workspaceId, importId);
+			var createImportJobUri = RelativityImportEndpoints.GetImportJobCreateUri(workspaceId, importId);
 
 			var response = await httpClient.PostAsJsonAsync(createImportJobUri, createJobPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
@@ -111,13 +111,13 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Start import job.
 			// endpoint: POST /import-jobs/{importId}/begin
-			var beginImportJobUri = RelativityImportEndpoints.GetBeginJobUri(workspaceId, importId);
+			var beginImportJobUri = RelativityImportEndpoints.GetImportJobBeginUri(workspaceId, importId);
 			response = await httpClient.PostAsync(beginImportJobUri, null);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
 			// End import job.
 			// endpoint: POST /import-jobs/{importId}/end
-			var endImportJobUri = RelativityImportEndpoints.GetEndJobUri(workspaceId, importId);
+			var endImportJobUri = RelativityImportEndpoints.GetImportJobEndUri(workspaceId, importId);
 			response = await httpClient.PostAsync(endImportJobUri, null);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 

@@ -1,4 +1,4 @@
-﻿// <copyright file="Sample19_GetImportJobProgress.cs" company="Relativity ODA LLC">
+﻿// <copyright file="Sample19_GetImportJobDetailsAndProgress.cs" company="Relativity ODA LLC">
 // © Relativity All Rights Reserved.
 // </copyright>
 
@@ -27,15 +27,15 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 		/// Example of reading job progress.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-		public async Task Sample19_GetImportJobProgress()
+		public async Task Sample19_GetImportJobDetailsAndProgress()
 		{
-			Console.WriteLine($"Running {nameof(Sample19_GetImportJobProgress)}");
+			Console.WriteLine($"Running {nameof(Sample19_GetImportJobDetailsAndProgress)}");
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1019056;
+			const int workspaceId = 1000000;
 
 			// set of columns indexes in load file used in import settings.
 			const int controlNumberColumnIndex = 0;
@@ -94,7 +94,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Create import job.
 			// endpoint: POST /import-jobs/{importId}
-			var createImportJobUri = RelativityImportEndpoints.GetCreateImportUri(workspaceId, importId);
+			var createImportJobUri = RelativityImportEndpoints.GetImportJobCreateUri(workspaceId, importId);
 
 			var response = await httpClient.PostAsJsonAsync(createImportJobUri,createJobPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
@@ -113,19 +113,19 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 			// Start import job.
 			// endpoint: POST /import-jobs/{importId}/begin
-			var beginImportJobUri = RelativityImportEndpoints.GetBeginJobUri(workspaceId, importId);
+			var beginImportJobUri = RelativityImportEndpoints.GetImportJobBeginUri(workspaceId, importId);
 			response = await httpClient.PostAsync(beginImportJobUri, null);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
 			// End import job.
 			// endpoint: POST /import-jobs/{importId}/end
-			var endImportJobUri = RelativityImportEndpoints.GetEndJobUri(workspaceId, importId);
+			var endImportJobUri = RelativityImportEndpoints.GetImportJobEndUri(workspaceId, importId);
 			response = await httpClient.PostAsync(endImportJobUri, null);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
-			// It may take some time for import job to be completed. Request data source details to monitor the current state.
+			// It may take some time for import job to be completed. Request import job details to monitor the current state.
 			// endpoint: GET import-jobs/{importId}/details"
-			var importJobDetailsUri = RelativityImportEndpoints.GetImportDetailsUri(workspaceId, importId);
+			var importJobDetailsUri = RelativityImportEndpoints.GetImportJobDetailsUri(workspaceId, importId);
 
 			JsonSerializerOptions options = new()
 			{
@@ -136,11 +136,11 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 				funcAsync: () => httpClient.GetFromJsonAsync<ValueResponse<ImportDetails>> (importJobDetailsUri, options),
 				timeout: 10000);
 
-			Console.WriteLine($"Current import state: {importState}");
+			Console.WriteLine($"Import job state: {importState}");
 
 			// Get current import progress for specific job.
 			// endpoint: GET import-jobs/{importId}/progress"
-			var importJobProgressUri = RelativityImportEndpoints.GetImportProgressUri(workspaceId, importId);
+			var importJobProgressUri = RelativityImportEndpoints.GetImportJobProgressUri(workspaceId, importId);
 
 			var valueResponse = await httpClient.GetFromJsonAsync<ValueResponse<ImportProgress>>(importJobProgressUri);
 			
@@ -156,7 +156,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 }
 
 /* Expected console result:
-	Current import state: Completed
+	Import job state: Completed
 
 	IsSuccess: True
 	Import job Id: dc126168-abc7-49e6-b329-d1721f27f67b
