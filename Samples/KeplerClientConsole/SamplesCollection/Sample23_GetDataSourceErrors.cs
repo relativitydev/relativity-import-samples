@@ -20,7 +20,7 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 	public partial class ImportServiceSample
 	{
 		/// <summary>
-		/// Example of reading all data sources Ids for particular job.
+		/// Example of reading data sources errors.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample23_GetDataSourceErrors()

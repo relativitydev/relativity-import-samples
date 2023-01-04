@@ -27,7 +27,10 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 			// destination workspace artifact Id.
 			const int workspaceId = 1031725;
 
-			const int importCount = 10;
+			const int dataSourceCount = 10;
+
+			// set of columns indexes in load file used in import settings.
+			const int controlNumberColumnIndex = 0;
 			const int filePathColumnIndex = 11;
 			const int fileNameColumnIndex = 13;
 
@@ -38,7 +41,8 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 					.WithFilePathDefinedInColumn(filePathColumnIndex)
 					.WithFileNameDefinedInColumn(fileNameColumnIndex))
 				.WithoutImages()
-				.WithoutFieldsMapped()
+				.WithFieldsMapped(x => x
+					.WithField(controlNumberColumnIndex, "Control Number"))
 				.WithoutFolders();
 
 			using (Relativity.Import.V1.Services.IDocumentConfigurationController documentConfiguration =
@@ -60,7 +64,7 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 				await documentConfiguration.CreateAsync(workspaceId, importId, importSettings);
 
 				// Add n data sources to the existing job.
-				for (int i = 0; i < importCount; i++)
+				for (int i = 0; i < dataSourceCount; i++)
 				{
 					Guid dataSourceId = Guid.NewGuid();
 

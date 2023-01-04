@@ -23,10 +23,11 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 		public async Task Sample17_GetImportJobs()
 		{
 			// destination workspace artifact Id.
-			const int workspaceId = 1031725;
+			const int workspaceId = 1019056;
 
 			const int importCount = 10;
 			const int pageSize = 7;
+			const int controlNumberColumnIndex = 0;
 			const int filePathColumnIndex = 11;
 			const int fileNameColumnIndex = 13;
 
@@ -37,7 +38,8 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 					.WithFilePathDefinedInColumn(filePathColumnIndex)
 					.WithFileNameDefinedInColumn(fileNameColumnIndex))
 				.WithoutImages()
-				.WithoutFieldsMapped()
+				.WithFieldsMapped(x => x
+					.WithField(controlNumberColumnIndex, "Control Number"))
 				.WithoutFolders();
 
 			using (Relativity.Import.V1.Services.IDocumentConfigurationController documentConfiguration =
@@ -63,7 +65,8 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 				// Read import job collection (guid list) for particular workspace. Paginating is supported thanks to dedicated parameters.
 				ValueResponse<ImportJobs> importJobs = await importJobController.GetJobsAsync(workspaceId, 0, pageSize);
 
-				Console.WriteLine(importJobs.Value.TotalCount);
+				Console.WriteLine($"Import Jobs total count: {importJobs.Value.TotalCount}");
+				Console.WriteLine("ImportJobIds:");
 				foreach (var importJobId in importJobs.Value.Jobs)
 				{
 					Console.WriteLine(importJobId);
