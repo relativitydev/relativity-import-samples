@@ -6,6 +6,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 {
 	using System;
 	using System.Threading.Tasks;
+	using Relativity.Import.Samples.NetFrameworkClient.ImportSampleHelpers;
 	using Relativity.Import.V1;
 	using Relativity.Import.V1.Builders.DataSource;
 	using Relativity.Import.V1.Builders.Documents;
@@ -28,10 +29,10 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1031725;
+			const int workspaceId = 1019056;
 
 			// destination folder artifact id.
-			const int rootFolderId = 1041269;
+			const int rootFolderId = 1040204;
 
 			// set of columns indexes in load file used in import settings.
 			const int folderPathColumnIndex = 15;
@@ -76,34 +77,28 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 					workspaceID: workspaceId,
 					applicationName: "Import-service-sample-app",
 					correlationID: "Sample-job-0006");
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.CreateAsync");
 
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					// Add import document settings to existing import job.
-					response = await documentConfiguration.CreateAsync(workspaceId, importId, importSettings);
-				}
+				// Add import document settings to existing import job.
+				response = await documentConfiguration.CreateAsync(workspaceId, importId, importSettings);
+				ResponseHelper.EnsureSuccessResponse(response, "IDocumentConfigurationController.CreateAsync");
 
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					// Add data source settings to existing import job.
-					response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId, dataSourceSettings);
-				}
+				// Add data source settings to existing import job.
+				response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId,
+					dataSourceSettings);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportSourceController.AddSourceAsync");
 
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					// Start import job.
-					response = await importJobController.BeginAsync(workspaceId, importId);
-				}
+				// Start import job.
+				response = await importJobController.BeginAsync(workspaceId, importId);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.BeginAsync");
 
-				if (!this.IsPreviousResponseWithSuccess(response))
-				{
-					Console.WriteLine($"Import Job was not started because of:  {response.ErrorCode} - {response.ErrorMessage}");
-					return;
-				}
+				// End import job.
+				await importJobController.EndAsync(workspaceId, importId);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.EndAsync");
 
 				// It may take some time for import job to be completed. Request data source details to monitor the current state.
-				var dataSourceState = await this.WaitToStatusChange(
-					targetStatus: DataSourceState.Completed,
+				// NOTE: You can also request job details to verify if job is finished - see appropriate sample.
+				var dataSourceState = await this.WaitImportDataSourceToBeCompleted(
 					funcAsync: () => importSourceController.GetDetailsAsync(workspaceId, importId, sourceId),
 					timeout: 10000);
 
@@ -113,11 +108,9 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 				if (importProgress.IsSuccess)
 				{
 					Console.WriteLine($"\nData source state: {dataSourceState}");
-					Console.WriteLine($"Import progress: Total records: {importProgress.Value.TotalRecords}, Imported records: {importProgress.Value.ImportedRecords}, Records with errors: {importProgress.Value.ErroredRecords}");
+					Console.WriteLine(
+						$"Import data source progress: Total records: {importProgress.Value.TotalRecords}, Imported records: {importProgress.Value.ImportedRecords}, Records with errors: {importProgress.Value.ErroredRecords}");
 				}
-
-				// End import job.
-				await importJobController.EndAsync(workspaceId, importId);
 			}
 		}
 	}
@@ -125,4 +118,4 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 
 // Expected output for sample load file.
 // Data source state: Completed
-// Import progress: Total records: 2, Imported records: 2, Records with errors: 0
+// Import data source progress: Total records: 2, Imported records: 2, Records with errors: 0

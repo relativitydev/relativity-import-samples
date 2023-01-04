@@ -6,6 +6,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 {
 	using System;
 	using System.Threading.Tasks;
+	using Relativity.Import.Samples.NetFrameworkClient.ImportSampleHelpers;
 	using Relativity.Import.V1;
 	using Relativity.Import.V1.Models.Settings;
 	using Relativity.Import.V1.Models.Sources;
@@ -27,8 +28,8 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace and folder artifact Ids.
-			const int workspaceId = 1031725;
-			const int rootFolderId = 1042316;
+			const int workspaceId = 1019056;
+			const int rootFolderId = 1040204;
 
 			// overlay keyField
 			const string keyField = "Control Number";
@@ -128,52 +129,49 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 			using (Relativity.Import.V1.Services.IImportSourceController importSourceController =
 				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportSourceController>())
 			{
+				// Create import job.
 				Response response = await importJobController.CreateAsync(
 					importJobID: importId,
 					workspaceID: workspaceId,
 					applicationName: "Import-service-sample-app",
-					correlationID: "Sample-job-0007-doc-settings");
+					correlationID: "Sample-job-0007");
 
-				if (this.IsPreviousResponseWithSuccess(response))
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.CreateAsync");
+
+				// Add import document settings to existing import job.
+				response = await documentConfiguration.CreateAsync(workspaceId, importId, importSettings);
+				ResponseHelper.EnsureSuccessResponse(response, "IDocumentConfigurationController.CreateAsync");
+
+				// Add data source settings to existing import job.
+				response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId, dataSourceSettings);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportSourceController.AddSourceAsync");
+
+				// Start import job.
+				response = await importJobController.BeginAsync(workspaceId, importId);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.BeginAsync");
+
+				// End import job.
+				await importJobController.EndAsync(workspaceId, importId);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.EndAsync");
+
+				// It may take some time for import job to be completed. Request data source details to monitor the current state.
+				var dataSourceState = await this.WaitImportDataSourceToBeCompleted(
+					funcAsync: () => importSourceController.GetDetailsAsync(workspaceId, importId, sourceId),
+					timeout: 10000);
+
+				// Get current import progress.
+				var importProgress = await importJobController.GetProgressAsync(workspaceId, importId);
+
+				if (importProgress.IsSuccess)
 				{
-					response = await documentConfiguration.CreateAsync(workspaceId, importId, importSettings);
-				}
-
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId, dataSourceSettings);
-				}
-
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					response = await importJobController.BeginAsync(workspaceId, importId);
-				}
-
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					// It may take some time for import job to be completed. Request data source details to monitor the current state.
-					var dataSourceState = await this.WaitToStatusChange(
-						targetStatus: DataSourceState.Completed,
-						funcAsync: () => importSourceController.GetDetailsAsync(workspaceId, importId, sourceId),
-						timeout: 10000);
-
-					// Get current import progress for specific data source.
-					var importProgress = await importJobController.GetProgressAsync(workspaceId, importId);
-
-					if (importProgress.IsSuccess)
-					{
-						Console.WriteLine($"\nData source state: {dataSourceState}");
-						Console.WriteLine($"Import progress: Total records: {importProgress.Value.TotalRecords}, Imported records: {importProgress.Value.ImportedRecords}, Records with errors: {importProgress.Value.ErroredRecords}");
-					}
-
-					// End import job.
-					await importJobController.EndAsync(workspaceId, importId);
+					Console.WriteLine($"\nData source state: {dataSourceState}");
+					Console.WriteLine($"Import progress: Total records: {importProgress.Value.TotalRecords}, Imported records: {importProgress.Value.ImportedRecords}, Records with errors: {importProgress.Value.ErroredRecords}");
 				}
 			}
 		}
 	}
 }
 
-// Expected console output for provided sample load file.
+// Expected console output:
 // Data source state: Completed
 // Import progress: Total records: 2, Imported records: 2, Records with errors: 0

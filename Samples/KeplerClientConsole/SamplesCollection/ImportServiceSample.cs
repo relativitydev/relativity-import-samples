@@ -30,35 +30,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 			this._serviceFactory = KeplerProxyHelper.GetServiceFactory();
 		}
 
-		/// <summary>
-		/// Check if received response was with success (isSuccess is True).
-		/// </summary>
-		/// <param name="response">Response.</param>
-		/// <param name="requestDescription">request description.</param>
-		/// <returns>bool indicating the received response has IsSuccess.</returns>
-		protected bool IsPreviousResponseWithSuccess(Response response, string requestDescription = null)
-		{
-			string errorInfo = response.IsSuccess ? string.Empty : $"ErrorMessage: {response.ErrorMessage} ErrorCode: {response.ErrorCode}";
-			Console.WriteLine($"{requestDescription} Response.IsSuccess: {response.IsSuccess} {errorInfo}");
-
-			return response.IsSuccess;
-		}
-
-		private async Task<DataSourceState?> WaitToStatusChange(DataSourceState targetStatus, Func<Task<ValueResponse<DataSourceDetails>>> funcAsync, int? timeout = null)
-		{
-			DataSourceState? state;
-			var timeoutTask = Task.Delay(timeout ?? Timeout.Infinite);
-			do
-			{
-				await Task.Delay(1000);
-				state = funcAsync().Result.Value.State;
-				Console.WriteLine($"DataSource status: {state}");
-			}
-			while (state != targetStatus && !timeoutTask.IsCompleted);
-
-			return state;
-		}
-
+		
 		private async Task<DataSourceState?> WaitImportDataSourceToBeCompleted(Func<Task<ValueResponse<DataSourceDetails>>> funcAsync, int? timeout = null)
 		{
 			DataSourceState[] completedStates = { DataSourceState.Completed, DataSourceState.CompletedWithItemErrors, DataSourceState.Failed };
@@ -98,7 +70,5 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 
 			return state;
 		}
-
-		private void DisplayExecutionInfo(string methodName) => Console.WriteLine($" Executing: {methodName}");
 	}
 }

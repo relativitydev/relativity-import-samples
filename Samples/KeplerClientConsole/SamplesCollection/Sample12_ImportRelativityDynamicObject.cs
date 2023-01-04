@@ -6,6 +6,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 {
 	using System;
 	using System.Threading.Tasks;
+	using Relativity.Import.Samples.NetFrameworkClient.ImportSampleHelpers;
 	using Relativity.Import.V1;
 	using Relativity.Import.V1.Builders.DataSource;
 	using Relativity.Import.V1.Builders.Rdos;
@@ -19,7 +20,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 	{
 		/// <summary>
 		/// Example of import  Relativity Dynamic Object (RDO).
-		/// Domain object used in this example.
+		/// NOTE: Existing RDO "Domain" is used in this example. Please insert document from sample01 first.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample12_ImportRelativityDynamicObject()
@@ -29,7 +30,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1035012;
+			const int workspaceId = 1019056;
 
 			// set of columns indexes in load file used in import settings.
 			// example import of Domain RDO.
@@ -49,8 +50,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 				.WithAppendMode()
 				.WithFieldsMapped(f => f
 					.WithField(nameColumnIndex, "Name")
-
-					// .WithField(domainEmailBccColumnIndex, "Domains (Email BCC)")
+					// If you do not use these fields please just comment them. Otherwise use sample01 first to import related documents.
 					.WithField(domainEmailCcColumnIndex, "Domains (Email CC)")
 					.WithField(domainEmailFromColumnIndex, "Domains (Email From)")
 					.WithField(domainEmailToColumnIndex, "Domains (Email To)"))
@@ -84,34 +84,28 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 					applicationName: "Import-service-sample-app",
 					correlationID: "Sample-job-import-0012");
 
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					// Add import rdo settings to existing import job.
-					response = await rdoConfiguration.CreateAsync(workspaceId, importId, importSettings);
-				}
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.CreateAsync");
 
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					// Add data source settings to existing import job.
-					response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId, dataSourceSettings);
-				}
+				// Add import rdo settings to existing import job.
+				response = await rdoConfiguration.CreateAsync(workspaceId, importId, importSettings);
+				ResponseHelper.EnsureSuccessResponse(response, "IRDOConfigurationController.CreateAsync");
 
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					// Start import job.
-					response = await importJobController.BeginAsync(workspaceId, importId);
-				}
+				// Add data source settings to existing import job.
+				response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId, dataSourceSettings);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportSourceController.AddSourceAsync");
 
-				if (!this.IsPreviousResponseWithSuccess(response))
-				{
-					Console.WriteLine($"Import Job was not started because of:  {response.ErrorCode} - {response.ErrorMessage}");
-					return;
-				}
+				// Start import job.
+				response = await importJobController.BeginAsync(workspaceId, importId);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.BeginAsync");
+
+				// End import job.
+				await importJobController.EndAsync(workspaceId, importId);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.EndAsync");
 
 				// It may take some time for import job to be completed. Request data source details to monitor the current state.
 				var dataSourceState = await this.WaitImportDataSourceToBeCompleted(
 					() => importSourceController.GetDetailsAsync(workspaceId, importId, sourceId),
-					15000);
+					10000);
 
 				// Get current import progress for specific data source.
 				var importProgress = await importSourceController.GetProgressAsync(workspaceId, importId, sourceId);
@@ -122,7 +116,6 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 					Console.WriteLine($"Import progress: Total records: {importProgress.Value.TotalRecords}, Imported records: {importProgress.Value.ImportedRecords}, Records with errors: {importProgress.Value.ErroredRecords}");
 				}
 
-				await importJobController.EndAsync(workspaceId, importId);
 			}
 		}
 	}

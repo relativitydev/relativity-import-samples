@@ -13,7 +13,6 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 	using Relativity.Import.V1.Builders.Documents;
 	using Relativity.Import.V1.Models.Settings;
 	using Relativity.Import.V1.Models.Sources;
-	using Relativity.Import.V1.Services;
 
 	/// <summary>
 	///  Class containing examples of using import service SDK.
@@ -98,27 +97,23 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 					applicationName: "Import-service-sample-app",
 					correlationID: "Sample-job-0002");
 
-				ResponseHelper.EnsureSuccessResponse(response, nameof(IImportJobController.CreateAsync));
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.CreateAsync");
 
 				// Add import document settings to existing import job.
 				response = await documentConfiguration.CreateAsync(workspaceId, importId, importSettings);
-				ResponseHelper.EnsureSuccessResponse(response, nameof(IDocumentConfigurationController.CreateAsync));
-
+				ResponseHelper.EnsureSuccessResponse(response, "IDocumentConfigurationController.CreateAsync");
 
 				// Add data source settings to existing import job.
 				response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId, dataSourceSettings);
-				ResponseHelper.EnsureSuccessResponse(response, nameof(IImportSourceController.AddSourceAsync));
-
+				ResponseHelper.EnsureSuccessResponse(response, "IImportSourceController.AddSourceAsync");
 
 				// Start import job.
 				response = await importJobController.BeginAsync(workspaceId, importId);
-				ResponseHelper.EnsureSuccessResponse(response, nameof(IImportJobController.BeginAsync));
-
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.BeginAsync");
 
 				// End import job.
 				await importJobController.EndAsync(workspaceId, importId);
-				ResponseHelper.EnsureSuccessResponse(response, nameof(IImportJobController.EndAsync));
-
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.EndAsync");
 
 				// It may take some time for import job to be completed. Request data source details to monitor the current state.
 				var dataSourceState = await this.WaitImportDataSourceToBeCompleted(
@@ -128,17 +123,19 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 				// Get current import progress for specific data source.
 				var importProgress = await importSourceController.GetProgressAsync(workspaceId, importId, sourceId);
 
-				ResponseHelper.EnsureSuccessResponse(importProgress, nameof(IImportSourceController.GetProgressAsync));
-
-
 				if (importProgress.IsSuccess)
 				{
 					Console.WriteLine("\n");
 					Console.WriteLine($"Data source state: {dataSourceState}");
-					Console.WriteLine($"Import progress: Total records: {importProgress.Value.TotalRecords}, Imported records: {importProgress.Value.ImportedRecords}, Records with errors: {importProgress.Value.ErroredRecords}");
+					Console.WriteLine($"Import data source progress: Total records: {importProgress.Value.TotalRecords}, Imported records: {importProgress.Value.ImportedRecords}, Records with errors: {importProgress.Value.ErroredRecords}");
 				}
 				Console.WriteLine("\n");
 			}
 		}
 	}
 }
+
+/* Expected console result:
+	Data source state: Completed
+	Import data source progress: Total records: 4, Imported records: 4, Records with errors: 0
+ */

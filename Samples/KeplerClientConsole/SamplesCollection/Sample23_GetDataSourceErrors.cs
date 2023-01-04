@@ -5,7 +5,9 @@
 namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Threading.Tasks;
+	using Relativity.Import.Samples.NetFrameworkClient.ImportSampleHelpers;
 	using Relativity.Import.V1;
 	using Relativity.Import.V1.Builders.DataSource;
 	using Relativity.Import.V1.Builders.Documents;
@@ -31,7 +33,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 			Guid sourceId02 = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1031725;
+			const int workspaceId = 1019056;
 
 			// set of columns indexes in load file used in import settings.
 			const int controlNumberColumnIndex = 0;
@@ -46,6 +48,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 			const string loadFile01Path = "C:\\DefaultFileRepository\\samples\\load_file_05.dat";
 			const string loadFile02Path = "C:\\DefaultFileRepository\\samples\\notExistingFile.dat";
 
+			// Configuration settings for data source. Builder is used to create settings.
 			ImportDocumentSettings importSettings = ImportDocumentSettingsBuilder.Create()
 				.WithAppendMode()
 				.WithNatives(x => x
@@ -59,6 +62,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 					.WithField(dateSentColumnIndex, "Date Sent"))
 				.WithoutFolders();
 
+			// Configuration settings for data source. Builder is used to create settings.
 			DataSourceSettings dataSourceSettings01 = DataSourceSettingsBuilder.Create()
 				.ForLoadFile(loadFile01Path)
 				.WithDelimiters(d => d
@@ -73,6 +77,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 				.WithDefaultEncoding()
 				.WithDefaultCultureInfo();
 
+			// Configuration settings for second data source
 			DataSourceSettings dataSourceSettings02 = DataSourceSettingsBuilder.Create()
 				.ForLoadFile(loadFile02Path)
 				.WithDelimiters(d => d
@@ -101,44 +106,46 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 					importJobID: importId,
 					workspaceID: workspaceId,
 					applicationName: "Import-service-sample-app",
-					correlationID: "Sample-job-00020");
+					correlationID: "Sample-job-00023");
 
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					// Add import document settings to existing import job.
-					response = await documentConfiguration.CreateAsync(workspaceId, importId, importSettings);
-				}
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.CreateAsync");
 
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					// Add first data source settings to existing import job.
-					response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId01, dataSourceSettings01);
-				}
+				// Add import document settings to existing import job.
+				response = await documentConfiguration.CreateAsync(workspaceId, importId, importSettings);
+				ResponseHelper.EnsureSuccessResponse(response, "IDocumentConfigurationController.CreateAsync");
 
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					// Add second data source settings to existing import job.
-					response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId02, dataSourceSettings02);
-				}
+				// Add first data source settings to existing import job.
+				response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId01, dataSourceSettings01);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportSourceController.AddSourceAsync");
 
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					// Start import job.
-					response = await importJobController.BeginAsync(workspaceId, importId);
-				}
+				// Add second data source settings to existing import job.
+				response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId02, dataSourceSettings02);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportSourceController.AddSourceAsync");
+
+				// Start import job.
+				response = await importJobController.BeginAsync(workspaceId, importId);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.BeginAsync");
 
 				// End import job - assuming no new data source won't be added later.
 				await importJobController.EndAsync(workspaceId, importId);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.EndAsync");
 
 				// It takes some time for import job to be completed. Request import job details to monitor its final state.
 				// remark: this sample based on checking import completed/failed because job was already ended.
 				var importJobState = await this.WaitImportJobToBeCompleted(
 					funcAsync: () => importJobController.GetDetailsAsync(workspaceId, importId));
 
-				ValueResponse<ImportProgress> importProgress = await importJobController.GetProgressAsync(workspaceId, importId);
+				Console.WriteLine($"Import job state: {importJobState}");
+				ValueResponse <ImportProgress> valueResponse = await importJobController.GetProgressAsync(workspaceId, importId);
 
-				Console.WriteLine($"\n\nImport Job State: {importJobState}");
-				Console.WriteLine($"Import progress: Total records: {importProgress.Value.TotalRecords}, Imported records: {importProgress.Value.ImportedRecords}, Records with errors: {importProgress.Value.ErroredRecords}");
+				if (valueResponse?.IsSuccess ?? false)
+				{
+					Console.WriteLine("\n");
+					Console.WriteLine($"IsSuccess: {valueResponse.IsSuccess}");
+					Console.WriteLine($"Import job Id: {valueResponse.ImportJobID}");
+					Console.WriteLine($"Import job progress: Total records: {valueResponse.Value.TotalRecords}, Imported records: {valueResponse.Value.ImportedRecords}, Records with errors: {valueResponse.Value.ErroredRecords}");
+				}
+
 
 				foreach (var source in new[] { sourceId01, sourceId02 })
 				{
@@ -146,17 +153,10 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 					var sourceDetails = await importSourceController.GetDetailsAsync(workspaceId, importId, source);
 
 					Console.WriteLine($"Data Source Id: {source} finished with state {sourceDetails.Value.State}");
+
 					if (sourceDetails.Value.State == DataSourceState.Failed)
 					{
-						Console.WriteLine("Data source failed due to errors:");
-						foreach (var importError in sourceDetails.Value.JobLevelErrors)
-						{
-							// Retrieve all error details.
-							foreach (var details in importError.ErrorDetails)
-							{
-								Console.WriteLine($"Line Number: {importError.LineNumber},	ColumnIndex: {details.ColumnIndex}, ErrorCode: {details.ErrorCode} ErrorMessage: {details.ErrorMessage} ");
-							}
-						}
+						PrintJobLevelErrors(sourceDetails.Value.JobLevelErrors);
 					}
 					else if (sourceDetails.Value.State == DataSourceState.CompletedWithItemErrors)
 					{
@@ -166,21 +166,39 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 						ValueResponse<ImportErrors> dataSourceErrors =
 							await importSourceController.GetItemErrorsAsync(workspaceId, importId, source, 0, 20);
 
-						foreach (var importError in dataSourceErrors.Value.Errors)
-						{
-							// Retrieve all error details for each line.
-							foreach (var details in importError.ErrorDetails)
-							{
-								Console.WriteLine(
-									$"Line Number: {importError.LineNumber},	ColumnIndex: {details.ColumnIndex}, ErrorCode: {details.ErrorCode} ErrorMessage: {details.ErrorMessage} ");
-							}
-						}
-
-						Console.WriteLine($"Number of records: {dataSourceErrors.Value.NumberOfRecords}");
-						Console.WriteLine($"Total count: {dataSourceErrors.Value.TotalCount}");
-						Console.WriteLine($"Number of skipped records: {dataSourceErrors.Value.NumberOfSkippedRecords}");
-						Console.WriteLine($"Has more records: {dataSourceErrors.Value.HasMoreRecords}");
+						PrintItemLevelErrors(dataSourceErrors.Value);
 					}
+				}
+			}
+		}
+
+		private static void PrintItemLevelErrors(ImportErrors importErrors)
+		{
+			foreach (var importError in importErrors.Errors)
+			{
+				// Retrieve all error details for each line.
+				foreach (var details in importError.ErrorDetails)
+				{
+					Console.WriteLine(
+						$"Line Number: {importError.LineNumber},	ColumnIndex: {details.ColumnIndex}, ErrorCode: {details.ErrorCode} ErrorMessage: {details.ErrorMessage} ");
+				}
+			}
+
+			Console.WriteLine($"Number of records: {importErrors.NumberOfRecords}");
+			Console.WriteLine($"Total count: {importErrors.TotalCount}");
+			Console.WriteLine($"Number of skipped records: {importErrors.NumberOfSkippedRecords}");
+			Console.WriteLine($"Has more records: {importErrors.HasMoreRecords}");
+		}
+
+		private static void PrintJobLevelErrors(List<ImportError> jobLevelErrors)
+		{
+			Console.WriteLine("Data source failed due to errors:");
+			foreach (var importError in jobLevelErrors)
+			{
+				// Retrieve all error details.
+				foreach (var details in importError.ErrorDetails)
+				{
+					Console.WriteLine($"Line Number: {importError.LineNumber},	ColumnIndex: {details.ColumnIndex}, ErrorCode: {details.ErrorCode} ErrorMessage: {details.ErrorMessage} ");
 				}
 			}
 		}
