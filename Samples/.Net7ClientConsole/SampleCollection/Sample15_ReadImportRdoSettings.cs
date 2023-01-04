@@ -76,7 +76,11 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			var getResponse = await httpClient.GetAsync(rdoConfigurationUri);
 			var valueResponse = await ImportJobSampleHelper.EnsureSuccessValueResponse<ImportRdoSettings>(getResponse);
 
-			Console.WriteLine($"Read RDO settings: {valueResponse?.Value.Rdo.ArtifactTypeID} {valueResponse?.Value.Rdo.ParentColumnIndex}");
+			Console.WriteLine($"Read RDO settings: ArtifactTypeID:{valueResponse?.Value.Rdo.ArtifactTypeID}, ParentColumnIndex:{valueResponse?.Value.Rdo.ParentColumnIndex}");
 		}
 	}
 }
+
+/* Expected console result:
+	Read RDO settings: ArtifactTypeID:100222, ParentColumnIndex:4
+*/
