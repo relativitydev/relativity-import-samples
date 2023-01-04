@@ -7,6 +7,28 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relativity.Import.Samples.N
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relativity.Import.Samples.Net7Client", ".Net7ClientConsole\Relativity.Import.Samples.Net7Client.csproj", "{8BFF16C9-3750-45DE-B112-199CC8AC3425}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataSources", "DataSources", "{8F26CC26-699A-4A46-BAB5-A35D76E2F0FA}"
+	ProjectSection(SolutionItems) = preProject
+		..\SampleDataSources\load_file_01.dat = ..\SampleDataSources\load_file_01.dat
+		..\SampleDataSources\load_file_02.dat = ..\SampleDataSources\load_file_02.dat
+		..\SampleDataSources\load_file_03.dat = ..\SampleDataSources\load_file_03.dat
+		..\SampleDataSources\load_file_04.dat = ..\SampleDataSources\load_file_04.dat
+		..\SampleDataSources\load_file_05.dat = ..\SampleDataSources\load_file_05.dat
+		..\SampleDataSources\load_file_07_0.dat = ..\SampleDataSources\load_file_07_0.dat
+		..\SampleDataSources\load_file_07_1.dat = ..\SampleDataSources\load_file_07_1.dat
+		..\SampleDataSources\load_file_07_2.dat = ..\SampleDataSources\load_file_07_2.dat
+		..\SampleDataSources\load_file_07_3.dat = ..\SampleDataSources\load_file_07_3.dat
+		..\SampleDataSources\load_file_07_4.dat = ..\SampleDataSources\load_file_07_4.dat
+		..\SampleDataSources\load_file_07_5.dat = ..\SampleDataSources\load_file_07_5.dat
+		..\SampleDataSources\load_file_07_6.dat = ..\SampleDataSources\load_file_07_6.dat
+		..\SampleDataSources\load_file_07_7.dat = ..\SampleDataSources\load_file_07_7.dat
+		..\SampleDataSources\Opticon_01.opt = ..\SampleDataSources\Opticon_01.opt
+		..\SampleDataSources\opticon_02.opt = ..\SampleDataSources\opticon_02.opt
+		..\SampleDataSources\rdo_load_file_01.dat = ..\SampleDataSources\rdo_load_file_01.dat
+		..\SampleDataSources\rdo_load_file_02.dat = ..\SampleDataSources\rdo_load_file_02.dat
+		..\SampleDataSources\rdo_load_file_03.dat = ..\SampleDataSources\rdo_load_file_03.dat
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

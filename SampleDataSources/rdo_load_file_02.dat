@@ -1,4 +1,4 @@
 ﻿^Name^|^Artifact ID^|^Domains (Email BCC)^|^Domains (Email CC)^|^Domains (Email From)^|^Domains (Email To)^
-^RDO_Sample_004^|^1042404^|^Sample_000001^|^Sample_000001^|^Sample_0000001^|^Sample_0000001^
-^RDO_Sample_005^|^1042405^|^Sample_000002^|^Sample_000002^|^Sample_0000002^|^Sample_0000002^
-^RDO_Sample_006^|^1042406^|^Sample_000003^|^Sample_000003^|^Sample_0000003^|^Sample_0000003^
+^RDO_Sample_004^|^1042404^|^Sample_0000001^|^Sample_0000001^|^Sample_0000001^|^Sample_0000001^
+^RDO_Sample_005^|^1042405^|^Sample_0000002^|^Sample_0000002^|^Sample_0000002^|^Sample_0000002^
+^RDO_Sample_006^|^1042406^|^Sample_0000003^|^Sample_0000003^|^Sample_0000003^|^Sample_0000003^
