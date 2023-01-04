@@ -1,5 +1,6 @@
 #import
 . "$global:rootDir\Helpers\EndpointsClass.ps1"
+. "$global:rootDir\Helpers\WriteInformationClass.ps1"
 
 $workspaceId = 1000000
 $loadFilePath = "C:\DefaultFileRepository\samples\load_file_01.dat"
@@ -7,6 +8,7 @@ $loadFilePath = "C:\DefaultFileRepository\samples\load_file_01.dat"
 $importId = New-Guid
 $sourceId = New-Guid
 $global:Endpoints = [Endpoints]::new($workspaceId)
+$global:WriteInformation = [WriteInformation]::new()
 
 Context "Sample20 Get data source details" {
     Describe "Create job" {
@@ -129,10 +131,13 @@ Context "Sample20 Get data source details" {
         }
 
         Write-Information -MessageData "Data Source finished with state: $sourceState" -InformationAction Continue
+        $uri = $global:Endpoints.importSourceProgressUri($importId, $sourceId)
+        $global:WriteInformation.getDataSourceProgress($uri)
     }
 
     #Expected output
     #Current data source state: Inserting
     #Current data source state: Completed
     #Data Source finished with state: Completed
+    #Data source progress: Total records: 4, Imported records: 4, Records with errors: 0
 }

@@ -47,7 +47,9 @@ Describe "Sample import" {
 
     # . "$global:rootDir\SamplesCollection\sample18-get-data-source.ps1"
 
-    # . "$global:rootDir\SamplesCollection\sample19-get-import-job-progress.ps1"
+    # . "$global:rootDir\SamplesCollection\sample19-get-import-job-details-and-progress.ps1"
+
+    # . "$global:rootDir\SamplesCollection\sample20-get-data-source-details-and-progress.ps1"
 
     # . "$global:rootDir\SamplesCollection\sample21-cancel-started-job.ps1"
 
