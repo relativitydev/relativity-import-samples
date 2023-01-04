@@ -20,7 +20,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 	{
 		/// <summary>
 		/// Example of import  Relativity Dynamic Object (RDO).
-		/// NOTE: Existing RDO "Domain" is used in this example. Please insert document from sample01 first.
+		/// NOTE: Existing RDO "Domain" is used in this example. Please insert documents from sample01 first.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample12_ImportRelativityDynamicObject()

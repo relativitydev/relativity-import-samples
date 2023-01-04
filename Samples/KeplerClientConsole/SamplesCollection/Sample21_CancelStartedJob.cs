@@ -38,7 +38,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 			const int filePathColumnIndex = 11;
 			const int fileNameColumnIndex = 13;
 
-			const string loadFile07PathTemplate = "C:\\DefaultFileRepository\\samples\\load_file_07{0}.dat";
+			const string loadFile07PathTemplate = "C:\\DefaultFileRepository\\samples\\load_file_07_{0}.dat";
 
 			ImportDocumentSettings importSettings = ImportDocumentSettingsBuilder.Create()
 				.WithAppendOverlayMode(x => x
