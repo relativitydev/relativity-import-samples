@@ -2,6 +2,7 @@
 . "$global:rootDir\Helpers\EndpointsClass.ps1"
 
 $workspaceId = 1000000
+
 $importId = New-Guid
 $sourcesCount = 10
 $pageSize = 7

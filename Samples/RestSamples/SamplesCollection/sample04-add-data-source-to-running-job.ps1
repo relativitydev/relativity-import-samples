@@ -2,12 +2,13 @@
 . "$global:rootDir\Helpers\EndpointsClass.ps1"
 . "$global:rootDir\Helpers\WriteInformationClass.ps1"
 
-$importId = New-Guid
-$source01Id = New-Guid
-$source02Id = New-Guid
 $workspaceId = 1000000
 $loadFile01Path = "C:\DefaultFileRepository\samples\load_file_01.dat"
 $loadFile02Path = "C:\DefaultFileRepository\samples\load_file_02.dat"
+
+$importId = New-Guid
+$source01Id = New-Guid
+$source02Id = New-Guid
 $global:Endpoints = [Endpoints]::new($workspaceId)
 $global:WriteInformation = [WriteInformation]::new()
 
@@ -122,7 +123,7 @@ Context "Sample04 Add data source to running import job" {
     }
 
     Describe "Wait for import to complete" {
-		$uri = $global:Endpoints.importJobDetailsUri($importId)
+        $uri = $global:Endpoints.importJobDetailsUri($importId)
         $jobDetailsResponse = $global:WebRequest.callGet($uri)
         $isJobFinished = $jobDetailsResponse."Value"."IsFinished"
 

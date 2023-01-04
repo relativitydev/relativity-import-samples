@@ -2,16 +2,17 @@
 . "$global:rootDir\Helpers\EndpointsClass.ps1"
 . "$global:rootDir\Helpers\WriteInformationClass.ps1"
 
+$workspaceId = 1000000
+$loadFilePath = "C:\DefaultFileRepository\samples\rdo_load_file_02.dat"
+
 $importId = New-Guid
 $sourceId = New-Guid
-$workspaceId = 1000000
 $rdoArtifactTypeID = 1000027
-$loadFilePath = "C:\DefaultFileRepository\samples\rdo_load_file_02.dat"
 $global:Endpoints = [Endpoints]::new($workspaceId)
 $global:WriteInformation = [WriteInformation]::new()
 
 # Example of import  Relativity Dynamic Object (RDO).
-# NOTE: Existing RDO "Domain" is used in this example. Please insert document from sample01 first.
+# NOTE: Existing RDO "Domain" is used in this example. Please insert documents from sample01 first.
 Context "Sample14 Import RDO settings" {
     Describe "Create job" {
         $uri = $global:Endpoints.importJobCreateUri($importId)
@@ -121,7 +122,7 @@ Context "Sample14 Import RDO settings" {
     }
 
     Describe "Wait for import to complete" {
-		$uri = $global:Endpoints.importJobDetailsUri($importId)
+        $uri = $global:Endpoints.importJobDetailsUri($importId)
         $jobDetailsResponse = $global:WebRequest.callGet($uri)
         $isJobFinished = $jobDetailsResponse."Value"."IsFinished"
 

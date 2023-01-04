@@ -1,10 +1,11 @@
 #import
 . "$global:rootDir\Helpers\EndpointsClass.ps1"
 
-$importId = New-Guid
-$sourceId = New-Guid
 $workspaceId = 1000000
 $loadFilePath = "C:\DefaultFileRepository\samples\load_file_01.dat"
+
+$importId = New-Guid
+$sourceId = New-Guid
 $global:Endpoints = [Endpoints]::new($workspaceId)
 
 Context "Sample19 Get import job progress" {
@@ -112,7 +113,7 @@ Context "Sample19 Get import job progress" {
     }
 
     Describe "Wait for import to complete" {
-		$uri = $global:Endpoints.importJobDetailsUri($importId)
+        $uri = $global:Endpoints.importJobDetailsUri($importId)
         $jobDetailsResponse = $global:WebRequest.callGet($uri)
         $isJobFinished = $jobDetailsResponse."Value"."IsFinished"
 

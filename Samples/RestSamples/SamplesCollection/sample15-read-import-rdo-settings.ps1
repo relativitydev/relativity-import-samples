@@ -1,9 +1,10 @@
 #import
 . "$global:rootDir\Helpers\EndpointsClass.ps1"
 
-$importId = New-Guid
 $workspaceId = 1000000
-$rdoArtifactTypeID = 1000001
+
+$importId = New-Guid
+$rdoArtifactTypeID = 1000027
 $global:Endpoints = [Endpoints]::new($workspaceId)
 
 Context "Sample15 Read RDO settings" {
@@ -79,7 +80,7 @@ Context "Sample15 Read RDO settings" {
                 ]
             },
             "Rdo": {
-                "ArtifactTypeID": 1000072,
+                "ArtifactTypeID": 1000027,
                 "ParentColumnIndex": 4
             }
         }

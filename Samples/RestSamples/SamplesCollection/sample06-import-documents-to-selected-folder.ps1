@@ -2,11 +2,12 @@
 . "$global:rootDir\Helpers\EndpointsClass.ps1"
 . "$global:rootDir\Helpers\WriteInformationClass.ps1"
 
-$importId = New-Guid
-$sourceId = New-Guid
 $workspaceId = 1000000
 $rootFolderId = 1000001
 $loadFilePath = "C:\DefaultFileRepository\samples\load_file_03.dat"
+
+$importId = New-Guid
+$sourceId = New-Guid
 $global:Endpoints = [Endpoints]::new($workspaceId)
 $global:WriteInformation = [WriteInformation]::new()
 
@@ -103,7 +104,7 @@ Context "Sample06 Import documents to selected folder" {
     }
 
     Describe "Wait for import to complete" {
-		$uri = $global:Endpoints.importJobDetailsUri($importId)
+        $uri = $global:Endpoints.importJobDetailsUri($importId)
         $jobDetailsResponse = $global:WebRequest.callGet($uri)
         $isJobFinished = $jobDetailsResponse."Value"."IsFinished"
 

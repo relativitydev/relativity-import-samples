@@ -1,10 +1,11 @@
 #import
 . "$global:rootDir\Helpers\EndpointsClass.ps1"
 
-$importId = New-Guid
-$sourceId = New-Guid
 $workspaceId = 1000000
 $loadFilePath = "C:\DefaultFileRepository\samples\load_file_01.dat"
+
+$importId = New-Guid
+$sourceId = New-Guid
 $global:Endpoints = [Endpoints]::new($workspaceId)
 
 Context "Sample20 Get data source details" {
@@ -112,7 +113,7 @@ Context "Sample20 Get data source details" {
     }
 
     Describe "Wait for import to complete" {
-		$uri = $global:Endpoints.importSourceDetailsUri($importId, $sourceId)
+        $uri = $global:Endpoints.importSourceDetailsUri($importId, $sourceId)
         $sourceDeatilsResponse = $global:WebRequest.callGet($uri)
         $sourceState = $sourceDeatilsResponse."Value"."State"
 

@@ -3,9 +3,10 @@
 . "$global:rootDir\Helpers\WriteInformationClass.ps1"
 
 $workspaceId = 1000000
+$loadFilePath = "C:\DefaultFileRepository\samples\load_file_07_"
+
 $importId = New-Guid
 $sourcesCount = 7
-$loadFilePath = "C:\DefaultFileRepository\samples\load_file_07_"
 $global:Endpoints = [Endpoints]::new($workspaceId)
 $global:WriteInformation = [WriteInformation]::new()
 
@@ -95,7 +96,7 @@ Context "Sample21 Cancel stared Job" {
     }
 
     Describe "Cancel job" {
-		$uri = $global:Endpoints.importJobDetailsUri($importId)
+        $uri = $global:Endpoints.importJobDetailsUri($importId)
         $jobDetailsResponse = $global:WebRequest.callGet($uri)
         $state = $jobDetailsResponse."Value"."State"
         Write-Information -MessageData "Current job status: $state" -InformationAction Continue

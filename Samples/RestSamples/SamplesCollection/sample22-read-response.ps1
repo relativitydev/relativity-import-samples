@@ -1,9 +1,10 @@
 #import
 . "$global:rootDir\Helpers\EndpointsClass.ps1"
 
+$workspaceId = 1000000
+
 $importId = New-Guid
 $sourceId = New-Guid
-$workspaceId = 1000000
 $global:Endpoints = [Endpoints]::new($workspaceId)
 
 Context "Sample22 Read response with errors" {

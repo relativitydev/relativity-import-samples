@@ -1,8 +1,9 @@
 #import
 . "$global:rootDir\Helpers\EndpointsClass.ps1"
 
-$importId = New-Guid
 $workspaceId = 1000000
+
+$importId = New-Guid
 $global:Endpoints = [Endpoints]::new($workspaceId)
 
 Context "Sample16 Read document settings" {

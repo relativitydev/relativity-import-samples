@@ -2,17 +2,18 @@
 . "$global:rootDir\Helpers\EndpointsClass.ps1"
 . "$global:rootDir\Helpers\WriteInformationClass.ps1"
 
-$importId = New-Guid
-$sourceId = New-Guid
 $workspaceId = 1000000
 $rdoArtifactTypeID = 1000001
 $loadFilePath = "C:\DefaultFileRepository\samples\rdo_load_file_03.dat"
+
+$importId = New-Guid
+$sourceId = New-Guid
 $global:Endpoints = [Endpoints]::new($workspaceId)
 $global:WriteInformation = [WriteInformation]::new()
 
 # Example of import Relativity Dynamic Objects (RDO) with selecting its parent.
 # NOTE: Sample based on the existing RDO "Domain" with object imported in sample12.
-# It requires to create descendant object for "Domain" object first and fill it's $rdoArtifactTypeID.
+# It requires to create descendant object (RDO) for "Domain" object first and fill it's $rdoArtifactTypeID.
 Context "Sample13 Import RDO with parent" {
     Describe "Create job" {
         $uri = $global:Endpoints.importJobCreateUri($importId)
