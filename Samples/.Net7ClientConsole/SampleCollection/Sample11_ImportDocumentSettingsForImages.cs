@@ -41,7 +41,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			var createJobPayload = new
 			{
 				applicationName = "Import-service-sample-app",
-				correlationID = "Sample-job-0001"
+				correlationID = "Sample-job-0011"
 			};
 
 			// Example of configuration settings for images import created without ImportDocumentSettingsBuilder.

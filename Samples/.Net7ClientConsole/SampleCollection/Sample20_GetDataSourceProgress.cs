@@ -52,7 +52,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			var createJobPayload = new
 			{
 				applicationName = "Import-service-sample-app",
-				correlationID = "Sample-job-0001"
+				correlationID = "Sample-job-0020"
 			};
 
 			// Configuration settings for document import. Builder is used to create settings.
