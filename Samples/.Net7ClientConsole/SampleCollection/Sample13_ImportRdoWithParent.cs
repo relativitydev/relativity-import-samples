@@ -45,7 +45,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			const int parentObjectIdColumnIndex = 2;
 
 			// RDO artifact type id
-			const int rdoArtifactTypeID = 1000000;
+			const int rdoArtifactTypeID = 2000000;
 
 			// Path to the load file used in data source settings.
 			const string rdoLoadFile = "C:\\DefaultFileRepository\\samples\\rdo_load_file_03.dat";

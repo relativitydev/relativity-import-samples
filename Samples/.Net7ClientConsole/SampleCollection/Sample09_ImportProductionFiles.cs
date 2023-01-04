@@ -40,7 +40,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			const int workspaceId = 1000000;
 
 			// destination production set artifact Id.
-			const int productionSetsArtifactId = 1000000;
+			const int productionSetsArtifactId = 1000001;
 
 			// Path to the file in opticon format used in data source settings.
 			const string opticonFilePath = "C:\\DefaultFileRepository\\samples\\opticon_02.opt";

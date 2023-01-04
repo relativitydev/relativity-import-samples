@@ -12,10 +12,7 @@ namespace Relativity.Import.Samples.Net7Client.Helpers
 	{
 		public static async Task EnsureSuccessResponse(HttpResponseMessage message)
 		{
-			var saveColor = Console.ForegroundColor;
-			Console.ForegroundColor = ConsoleColor.DarkGreen;
-			Console.WriteLine($"{message.RequestMessage?.Method} {message.RequestMessage?.RequestUri?.PathAndQuery}");
-			Console.ForegroundColor = saveColor;
+			ConsoleWriteLine($"{message.RequestMessage?.Method} {message.RequestMessage?.RequestUri?.PathAndQuery}", ConsoleColor.DarkGreen);
 
 			message.EnsureSuccessStatusCode();
 			var response = await HttpClientHelper.DeserializeResponse<Response>(message);
@@ -44,33 +41,29 @@ namespace Relativity.Import.Samples.Net7Client.Helpers
 		{
 			ConsoleWriteLine($"{message.RequestMessage?.Method} {message.RequestMessage?.RequestUri?.PathAndQuery}",
 				ConsoleColor.DarkGreen);
-			//var saveColor = Console.ForegroundColor;
-			//Console.ForegroundColor = ConsoleColor.DarkGreen;
-			//Console.WriteLine($"{message.RequestMessage?.Method} {message.RequestMessage?.RequestUri?.PathAndQuery}");
-			//Console.ForegroundColor = saveColor;
 
 			message.EnsureSuccessStatusCode();
-			var response = await HttpClientHelper.DeserializeResponse<ValueResponse<T>>(message);
+			var valueResponse = await HttpClientHelper.DeserializeResponse<ValueResponse<T>>(message);
 
-			if (response == null)
+			if (valueResponse == null)
 			{
-				var errorInfo = "Deserialized response model is null";
+				var errorInfo = "Deserialized valueResponse model is null";
 
 				Console.WriteLine(errorInfo);
 				throw new Exception(errorInfo);
 			}
 
-			if (response.IsSuccess == false)
+			if (valueResponse.IsSuccess == false)
 			{
-				var errorInfo = $"ErrorMessage: {response.ErrorMessage} ErrorCode: {response.ErrorCode}";
-				Console.WriteLine($"Response.IsSuccess: {response.IsSuccess} {errorInfo}");
+				var errorInfo = $"ErrorMessage: {valueResponse.ErrorMessage} ErrorCode: {valueResponse.ErrorCode}";
+				Console.WriteLine($"ValueResponse.IsSuccess: {valueResponse.IsSuccess} {errorInfo}");
 
 				throw new Exception($"Response failed: {errorInfo}");
 			}
 
-			Console.WriteLine($"Response.IsSuccess: {response.IsSuccess}");
+			Console.WriteLine($"ValueResponse.IsSuccess: {valueResponse.IsSuccess}");
 			
-			return response;
+			return valueResponse;
 
 		}
 
@@ -107,7 +100,7 @@ namespace Relativity.Import.Samples.Net7Client.Helpers
 				{
 					isFinished = valueResponse.Value.IsFinished;
 					state = valueResponse.Value?.State;
-					Console.WriteLine($"DataSource state: {state}");
+					Console.WriteLine($"Import job state: {state}");
 				}
 			}
 			while (!isFinished && !timeoutTask.IsCompleted);
