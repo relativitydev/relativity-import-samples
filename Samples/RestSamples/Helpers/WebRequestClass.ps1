@@ -49,7 +49,7 @@ class WebRequest {
         if($response."IsSuccess" -eq $false)
         {
             $message = $response."ErrorMessage"
-            Write-Information -MessageData "Response doesn't idicate success: $message" -InformationAction Continue
+            Write-Information -MessageData "Response doesn't indicate success: $message" -InformationAction Continue
             exit 1
         }
     }

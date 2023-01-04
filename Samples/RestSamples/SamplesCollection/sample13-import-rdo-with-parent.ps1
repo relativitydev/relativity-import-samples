@@ -11,8 +11,8 @@ $global:Endpoints = [Endpoints]::new($workspaceId)
 $global:WriteInformation = [WriteInformation]::new()
 
 # Example of import Relativity Dynamic Objects (RDO) with selecting its parent.
-# NOTE: Sample based on the Domain object with object imported in sample12.
-# It requires create descendant object for Domain object first. 
+# NOTE: Sample based on the existing RDO "Domain" with object imported in sample12.
+# It requires to create descendant object for "Domain" object first and fill it's $rdoArtifactTypeID.
 Context "Sample13 Import RDO with parent" {
     Describe "Create job" {
         $uri = $global:Endpoints.importJobCreateUri($importId)

@@ -5,13 +5,13 @@
 $importId = New-Guid
 $sourceId = New-Guid
 $workspaceId = 1000000
-$rdoArtifactTypeID = 1000001
+$rdoArtifactTypeID = 1000027
 $loadFilePath = "C:\DefaultFileRepository\samples\rdo_load_file_02.dat"
 $global:Endpoints = [Endpoints]::new($workspaceId)
 $global:WriteInformation = [WriteInformation]::new()
 
 # Example of import  Relativity Dynamic Object (RDO).
-# NOTE: Domain object is used in this example. Please insert document from sample01 first.
+# NOTE: Existing RDO "Domain" is used in this example. Please insert document from sample01 first.
 Context "Sample14 Import RDO settings" {
     Describe "Create job" {
         $uri = $global:Endpoints.importJobCreateUri($importId)
@@ -34,6 +34,8 @@ Context "Sample14 Import RDO settings" {
             ContainsID = $false
             ContainsFilePath = $false
         }
+        # Use sample01 and load_file_01.dat first to import document. The following fields have reference to these documents.
+		# If you do not use these fields, please just comment them.
         $field2 = @{
             ColumnIndex = 3
             Field = "Domains (Email CC)"

@@ -55,16 +55,16 @@ Context "Sample16 Read document settings" {
     }
 
     Describe "Read document configuration" {
-        $uri = $global:Endpoints.rdoConfigurationUri($importId)	
+        $uri = $global:Endpoints.documentConfigurationUri($importId)
         $value = $global:WebRequest.callGet($uri)."Value" | ConvertTo-Json -Depth 10
         Write-Information -MessageData "Configuration: $value" -InformationAction Continue
     }
 
     <#Expected output
     Configuration: {
-        "Native":{
-            "FilePathColumnIndex": "22",
-            "FileNameColumnIndex": "13"
+        "Native": {
+            "FilePathColumnIndex": 22,
+            "FileNameColumnIndex": 13
         },
         "Fields": {
             "FieldMappings": [

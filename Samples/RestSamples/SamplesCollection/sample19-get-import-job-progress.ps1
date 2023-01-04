@@ -1,6 +1,5 @@
 #import
 . "$global:rootDir\Helpers\EndpointsClass.ps1"
-. "$global:rootDir\Helpers\WriteInformationClass.ps1"
 
 $importId = New-Guid
 $sourceId = New-Guid
