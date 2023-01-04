@@ -10,13 +10,13 @@ $sourceId = New-Guid
 $global:Endpoints = [Endpoints]::new($workspaceId)
 $global:WriteInformation = [WriteInformation]::new()
 
-Context "Sample01 Import native files" {
+Context "Sample20 Get data source details" {
     Describe "Create job" {
         $uri = $global:Endpoints.importJobCreateUri($importId)
 
         $body = @{
             applicationName = "Import-service-sample-app"
-            correlationID = "Sample-job-0001"
+            correlationID = "Sample-job-0020"
         } | ConvertTo-Json -Depth 10
 		
         $response = $global:WebRequest.callPost($uri, $body)
@@ -115,32 +115,29 @@ Context "Sample01 Import native files" {
     }
 
     Describe "Wait for import to complete" {
-        $uri = $global:Endpoints.importJobDetailsUri($importId)
-        $jobDetailsResponse = $global:WebRequest.callGet($uri)
-        $isJobFinished = $jobDetailsResponse."Value"."IsFinished"
+        $uri = $global:Endpoints.importSourceDetailsUri($importId, $sourceId)
+        $sourceDeatilsResponse = $global:WebRequest.callGet($uri)
+        $sourceState = $sourceDeatilsResponse."Value"."State"
 
         [int]$sleepTime = 5
+        $completedStates = @('Completed', 'CompletedWithItemErrors', 'Failed')
 
-        while($isJobFinished -ne $true)
+        while($completedStates -notcontains $sourceState)
         {
             Start-Sleep -Seconds $sleepTime
-            $jobDetailsResponse = $global:WebRequest.callGet($uri)
-            $isJobFinished = $jobDetailsResponse."Value"."IsFinished"
-            $state = $jobDetailsResponse."Value"."State"
-            Write-Information -MessageData "Current job status: $state" -InformationAction Continue
+            $sourceDeatilsResponse = $global:WebRequest.callGet($uri)
+            $sourceState = $sourceDeatilsResponse."Value"."State"
+            Write-Information -MessageData "Current data source state: $sourceState" -InformationAction Continue
         }
-    }
 
-    Describe "Imported records info" {
-        $uri = $global:Endpoints.importSourceDetailsUri($importId, $sourceId)
-        $sourceDetailsResponse = $global:WebRequest.callGet($uri)
-        $state = $sourceDetailsResponse."Value"."State"
-        Write-Information -MessageData "Data source state: $state" -InformationAction Continue
+        Write-Information -MessageData "Data Source finished with state: $sourceState" -InformationAction Continue
         $uri = $global:Endpoints.importSourceProgressUri($importId, $sourceId)
         $global:WriteInformation.getDataSourceProgress($uri)
-
-        #Expected output
-        #Data source state: Completed
-        #Data source progress: Total records: 4, Imported records: 4, Records with errors: 0
     }
+
+    #Expected output
+    #Current data source state: Inserting
+    #Current data source state: Completed
+    #Data Source finished with state: Completed
+    #Data source progress: Total records: 4, Imported records: 4, Records with errors: 0
 }

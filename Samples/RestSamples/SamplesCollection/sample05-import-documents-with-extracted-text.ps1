@@ -10,13 +10,13 @@ $sourceId = New-Guid
 $global:Endpoints = [Endpoints]::new($workspaceId)
 $global:WriteInformation = [WriteInformation]::new()
 
-Context "Sample01 Import native files" {
+Context "Sample05 Import documents with extracted text" {
     Describe "Create job" {
         $uri = $global:Endpoints.importJobCreateUri($importId)
 
         $body = @{
             applicationName = "Import-service-sample-app"
-            correlationID = "Sample-job-0001"
+            correlationID = "Sample-job-0005"
         } | ConvertTo-Json -Depth 10
 		
         $response = $global:WebRequest.callPost($uri, $body)
@@ -35,7 +35,6 @@ Context "Sample01 Import native files" {
                     "FileNameColumnIndex": "13"
                 },
                 "Image":null,
-                "Production":null,
                 "Fields": {
                     "FieldMappings": [
                         {
@@ -45,24 +44,18 @@ Context "Sample01 Import native files" {
                             "ContainsFilePath": false
                         },
                         {
-                            "ColumnIndex": 1,
-                            "Field": "Custodian - Single Choice",
+                            "ColumnIndex": 12,
+                            "Field": "Extracted Text",
                             "ContainsID": false,
-                            "ContainsFilePath": false
-                        },
-                        {
-                            "ColumnIndex": 11,
-                            "Field": "Email To",
-                            "ContainsID": false,
-                            "ContainsFilePath": false
-                        },
-                        {
-                            "ColumnIndex": 5,
-                            "Field": "Date Sent",
-                            "ContainsID": false,
-                            "ContainsFilePath": false
+                            "ContainsFilePath": true
                         }
                     ]
+                },
+                "Other":{
+                    "ExtractedText":{
+                        "Encoding": "UTF-8",
+                        "ValidateEncoding": false
+                    }
                 },
                 "Folder":null
             }

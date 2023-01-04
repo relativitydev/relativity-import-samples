@@ -3,20 +3,21 @@
 . "$global:rootDir\Helpers\WriteInformationClass.ps1"
 
 $workspaceId = 1000000
-$loadFilePath = "C:\DefaultFileRepository\samples\load_file_01.dat"
+$rootFolderId = 1000001
+$loadFilePath = "C:\DefaultFileRepository\samples\load_file_03.dat"
 
 $importId = New-Guid
 $sourceId = New-Guid
 $global:Endpoints = [Endpoints]::new($workspaceId)
 $global:WriteInformation = [WriteInformation]::new()
 
-Context "Sample01 Import native files" {
+Context "Sample06 Import documents to selected folder" {
     Describe "Create job" {
         $uri = $global:Endpoints.importJobCreateUri($importId)
 
         $body = @{
             applicationName = "Import-service-sample-app"
-            correlationID = "Sample-job-0001"
+            correlationID = "Sample-job-0006"
         } | ConvertTo-Json -Depth 10
 		
         $response = $global:WebRequest.callPost($uri, $body)
@@ -26,47 +27,32 @@ Context "Sample01 Import native files" {
 
     Describe "Create document configuration" {
         $uri = $global:Endpoints.documentConfigurationUri($importId)
-        $jobConfigurationBody = '{
-            "importSettings" :
-            {
-                "Overlay":null,
-                "Native":{
-                    "FilePathColumnIndex": "22",
-                    "FileNameColumnIndex": "13"
-                },
-                "Image":null,
-                "Production":null,
-                "Fields": {
-                    "FieldMappings": [
-                        {
-                            "ColumnIndex": 0,
-                            "Field": "Control Number",
-                            "ContainsID": false,
-                            "ContainsFilePath": false
-                        },
-                        {
-                            "ColumnIndex": 1,
-                            "Field": "Custodian - Single Choice",
-                            "ContainsID": false,
-                            "ContainsFilePath": false
-                        },
-                        {
-                            "ColumnIndex": 11,
-                            "Field": "Email To",
-                            "ContainsID": false,
-                            "ContainsFilePath": false
-                        },
-                        {
-                            "ColumnIndex": 5,
-                            "Field": "Date Sent",
-                            "ContainsID": false,
-                            "ContainsFilePath": false
-                        }
-                    ]
-                },
-                "Folder":null
+        $field1 = @{
+            ColumnIndex = 0
+            Field = "Control Number"
+            ContainsID = $false
+            ContainsFilePath = $false
+        }
+        $fields = @($field1)
+
+        $jobConfigurationBody = @{
+            importSettings =
+            @{
+                Overlay = $null
+                Native = @{
+                    FilePathColumnIndex =  22
+                    FileNameColumnIndex = 13
+                }
+                Image = $null
+                Fields = @{
+                    FieldMappings = $fields
+                }
+                Folder = @{
+                    RootFolderID = $rootFolderId
+                    FolderPathColumnIndex = 15
+                }
             }
-        }'
+        } | ConvertTo-Json -Depth 10
         $response = $global:WebRequest.callPost($uri, $jobConfigurationBody)
         $global:WebRequest.checkIfSuccess($response)
         Write-Information -MessageData "Job configuration created" -InformationAction Continue
@@ -74,22 +60,25 @@ Context "Sample01 Import native files" {
 
     Describe "Add Source" {
         $uri = $global:Endpoints.importSourceUri($importId, $sourceId)
+        
+        $loadFilePath = $loadFilePath.replace('\','\\')
+
         $dataSourceConfigurationBody = @{
             dataSourceSettings = @{
                 path = $loadFilePath
-                firstLineContainsColumnNames = $true
+                firstLineContainsColumnNames = $false
                 startLine = 0
-                columnDelimiter = "|"
-                quoteDelimiter = "^"
-                newLineDelimiter = "#"
-                nestedValueDelimiter = "&"
-                multiValueDelimiter = "$"
+                columnDelimiter = "\u0014"
+                quoteDelimiter = "\u00fe"
+                newLineDelimiter = "\u00ae"
+                nestedValueDelimiter = "\u005c"
+                multiValueDelimiter = "\u003b"
                 endOfLine = 0
                 encoding = $null
                 cultureInfo = "en-us"
                 type = 2
             }
-        } | ConvertTo-Json -Depth 10
+        } | ConvertTo-Json -Depth 10 | Foreach {[System.Text.RegularExpressions.Regex]::Unescape($_)}
 		
         $response = $global:WebRequest.callPost($uri, $dataSourceConfigurationBody)
         $global:WebRequest.checkIfSuccess($response)
@@ -141,6 +130,6 @@ Context "Sample01 Import native files" {
 
         #Expected output
         #Data source state: Completed
-        #Data source progress: Total records: 4, Imported records: 4, Records with errors: 0
+        #Data source progress: Total records: 2, Imported records: 2, Records with errors: 0
     }
 }
