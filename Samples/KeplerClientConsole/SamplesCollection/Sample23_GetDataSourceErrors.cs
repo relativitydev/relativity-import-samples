@@ -2,10 +2,12 @@
 // © Relativity All Rights Reserved.
 // </copyright>
 
-namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
+namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Threading.Tasks;
+	using Relativity.Import.Samples.NetFrameworkClient.ImportSampleHelpers;
 	using Relativity.Import.V1;
 	using Relativity.Import.V1.Builders.DataSource;
 	using Relativity.Import.V1.Builders.Documents;
@@ -25,13 +27,15 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample23_GetDataSourceErrors()
 		{
+			Console.WriteLine($"Running {nameof(Sample23_GetDataSourceErrors)}");
+
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId01 = Guid.NewGuid();
 			Guid sourceId02 = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1031725;
+			const int workspaceId = 1000000;
 
 			// set of columns indexes in load file used in import settings.
 			const int controlNumberColumnIndex = 0;
@@ -46,6 +50,7 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 			const string loadFile01Path = "C:\\DefaultFileRepository\\samples\\load_file_05.dat";
 			const string loadFile02Path = "C:\\DefaultFileRepository\\samples\\notExistingFile.dat";
 
+			// Configuration settings for data source. Builder is used to create settings.
 			ImportDocumentSettings importSettings = ImportDocumentSettingsBuilder.Create()
 				.WithAppendMode()
 				.WithNatives(x => x
@@ -59,6 +64,7 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 					.WithField(dateSentColumnIndex, "Date Sent"))
 				.WithoutFolders();
 
+			// Configuration settings for data source. Builder is used to create settings.
 			DataSourceSettings dataSourceSettings01 = DataSourceSettingsBuilder.Create()
 				.ForLoadFile(loadFile01Path)
 				.WithDelimiters(d => d
@@ -73,6 +79,7 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 				.WithDefaultEncoding()
 				.WithDefaultCultureInfo();
 
+			// Configuration settings for second data source
 			DataSourceSettings dataSourceSettings02 = DataSourceSettingsBuilder.Create()
 				.ForLoadFile(loadFile02Path)
 				.WithDelimiters(d => d
@@ -101,44 +108,46 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 					importJobID: importId,
 					workspaceID: workspaceId,
 					applicationName: "Import-service-sample-app",
-					correlationID: "Sample-job-00020");
+					correlationID: "Sample-job-00023");
 
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					// Add import document settings to existing import job.
-					response = await documentConfiguration.CreateAsync(workspaceId, importId, importSettings);
-				}
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.CreateAsync");
 
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					// Add first data source settings to existing import job.
-					response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId01, dataSourceSettings01);
-				}
+				// Add import document settings to existing import job.
+				response = await documentConfiguration.CreateAsync(workspaceId, importId, importSettings);
+				ResponseHelper.EnsureSuccessResponse(response, "IDocumentConfigurationController.CreateAsync");
 
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					// Add second data source settings to existing import job.
-					response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId02, dataSourceSettings02);
-				}
+				// Add first data source settings to existing import job.
+				response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId01, dataSourceSettings01);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportSourceController.AddSourceAsync");
 
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					// Start import job.
-					response = await importJobController.BeginAsync(workspaceId, importId);
-				}
+				// Add second data source settings to existing import job.
+				response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId02, dataSourceSettings02);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportSourceController.AddSourceAsync");
+
+				// Start import job.
+				response = await importJobController.BeginAsync(workspaceId, importId);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.BeginAsync");
 
 				// End import job - assuming no new data source won't be added later.
 				await importJobController.EndAsync(workspaceId, importId);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.EndAsync");
 
 				// It takes some time for import job to be completed. Request import job details to monitor its final state.
 				// remark: this sample based on checking import completed/failed because job was already ended.
 				var importJobState = await this.WaitImportJobToBeCompleted(
 					funcAsync: () => importJobController.GetDetailsAsync(workspaceId, importId));
 
-				ValueResponse<ImportProgress> importProgress = await importJobController.GetProgressAsync(workspaceId, importId);
+				Console.WriteLine($"Import job state: {importJobState}");
+				ValueResponse <ImportProgress> valueResponse = await importJobController.GetProgressAsync(workspaceId, importId);
 
-				Console.WriteLine($"\n\nImport Job State: {importJobState}");
-				Console.WriteLine($"Import progress: Total records: {importProgress.Value.TotalRecords}, Imported records: {importProgress.Value.ImportedRecords}, Records with errors: {importProgress.Value.ErroredRecords}");
+				if (valueResponse?.IsSuccess ?? false)
+				{
+					Console.WriteLine("\n");
+					Console.WriteLine($"IsSuccess: {valueResponse.IsSuccess}");
+					Console.WriteLine($"Import job Id: {valueResponse.ImportJobID}");
+					Console.WriteLine($"Import job progress: Total records: {valueResponse.Value.TotalRecords}, Imported records: {valueResponse.Value.ImportedRecords}, Records with errors: {valueResponse.Value.ErroredRecords}");
+				}
+
 
 				foreach (var source in new[] { sourceId01, sourceId02 })
 				{
@@ -146,17 +155,10 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 					var sourceDetails = await importSourceController.GetDetailsAsync(workspaceId, importId, source);
 
 					Console.WriteLine($"Data Source Id: {source} finished with state {sourceDetails.Value.State}");
+
 					if (sourceDetails.Value.State == DataSourceState.Failed)
 					{
-						Console.WriteLine("Data source failed due to errors:");
-						foreach (var importError in sourceDetails.Value.JobLevelErrors)
-						{
-							// Retrieve all error details.
-							foreach (var details in importError.ErrorDetails)
-							{
-								Console.WriteLine($"Line Number: {importError.LineNumber},	ColumnIndex: {details.ColumnIndex}, ErrorCode: {details.ErrorCode} ErrorMessage: {details.ErrorMessage} ");
-							}
-						}
+						PrintJobLevelErrors(sourceDetails.Value.JobLevelErrors);
 					}
 					else if (sourceDetails.Value.State == DataSourceState.CompletedWithItemErrors)
 					{
@@ -166,44 +168,63 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 						ValueResponse<ImportErrors> dataSourceErrors =
 							await importSourceController.GetItemErrorsAsync(workspaceId, importId, source, 0, 20);
 
-						foreach (var importError in dataSourceErrors.Value.Errors)
-						{
-							// Retrieve all error details for each line.
-							foreach (var details in importError.ErrorDetails)
-							{
-								Console.WriteLine(
-									$"Line Number: {importError.LineNumber},	ColumnIndex: {details.ColumnIndex}, ErrorCode: {details.ErrorCode} ErrorMessage: {details.ErrorMessage} ");
-							}
-						}
-
-						Console.WriteLine($"Number of records: {dataSourceErrors.Value.NumberOfRecords}");
-						Console.WriteLine($"Total count: {dataSourceErrors.Value.TotalCount}");
-						Console.WriteLine($"Number of skipped records: {dataSourceErrors.Value.NumberOfSkippedRecords}");
-						Console.WriteLine($"Has more records: {dataSourceErrors.Value.HasMoreRecords}");
+						PrintItemLevelErrors(dataSourceErrors.Value);
 					}
+				}
+			}
+		}
+
+		private static void PrintItemLevelErrors(ImportErrors importErrors)
+		{
+			foreach (var importError in importErrors.Errors)
+			{
+				// Retrieve all error details for each line.
+				foreach (var details in importError.ErrorDetails)
+				{
+					Console.WriteLine(
+						$"Line Number: {importError.LineNumber}, ColumnIndex: {details.ColumnIndex}, ErrorCode: {details.ErrorCode} ErrorMessage: {details.ErrorMessage} ");
+				}
+			}
+
+			Console.WriteLine($"Number of records: {importErrors.NumberOfRecords}");
+			Console.WriteLine($"Total count: {importErrors.TotalCount}");
+			Console.WriteLine($"Number of skipped records: {importErrors.NumberOfSkippedRecords}");
+			Console.WriteLine($"Has more records: {importErrors.HasMoreRecords}");
+		}
+
+		private static void PrintJobLevelErrors(List<ImportError> jobLevelErrors)
+		{
+			Console.WriteLine("Data source failed due to errors:");
+			foreach (var importError in jobLevelErrors)
+			{
+				// Retrieve all error details.
+				foreach (var details in importError.ErrorDetails)
+				{
+					Console.WriteLine($"Line Number: {importError.LineNumber}, ColumnIndex: {details.ColumnIndex}, ErrorCode: {details.ErrorCode} ErrorMessage: {details.ErrorMessage} ");
 				}
 			}
 		}
 	}
 }
 
-// Expected console output for sample data source files.
+/* Expected console output
 
 // Import Job State: Failed
-// Import progress: Total records: 4, Imported records: 0, Records with errors: 4
+ Import progress: Total records: 4, Imported records: 0, Records with errors: 4
 
-// Data Source Id: cb733792-2a70-41f7-84b9-3ee821595097 finished with state CompletedWithItemErrors
-// Data source completed with item errors:
-//    Line Number: 2, ColumnIndex: 0, ErrorCode: S.LN.INT.4015 ErrorMessage: Error in row 1, field "date sent".Invalid date.
-//    Line Number: 3, ColumnIndex: 0, ErrorCode: S.LN.INT.4015 ErrorMessage: Error in row 2, field "date sent".Invalid date.
-//    Line Number: 4, ColumnIndex: 0, ErrorCode: S.LN.INT.4101 ErrorMessage: An item with identifier Sample_0000003 already exists in the workspace
-//    Line Number: 5, ColumnIndex: 0, ErrorCode: S.LN.INT.4101 ErrorMessage: An item with identifier Sample_0000004 already exists in the workspace
-// Number of records: 4
-// Total count: 4
-// Number of skipped records: 0
-// Has more records: False
+ Data Source Id: cb733792-2a70-41f7-84b9-3ee821595097 finished with state CompletedWithItemErrors
+ Data source completed with item errors:
+    Line Number: 2, ColumnIndex: 0, ErrorCode: S.LN.INT.4015 ErrorMessage: Error in row 1, field "date sent".Invalid date.
+    Line Number: 3, ColumnIndex: 0, ErrorCode: S.LN.INT.4015 ErrorMessage: Error in row 2, field "date sent".Invalid date.
+    Line Number: 4, ColumnIndex: 0, ErrorCode: S.LN.INT.4101 ErrorMessage: An item with identifier Sample_0000003 already exists in the workspace
+    Line Number: 5, ColumnIndex: 0, ErrorCode: S.LN.INT.4101 ErrorMessage: An item with identifier Sample_0000004 already exists in the workspace
+ Number of records: 4
+ Total count: 4
+ Number of skipped records: 0
+ Has more records: False
 
-// Data Source Id: 0f3c8860-5fe6-414d-9bae-1e0f628957c3 finished with state Failed
-// Data source failed due to errors:
-//    Line Number: -1, ColumnIndex: -1, ErrorCode: S.RD.EXT.0217 ErrorMessage: Cannot read Data Source. Could not open file for reading by RestartableStream.
-//    Line Number: -1, ColumnIndex: -1, ErrorCode: J.RUN.EXT.0217 ErrorMessage: Cannot run import job. Could not open file for reading by RestartableStream.
+ Data Source Id: 0f3c8860-5fe6-414d-9bae-1e0f628957c3 finished with state Failed
+ Data source failed due to errors:
+    Line Number: -1, ColumnIndex: -1, ErrorCode: S.RD.EXT.0217 ErrorMessage: Cannot read Data Source. Could not open file for reading by RestartableStream.
+    Line Number: -1, ColumnIndex: -1, ErrorCode: J.RUN.EXT.0217 ErrorMessage: Cannot run import job. Could not open file for reading by RestartableStream.
+*/

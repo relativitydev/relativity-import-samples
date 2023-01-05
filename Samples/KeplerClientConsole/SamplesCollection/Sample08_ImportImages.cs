@@ -2,10 +2,11 @@
 // © Relativity All Rights Reserved.
 // </copyright>
 
-namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
+namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 {
 	using System;
 	using System.Threading.Tasks;
+	using Relativity.Import.Samples.NetFrameworkClient.ImportSampleHelpers;
 	using Relativity.Import.V1;
 	using Relativity.Import.V1.Builders.DataSource;
 	using Relativity.Import.V1.Builders.Documents;
@@ -23,12 +24,14 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample08_ImportImages()
 		{
+			Console.WriteLine($"Running {nameof(Sample08_ImportImages)}");
+
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1035012;
+			const int workspaceId = 1000000;
 
 			// Path to the file in opticon format used in data source settings.
 			const string opticonFilePath = "C:\\DefaultFileRepository\\samples\\opticon_01.opt";
@@ -69,44 +72,38 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 					applicationName: "Import-service-sample-app",
 					correlationID: "Sample-job-image-0008");
 
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					// Add import images configuration to existing import job.
-					response = await documentConfiguration.CreateAsync(workspaceId, importId, importSettings);
-				}
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.CreateAsync");
 
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					// Add data source settings to existing import job.
-					response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId, dataSourceSettings);
-				}
+				// Add import images configuration to existing import job.
+				response = await documentConfiguration.CreateAsync(workspaceId, importId, importSettings);
+				ResponseHelper.EnsureSuccessResponse(response, "IDocumentConfigurationController.CreateAsync");
 
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					// Start import job.
-					response = await importJobController.BeginAsync(workspaceId, importId);
-				}
+				// Add data source settings to existing import job.
+				response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId, dataSourceSettings);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportSourceController.AddSourceAsync");
 
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					// It may take some time for import job to be completed. Request data source details to monitor the current state.
-					var dataSourceState = await this.WaitToStatusChange(
-						targetStatus: DataSourceState.Completed,
-						funcAsync: () => importSourceController.GetDetailsAsync(workspaceId, importId, sourceId),
-						timeout: 10000);
-
-					// Get current import progress for specific data source.
-					var importProgress = await importJobController.GetProgressAsync(workspaceId, importId);
-
-					if (importProgress.IsSuccess)
-					{
-						Console.WriteLine($"\nData source state: {dataSourceState}");
-						Console.WriteLine($"Import progress: Total records: {importProgress.Value.TotalRecords}, Imported records: {importProgress.Value.ImportedRecords}, Records with errors: {importProgress.Value.ErroredRecords}");
-					}
-				}
+				// Start import job.
+				response = await importJobController.BeginAsync(workspaceId, importId);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.BeginAsync");
 
 				// End import job.
 				await importJobController.EndAsync(workspaceId, importId);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.EndAsync");
+
+				// It may take some time for import job to be completed. Request data source details to monitor the current state.
+				// NOTE: You can also request job details to verify if job is finished - see appropriate sample (sample_19).
+				var dataSourceState = await this.WaitImportDataSourceToBeCompleted(
+					funcAsync: () => importSourceController.GetDetailsAsync(workspaceId, importId, sourceId),
+					timeout: 10000);
+
+				// Get current import progress.
+				var importProgress = await importJobController.GetProgressAsync(workspaceId, importId);
+
+				if (importProgress.IsSuccess)
+				{
+					Console.WriteLine($"\nData source state: {dataSourceState}");
+					Console.WriteLine($"Import progress: Total records: {importProgress.Value.TotalRecords}, Imported records: {importProgress.Value.ImportedRecords}, Records with errors: {importProgress.Value.ErroredRecords}");
+				}
 			}
 		}
 	}

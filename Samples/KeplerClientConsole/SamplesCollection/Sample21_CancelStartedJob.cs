@@ -1,12 +1,13 @@
-﻿// <copyright file="Sample21_CancelStartedJob.cs" company="Relativity ODA LLC">
-// © Relativity All Rights Reserved.
+// <copyright file="Sample21_CancelStartedJob.cs" company="Relativity ODA LLC">
+// � Relativity All Rights Reserved.
 // </copyright>
 
-namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
+namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 {
 	using System;
-	using System.Diagnostics;
 	using System.Threading.Tasks;
+
+	using Relativity.Import.Samples.NetFrameworkClient.ImportSampleHelpers;
 	using Relativity.Import.V1;
 	using Relativity.Import.V1.Builders.DataSource;
 	using Relativity.Import.V1.Builders.Documents;
@@ -24,21 +25,28 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample21_CancelStartedJob()
 		{
+			Console.WriteLine($"Running {nameof(Sample21_CancelStartedJob)}");
+
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
-			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1031725;
+			const int workspaceId = 1000000;
 
+			// set of columns indexes in load file used in import settings.
 			const int controlNumberColumnIndex = 0;
-			const string loadFile01PathTemplate = "C:\\DefaultFileRepository\\samples\\load_file_07{0}.dat";
+			const int filePathColumnIndex = 11;
+			const int fileNameColumnIndex = 13;
+
+			const string loadFile07PathTemplate = "C:\\DefaultFileRepository\\samples\\load_file_07_{0}.dat";
 
 			ImportDocumentSettings importSettings = ImportDocumentSettingsBuilder.Create()
 				.WithAppendOverlayMode(x => x
 					.WithDefaultKeyField()
 					.WithDefaultMultiFieldOverlayBehaviour())
-				.WithoutNatives()
+				.WithNatives(x => x
+					.WithFilePathDefinedInColumn(filePathColumnIndex)
+					.WithFileNameDefinedInColumn(fileNameColumnIndex))
 				.WithoutImages()
 				.WithFieldsMapped(x => x
 					.WithField(controlNumberColumnIndex, "Control Number"))
@@ -58,50 +66,61 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 					workspaceID: workspaceId,
 					applicationName: "Import-service-sample-app",
 					correlationID: "Sample-job-00021");
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.CreateAsync");
 
-				if (this.IsPreviousResponseWithSuccess(response))
+				response = await documentConfiguration.CreateAsync(workspaceId, importId, importSettings);
+				ResponseHelper.EnsureSuccessResponse(response, "IDocumentConfigurationController.CreateAsync");
+
+				// Add n data sources to the existing job.
+				for (int i = 0; i < 20; i++)
 				{
-					response = await documentConfiguration.CreateAsync(workspaceId, importId, importSettings);
+					Guid dataSourceId = Guid.NewGuid();
+					var path = string.Format(loadFile07PathTemplate, i);
+					DataSourceSettings dataSourceSettings = DataSourceSettingsBuilder.Create()
+						.ForLoadFile(path)
+						.WithDefaultDelimiters()
+						.WithFirstLineContainingHeaders()
+						.WithEndOfLineForWindows()
+						.WithStartFromBeginning()
+						.WithDefaultEncoding()
+						.WithDefaultCultureInfo();
+
+					await importSourceController.AddSourceAsync(workspaceId, importId, dataSourceId, dataSourceSettings);
+					ResponseHelper.EnsureSuccessResponse(response, "IImportSourceController.AddSourceAsync");
 				}
 
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					// Add n data sources to the existing job.
-					for (int i = 0; i < 20; i++)
-					{
-						Guid dataSourceId = Guid.NewGuid();
-						var path = string.Format(loadFile01PathTemplate, i);
-						DataSourceSettings dataSourceSettings = DataSourceSettingsBuilder.Create()
-							.ForLoadFile(path)
-							.WithDefaultDelimiters()
-							.WithFirstLineContainingHeaders()
-							.WithEndOfLineForWindows()
-							.WithStartFromBeginning()
-							.WithDefaultEncoding()
-							.WithDefaultCultureInfo();
+				// Start import job.
+				response = await importJobController.BeginAsync(workspaceId, importId);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.BeginAsync");
 
-						await importSourceController.AddSourceAsync(workspaceId, importId, dataSourceId, dataSourceSettings);
-					}
-				}
+				// Read import job details.
+				var valueResponse = await importJobController.GetDetailsAsync(workspaceId, importId);
+				Console.WriteLine("Import Job Status");
+				Console.WriteLine($"	IsSuccess: {valueResponse.IsSuccess}");
+				Console.WriteLine($"	Import status: {valueResponse.Value.State}");
 
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					response = await importJobController.BeginAsync(workspaceId, importId);
-				}
+				await importJobController.CancelAsync(workspaceId, importId);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.CancelAsync");
 
-				if (this.IsPreviousResponseWithSuccess(response))
-				{
-					var importDetails = await importJobController.GetDetailsAsync(workspaceId, importId);
+				// Read import job details once again.
+				valueResponse = await importJobController.GetDetailsAsync(workspaceId, importId);
+				Console.WriteLine("Import Job Status");
+				Console.WriteLine($"	IsSuccess: {valueResponse.IsSuccess}");
+				Console.WriteLine($"	Import status: {valueResponse.Value.State}");
 
-					Console.WriteLine(importDetails.Value.State);
-
-					await importJobController.CancelAsync(workspaceId, importId);
-
-					importDetails = await importJobController.GetDetailsAsync(workspaceId, importId);
-
-					Console.WriteLine(importDetails.Value.State);
-				}
 			}
 		}
 	}
 }
+/* Example of expected console result:
+IImportJobController.BeginAsync
+Response.IsSuccess: True
+Import Job Status
+        IsSuccess: True
+        Import status: Scheduled
+IImportJobController.CancelAsync
+Response.IsSuccess: True
+Import Job Status
+        IsSuccess: True
+        Import status: Canceled
+*/

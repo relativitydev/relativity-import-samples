@@ -2,11 +2,11 @@
 // © Relativity All Rights Reserved.
 // </copyright>
 
-namespace Relativity.Import.Samples.dotNetWithKepler
+namespace Relativity.Import.Samples.NetFrameworkClient
 {
 	using System;
 	using System.Threading.Tasks;
-	using SamplesCollection;
+	using Relativity.Import.Samples.NetFrameworkClient.SamplesCollection;
 
 	/// <summary>
 	/// Console application presenting using Relativity.Import.sdk in samples.
@@ -15,8 +15,7 @@ namespace Relativity.Import.Samples.dotNetWithKepler
 	{
 		private static void Main(string[] args)
 		{
-			// Provide relativity host, username and password.
-			var sample = new ImportServiceSample("https://sample-hosts/", "sample@username", "password!");
+			var sampleCollection = new ImportServiceSample();
 
 			// Execute samples:
 
@@ -26,54 +25,61 @@ namespace Relativity.Import.Samples.dotNetWithKepler
 			var task = Task.Run(
 				async () =>
 				{
-					await sample.Sample01_ImportNativeFiles();
+					await sampleCollection.Sample01_ImportNativeFiles();
 
-					// await sample.Sample02_ImportDocumentsInOverlayMode();
+					// await sampleCollection.Sample02_ImportDocumentsInOverlayMode();
 
-					// await sample.Sample03_ImportFromTwoDataSources();
+					// await sampleCollection.Sample03_ImportFromTwoDataSources();
 
-					// await sample.Sample04_AddDataSourceToRunningJob();
+					// await sampleCollection.Sample04_AddDataSourceToRunningJob();
 
-					// await sample.Sample05_ImportDocumentsWithExtractedText();
+					// await sampleCollection.Sample05_ImportDocumentsWithExtractedText();
 
-					// await sample.Sample06_ImportDocumentsToSelectedFolder();
+					// await sampleCollection.Sample06_ImportDocumentsToSelectedFolder();
 
-					// await sample.Sample07_ImportDocumentSettingsForNatives();
+					// await sampleCollection.Sample07_ImportDocumentSettingsForNatives();
 
-					// await sample.Sample08_ImportImages();
+					// await sampleCollection.Sample08_ImportImages();
 
-					// await sample.Sample09_ImportProductionFiles();
+					// await sampleCollection.Sample09_ImportProductionFiles();
 
-					// await sample.Sample10_ImportImagesInAppendOverlayMode();
+					// await sampleCollection.Sample10_ImportImagesInAppendOverlayMode();
 
-					// await sample.Sample11_ImportDocumentSettingsForImages();
+					// await sampleCollection.Sample11_ImportDocumentSettingsForImages();
 
-					// await sample.Sample12_ImportRelativityDynamicObject();
+					// await sampleCollection.Sample12_ImportRelativityDynamicObject();
 
-					// await sample.Sample13_ImportRdoWithParent();
+					// await sampleCollection.Sample13_ImportRdoWithParent();
 
-					// await sample.Sample14_ImportRdoSettings();
+					// await sampleCollection.Sample14_ImportRdoSettings();
 
-					// await sample.Sample15_ReadImportRdoSettings();
+					// await sampleCollection.Sample15_ReadImportRdoSettings();
 
-					// await sample.Sample16_ReadImportDocumentSettings();
+					// await sampleCollection.Sample16_ReadImportDocumentSettings();
 
-					// await sample.Sample17_GetImportJobs();
+					// await sampleCollection.Sample17_GetImportJobs();
 
-					// await sample.Sample18_GetDataSource();
+					// await sampleCollection.Sample18_GetDataSource();
 
-					// await sample.Sample19_GetImportJobProgress();
+					// await sampleCollection.Sample19_GetImportJobDetailsAndProgress();
 
-					// await sample.Sample20_GetDataSourceProgress();
+					// await sampleCollection.Sample20_GetDataSourceDetailsAndProgress();
 
-					// await sample.Sample21_CancelStartedJob();
+					// await sampleCollection.Sample21_CancelStartedJob();
 
-					// await sample.Sample22_ReadResponse();
+					// await sampleCollection.Sample22_ReadResponse();
 
-					// await sample.Sample23_GetDataSourceErrors();
+					// await sampleCollection.Sample23_GetDataSourceErrors();
 				});
 
-			task.Wait();
+			try
+			{
+				task.Wait();
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e.Message);
+			}
 
 			Console.ReadKey();
 		}

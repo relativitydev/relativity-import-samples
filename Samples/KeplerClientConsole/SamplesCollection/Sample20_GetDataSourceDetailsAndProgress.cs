@@ -1,4 +1,4 @@
-﻿// <copyright file="Sample01_ImportNativeFiles.cs" company="Relativity ODA LLC">
+﻿// <copyright file="Sample20_GetDataSourceDetailsAndProgress.cs" company="Relativity ODA LLC">
 // © Relativity All Rights Reserved.
 // </copyright>
 
@@ -10,6 +10,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 	using Relativity.Import.V1;
 	using Relativity.Import.V1.Builders.DataSource;
 	using Relativity.Import.V1.Builders.Documents;
+	using Relativity.Import.V1.Models;
 	using Relativity.Import.V1.Models.Settings;
 	using Relativity.Import.V1.Models.Sources;
 
@@ -19,21 +20,21 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 	public partial class ImportServiceSample
 	{
 		/// <summary>
-		/// Example of simple import native files.
+		/// Example of reading all data sources Ids for particular job.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-		public async Task Sample01_ImportNativeFiles()
+		public async Task Sample20_GetDataSourceDetailsAndProgress()
 		{
-			Console.WriteLine($"Running {nameof(Sample01_ImportNativeFiles)}");
+			Console.WriteLine($"Running {nameof(Sample20_GetDataSourceDetailsAndProgress)}");
 
-			// GUID identifiers for import job and data source.
+			// GUID identifiers for import job and data sources.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
 			const int workspaceId = 1000000;
 
-			// set of columns indexes in load file used in import settings.
+			// set of columns indexes in load file used in import settings
 			const int controlNumberColumnIndex = 0;
 			const int custodianColumnIndex = 1;
 			const int dateSentColumnIndex = 5;
@@ -41,10 +42,9 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 			const int fileNameColumnIndex = 13;
 			const int filePathColumnIndex = 22;
 
-			// Path to the load file used in data source settings.
 			const string loadFile01Path = "C:\\DefaultFileRepository\\samples\\load_file_01.dat";
 
-			// Configuration settings for document import. Builder is used to create settings.
+			// Configuration settings for images import. Builder is used to create settings.
 			ImportDocumentSettings importSettings = ImportDocumentSettingsBuilder.Create()
 				.WithAppendMode()
 				.WithNatives(x => x
@@ -59,7 +59,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 				.WithoutFolders();
 
 			// Configuration settings for data source. Builder is used to create settings.
-			DataSourceSettings dataSourceSettings = DataSourceSettingsBuilder.Create()
+			DataSourceSettings dataSourceSettings01 = DataSourceSettingsBuilder.Create()
 				.ForLoadFile(loadFile01Path)
 				.WithDelimiters(d => d
 					.WithColumnDelimiters('|')
@@ -87,16 +87,16 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 					importJobID: importId,
 					workspaceID: workspaceId,
 					applicationName: "Import-service-sample-app",
-					correlationID: "Sample-job-0001");
+					correlationID: "Sample-job-00020");
 
 				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.CreateAsync");
 
-				// Add import document settings to existing import job.
+				// Add import document settings to existing import job (configure import job).
 				response = await documentConfiguration.CreateAsync(workspaceId, importId, importSettings);
 				ResponseHelper.EnsureSuccessResponse(response, "IDocumentConfigurationController.CreateAsync");
 
 				// Add data source settings to existing import job.
-				response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId, dataSourceSettings);
+				response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId, dataSourceSettings01);
 				ResponseHelper.EnsureSuccessResponse(response, "IImportSourceController.AddSourceAsync");
 
 				// Start import job.
@@ -107,28 +107,39 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 				await importJobController.EndAsync(workspaceId, importId);
 				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.EndAsync");
 
+				// Read Data source Progress
+				await ReadImportJobProgress();
+
 				// It may take some time for import job to be completed. Request data source details to monitor the current state.
-				// NOTE: You can also request job details to verify if job is finished - see appropriate sample (sample_19).
-				var dataSourceState = await this.WaitImportDataSourceToBeCompleted(
+				await this.WaitImportDataSourceToBeCompleted(
 					funcAsync: () => importSourceController.GetDetailsAsync(workspaceId, importId, sourceId),
 					timeout: 10000);
 
-				// Get current import progress for specific data source.
-				var importProgress = await importSourceController.GetProgressAsync(workspaceId, importId, sourceId);
+				// Get Data source Progress
+				await ReadImportJobProgress();
 
-				if (importProgress.IsSuccess)
+				async Task ReadImportJobProgress()
 				{
-					Console.WriteLine("\n");
-					Console.WriteLine($"Data source state: {dataSourceState}");
-					Console.WriteLine($"Import data source progress: Total records: {importProgress.Value.TotalRecords}, Imported records: {importProgress.Value.ImportedRecords}, Records with errors: {importProgress.Value.ErroredRecords}");
+					ValueResponse<ImportProgress> valueResponse = await importSourceController.GetProgressAsync(workspaceId, importId, sourceId);
+
+					if (valueResponse?.IsSuccess ?? false)
+					{
+						Console.WriteLine("\n");
+						Console.WriteLine($"Import data source progress: Total records: {valueResponse.Value.TotalRecords}, Imported records: {valueResponse.Value.ImportedRecords}, Records with errors: {valueResponse.Value.ErroredRecords}");
+					}
 				}
-				Console.WriteLine("\n");
 			}
 		}
 	}
 }
 
 /* Expected console result:
-	Data source state: Completed
-	Import data source progress: Total records: 4, Imported records: 4, Records with errors: 0
+
+	Import data source progress: Total records: 0, Imported records: 0, Records with errors: 0
+
+	DataSource state: Inserting
+	DataSource state: Inserting
+	DataSource state: Completed
+
+	Import data source progress: Total records: 4, Imported records: 4, Records with errors: 0	
  */

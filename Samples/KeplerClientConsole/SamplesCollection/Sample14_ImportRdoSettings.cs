@@ -2,14 +2,14 @@
 // © Relativity All Rights Reserved.
 // </copyright>
 
-namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
+namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 {
 	using System;
 	using System.Threading.Tasks;
+	using Relativity.Import.Samples.NetFrameworkClient.ImportSampleHelpers;
 	using Relativity.Import.V1;
 	using Relativity.Import.V1.Models.Settings;
 	using Relativity.Import.V1.Models.Sources;
-	using Relativity.Import.V1.Services;
 
 	/// <summary>
 	///  Class containing examples of using import service SDK.
@@ -18,21 +18,23 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 	{
 		/// <summary>
 		/// Example of creating ImportRdoSettings manually - without ImportRdoSettingsBuilder.
+		/// NOTE: Existing RDO "Domain" is used in this example. Please insert documents from sample01 first.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample14_ImportRdoSettings()
 		{
+			Console.WriteLine($"Running {nameof(Sample14_ImportRdoSettings)}");
+
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
 
 			// destination workspace artifact Id.
-			const int workspaceId = 1031725;
+			const int workspaceId = 1000000;
 
 			// set of columns indexes in load file used in import settings.
 			// example import of Domain RDO.
 			const int nameColumnIndex = 0;
-			const int domainEmailBccColumnIndex = 2;
 			const int domainEmailCcColumnIndex = 3;
 			const int domainEmailFromColumnIndex = 4;
 			const int domainEmailToColumnIndex = 5;
@@ -60,6 +62,7 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 							ColumnIndex = nameColumnIndex,
 							ContainsFilePath = false,
 						},
+						// If you do not use these fields please just comment them. Otherwise use sample01 first to import related documents.
 						new FieldMapping
 						{
 							Field = "Domains (Email CC)",
@@ -69,16 +72,16 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 						},
 						new FieldMapping
 						{
-							Field = "Domain (Email BCC)",
+							Field = "Domain (Email From)",
 							ContainsID = false,
-							ColumnIndex = domainEmailBccColumnIndex,
+							ColumnIndex = domainEmailFromColumnIndex,
 							ContainsFilePath = false,
 						},
 						new FieldMapping
 						{
-							Field = "Domains (Email From)",
+							Field = "Domains (Email To)",
 							ContainsID = false,
-							ColumnIndex = domainEmailFromColumnIndex,
+							ColumnIndex = domainEmailToColumnIndex,
 							ContainsFilePath = false,
 						},
 						new FieldMapping
@@ -130,42 +133,36 @@ namespace Relativity.Import.Samples.dotNetWithKepler.SamplesCollection
 					applicationName: "Import-service-sample-app",
 					correlationID: "Sample-job-import-00014");
 
-				if (this.IsPreviousResponseWithSuccess(response, nameof(IImportJobController.CreateAsync)))
-				{
-					// Add import rdo settings to existing import job.
-					response = await rdoConfiguration.CreateAsync(workspaceId, importId, importSettings);
-				}
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.CreateAsync");
 
-				if (this.IsPreviousResponseWithSuccess(response, nameof(IImportJobController.CreateAsync)))
-				{
-					// Add data source settings to existing import job.
-					response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId, dataSourceSettings);
-				}
+				// Add import rdo settings to existing import job.
+				response = await rdoConfiguration.CreateAsync(workspaceId, importId, importSettings);
+				ResponseHelper.EnsureSuccessResponse(response, "IRDOConfigurationController.CreateAsync");
 
-				if (this.IsPreviousResponseWithSuccess(response, nameof(IImportSourceController.AddSourceAsync)))
-				{
-					// Start import job.
-					response = await importJobController.BeginAsync(workspaceId, importId);
-				}
+				// Add data source settings to existing import job.
+				response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId, dataSourceSettings);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportSourceController.AddSourceAsync");
 
-				if (this.IsPreviousResponseWithSuccess(response, nameof(IImportJobController.BeginAsync)))
-				{
-					await this.WaitImportDataSourceToBeCompleted(
-						() => importSourceController.GetDetailsAsync(workspaceId, importId, sourceId),
-						15000);
+				// Start import job.
+				response = await importJobController.BeginAsync(workspaceId, importId);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.BeginAsync");
 
-					// Get current import progress for specific data source.
-					var importProgress = await importSourceController.GetProgressAsync(workspaceId, importId, sourceId);
-					var dataSourceState = await importSourceController.GetDetailsAsync(workspaceId, importId, sourceId);
-
-					if (importProgress.IsSuccess)
-					{
-						Console.WriteLine($"\n\nData source state: {dataSourceState.Value.State}");
-						Console.WriteLine($"Import progress: Total records: {importProgress.Value.TotalRecords}, Imported records: {importProgress.Value.ImportedRecords}, Records with errors: {importProgress.Value.ErroredRecords}");
-					}
-				}
-
+				// End import job.
 				await importJobController.EndAsync(workspaceId, importId);
+				ResponseHelper.EnsureSuccessResponse(response, "IImportJobController.EndAsync");
+
+				var dataSourceState = await this.WaitImportDataSourceToBeCompleted(
+					() => importSourceController.GetDetailsAsync(workspaceId, importId, sourceId),
+					15000);
+
+				// Get current import progress for specific data source.
+				var importProgress = await importSourceController.GetProgressAsync(workspaceId, importId, sourceId);
+				
+				if (importProgress.IsSuccess)
+				{
+					Console.WriteLine($"\n\nData source state: {dataSourceState}");
+					Console.WriteLine($"Import progress: Total records: {importProgress.Value.TotalRecords}, Imported records: {importProgress.Value.ImportedRecords}, Records with errors: {importProgress.Value.ErroredRecords}");
+				}
 			}
 		}
 	}
