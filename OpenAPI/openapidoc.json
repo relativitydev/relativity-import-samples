@@ -1,0 +1,1817 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Relativity.Import.Services",
+    "description": "Relativity.Import.Services",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "/Relativity.REST/api",
+      "description": "The URL prefix for all Kepler services"
+    }
+  ],
+  "paths": {
+    "/import-service/v1/health-check/": {
+      "get": {
+        "tags": [
+          "Health Check Module"
+        ],
+        "summary": "",
+        "description": "Check if Import Service is available.",
+        "operationId": "Import.Services.V1.HealthCheckController.HealthCheckAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthCheckResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/client-side-libraries/{fileName}/": {
+      "get": {
+        "tags": [
+          "Client Side Libraries Module"
+        ],
+        "summary": "",
+        "description": "Get a script by name.",
+        "operationId": "Import.Services.V1.ClientSideLibrariesController.GetScript",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/fileName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValueResponse.ScriptResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/": {
+      "post": {
+        "tags": [
+          "Import Job Module"
+        ],
+        "summary": "",
+        "description": "Create import job.",
+        "operationId": "Import.Services.V1.ImportJobController.CreateAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/importJobID"
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createJobBodyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/cancel/": {
+      "post": {
+        "tags": [
+          "Import Job Module"
+        ],
+        "summary": "",
+        "description": "Cancel import job.",
+        "operationId": "Import.Services.V1.ImportJobController.CancelAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/importJobID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/begin/": {
+      "post": {
+        "tags": [
+          "Import Job Module"
+        ],
+        "summary": "",
+        "description": "Begin import job.",
+        "operationId": "Import.Services.V1.ImportJobController.BeginAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/importJobID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/end/": {
+      "post": {
+        "tags": [
+          "Import Job Module"
+        ],
+        "summary": "",
+        "description": "End import job.",
+        "operationId": "Import.Services.V1.ImportJobController.EndAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/importJobID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/pause/": {
+      "post": {
+        "tags": [
+          "Import Job Module"
+        ],
+        "summary": "",
+        "description": "Pause import job.",
+        "operationId": "Import.Services.V1.ImportJobController.PauseAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/importJobID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/resume/": {
+      "post": {
+        "tags": [
+          "Import Job Module"
+        ],
+        "summary": "",
+        "description": "Resume previously paused import job.",
+        "operationId": "Import.Services.V1.ImportJobController.ResumeAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/importJobID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/progress/": {
+      "get": {
+        "tags": [
+          "Import Job Module"
+        ],
+        "summary": "",
+        "description": "Get import job progress.",
+        "operationId": "Import.Services.V1.ImportJobController.GetProgressAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/importJobID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValueResponse.ImportProgress"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/details/": {
+      "get": {
+        "tags": [
+          "Import Job Module"
+        ],
+        "summary": "",
+        "description": "Get import job details.",
+        "operationId": "Import.Services.V1.ImportJobController.GetDetailsAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/importJobID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValueResponse.ImportDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/jobs/": {
+      "get": {
+        "tags": [
+          "Import Job Module"
+        ],
+        "summary": "",
+        "description": "Get import jobs which exist in workspace.",
+        "operationId": "Import.Services.V1.ImportJobController.GetJobsAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/start"
+          },
+          {
+            "$ref": "#/components/parameters/length"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValueResponse.ImportJobs"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/documents-configurations/": {
+      "post": {
+        "tags": [
+          "Document Configuration Module"
+        ],
+        "summary": "",
+        "description": "Create Import Job document configuration.",
+        "operationId": "Import.Services.V1.IDocumentConfigurationController.CreateAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/importJobID"
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createDocumentConfigurationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/documents-configurations": {
+      "get": {
+        "tags": [
+          "Document Configuration Module"
+        ],
+        "summary": "",
+        "description": "Get Import Job document settings.",
+        "operationId": "Import.Services.V1.IDocumentConfigurationController.ReadAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/importJobID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValueResponse.ImportDocumentSettings"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/sources/{sourceID}": {
+      "post": {
+        "tags": [
+          "Import Source Module"
+        ],
+        "summary": "",
+        "description": "Add source to import job.",
+        "operationId": "Import.Services.V1.IImportSourceController.AddSourceAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/importJobID"
+          },
+          {
+            "$ref": "#/components/parameters/sourceID"
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createDataSourceSettingsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/sources/{sourceID}/columns": {
+      "get": {
+        "tags": [
+          "Import Source Module"
+        ],
+        "summary": "",
+        "description": "Returns list of column names read from configuration.",
+        "operationId": "Import.Services.V1.IImportSourceController.GetColumnsAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/importJobID"
+          },
+          {
+            "$ref": "#/components/parameters/sourceID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValueResponse.StringArray"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/sources/{sourceID}/details": {
+      "get": {
+        "tags": [
+          "Import Source Module"
+        ],
+        "summary": "",
+        "description": "Returns details for single source.",
+        "operationId": "Import.Services.V1.IImportSourceController.GetDetailsAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/importJobID"
+          },
+          {
+            "$ref": "#/components/parameters/sourceID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValueResponse.DataSourceDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/sources/": {
+      "get": {
+        "tags": [
+          "Import Source Module"
+        ],
+        "summary": "",
+        "description": "Returns sources for single source.",
+        "operationId": "Import.Services.V1.IImportSourceController.GetSourcesAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/importJobID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValueResponse.DataSources"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/sources/{sourceID}/itemerrors": {
+      "get": {
+        "tags": [
+          "Import Source Module"
+        ],
+        "summary": "",
+        "description": "Get errors for single source.",
+        "operationId": "Import.Services.V1.IImportSourceController.GetItemErrorsAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/importJobID"
+          },
+          {
+            "$ref": "#/components/parameters/sourceID"
+          },
+          {
+            "$ref": "#/components/parameters/start"
+          },
+          {
+            "$ref": "#/components/parameters/length"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValueResponse.ImportErrors"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/sources/{sourceID}/errorloadfile": {
+      "get": {
+        "tags": [
+          "Import Source Module"
+        ],
+        "summary": "",
+        "description": "Get path to Loadfile with error lines. Empty if data source had no errors.",
+        "operationId": "Import.Services.V1.IImportSourceController.GetErrorLoadfileAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/importJobID"
+          },
+          {
+            "$ref": "#/components/parameters/sourceID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValueResponse.String"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/sources/{sourceID}/progress": {
+      "get": {
+        "tags": [
+          "Import Source Module"
+        ],
+        "summary": "",
+        "description": "Get progress for single source.",
+        "operationId": "Import.Services.V1.IImportSourceController.GetProgressAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/importJobID"
+          },
+          {
+            "$ref": "#/components/parameters/sourceID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValueResponse.ImportProgress"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/rdos-configurations/": {
+      "post": {
+        "tags": [
+          "RDO Configuration Module"
+        ],
+        "summary": "",
+        "description": "Create RDO configuration.",
+        "operationId": "Import.Services.V1.IRDOConfigurationController.CreateAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/importJobID"
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createRDOConfigurationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/rdos-configurations": {
+      "get": {
+        "tags": [
+          "RDO Configuration Module"
+        ],
+        "summary": "",
+        "description": "Get RDO configuration.",
+        "operationId": "Import.Services.V1.IRDOConfigurationController.ReadAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/importJobID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValueResponse.ImportDocumentSettings"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-private/v1/DiagnosticJob/Execute": {
+      "post": {
+        "tags": [
+          "Diagnostic Job Module"
+        ],
+        "summary": "",
+        "description": "Create, configure, and execute simple import job for diagnostic purpose.",
+        "operationId": "Import.Services.V1.IDiagnosticJobController.ExecuteAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DiagnosticJobSettings"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiagnosticJobResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "X-CSRF-Header": {
+        "name": "X-CSRF-Header",
+        "in": "header",
+        "description": "Required CSRF header for any KeplerService. *Note: Actual string value does not matter*. ",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "System.String",
+          "default": "."
+        }
+      },
+      "fileName": {
+        "name": "fileName",
+        "in": "path",
+        "description": "The name of the file to return.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "example": "CsvReader.js"
+      },
+      "workspaceID": {
+        "name": "workspaceID",
+        "in": "path",
+        "description": "Workspace identification number.",
+        "required": true,
+        "schema": {
+          "type": "integer"
+        },
+        "example": 10000
+      },
+      "length": {
+        "name": "length",
+        "in": "query",
+        "description": "Number of returned import jobs in workspace.",
+        "required": true,
+        "schema": {
+          "type": "integer"
+        },
+        "example": 10
+      },
+      "start": {
+        "name": "start",
+        "in": "query",
+        "description": "Index from which import jobs will be read.",
+        "required": true,
+        "schema": {
+          "type": "integer"
+        },
+        "example": "0"
+      },
+      "importJobID": {
+        "name": "importJobID",
+        "in": "path",
+        "description": "Import job identification GUID.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "example": "00000000-0000-0000-0000-000000000000"
+      },
+      "sourceID": {
+        "name": "sourceID",
+        "in": "path",
+        "description": "Source identification GUID.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "example": "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "schemas": {
+      "HealthCheckResult": {
+        "type": "object",
+        "properties": {
+          "IsHealthy": {
+            "type": "boolean",
+            "example": true
+          },
+          "Message": {
+            "type": "string",
+            "example": "Import.Services is Healthy"
+          }
+        }
+      },
+      "ValueResponse.ScriptResult": {
+        "description": "ValueResponse of ScriptResult type",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "object",
+                "properties": {
+                  "Content": {
+                    "type": "string",
+                    "example": "function CsvReader() {.....}"
+                  }
+                }
+              }
+            }
+          },
+          { "$ref": "#/components/schemas/Response" }
+        ]
+      },
+      "ValueResponse.ImportProgress": {
+        "description": "ValueResponse of ImportProgress type",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "object",
+                "properties": {
+                  "RecordsInDataSources": {
+                    "type": "integer",
+                    "example": 11
+                  },
+                  "ImportedRecords": {
+                    "type": "integer",
+                    "example": 10
+                  },
+                  "ErrorRecords": {
+                    "type": "integer",
+                    "example": 1
+                  }
+                }
+              }
+            }
+          },
+          { "$ref": "#/components/schemas/Response" }
+        ]
+      },
+      "ValueResponse.ImportDetails": {
+        "description": "ValueResponse of ImportDetails type",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "object",
+                "properties": {
+                  "IsFinished": {
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "State": {
+                    "$ref": "#/components/schemas/ImportState"
+                  },
+                  "ApplicationName": {
+                    "type": "string",
+                    "example": "Example Application"
+                  },
+                  "CreatedBy": {
+                    "type": "integer",
+                    "example": 10
+                  },
+                  "CreatedOn": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2021-11-30T09:17:19.81"
+                  },
+                  "LastModifiedBy": {
+                    "type": "integer",
+                    "example": 9
+                  },
+                  "LastModifiedOn": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2021-11-30T09:17:19.81"
+                  }
+                }
+              }
+            }
+          },
+          { "$ref": "#/components/schemas/Response" }
+        ]
+      },
+      "ValueResponse.ImportJobs": {
+        "description": "ValueResponse of ImportJobs type",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "object",
+                "properties": {
+                  "Jobs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "uniqueItems": true,
+                    "description": "Jobs Guid ids.",
+                    "example": [ "1D2F6FF7-D3BA-49D4-BAF0-808533EE5233", "00000000-0000-0000-0000-000000000000" ]
+                  },
+                  "TotalCount": {
+                    "type": "integer",
+                    "example": 2
+                  }
+                }
+              }
+            }
+          },
+          { "$ref": "#/components/schemas/Response" }
+        ]
+      },
+      "ValueResponse.DataSourceDetails": {
+        "description": "ValueResponse of DataSourceDetails type",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "Value": { "$ref": "#/components/schemas/DataSourceDetails" }
+            }
+          },
+          { "$ref": "#/components/schemas/Response" }
+        ]
+      },
+      "DataSourceDetails": {
+        "description": "DataSourceDetails type",
+        "type": "object",
+        "properties": {
+          "State": {
+            "$ref": "#/components/schemas/DataSourceState",
+            "description": "Indicates in what state currently DataSource is."
+          },
+          "DataSourceSettings": { "$ref": "#/components/schemas/DataSourceSettings" }
+        }
+      },
+      "ValueResponse.ImportDocumentSettings": {
+        "description": "ValueResponse of ImportDocumentSettings type",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "Value": { "$ref": "#/components/schemas/ImportDocumentSettings" }
+            }
+          },
+          { "$ref": "#/components/schemas/Response" }
+        ]
+      },
+      "ValueResponse.StringArray": {
+        "description": "ValueResponse of string[] type",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Names of columns.",
+                "example": [ "Column1", "Column2" ]
+              }
+            }
+          },
+          { "$ref": "#/components/schemas/Response" }
+        ]
+      },
+      "ValueResponse.DataSourceSettings": {
+        "description": "ValueResponse of DataSourceSettings type",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "Value": { "$ref": "#/components/schemas/DataSourceSettings" }
+            }
+          },
+          { "$ref": "#/components/schemas/Response" }
+        ]
+      },
+      "ValueResponse.DataSources": {
+        "description": "ValueResponse of DataSources type",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "Value": { "$ref": "#/components/schemas/DataSources" }
+            }
+          },
+          { "$ref": "#/components/schemas/Response" }
+        ]
+      },
+      "ValueResponse.String": {
+        "description": "ValueResponse of string type",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "string",
+                "example": "//emttest/DefaultFileShare/EDDS124421/loadfile_d2609a39-f0ab-492e-a98e-a3171671cb00.dat"
+              }
+            }
+          },
+          { "$ref": "#/components/schemas/Response" }
+        ]
+      },
+      "ValueResponse.ImportErrors": {
+        "description": "ValueResponse of ImportErrors type",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "Value": { "$ref": "#/components/schemas/ImportErrors" }
+            }
+          },
+          { "$ref": "#/components/schemas/Response" }
+        ]
+      },
+      "Response": {
+        "type": "object",
+        "properties": {
+          "IsSuccess": {
+            "type": "boolean",
+            "example": true
+          },
+          "ErrorMessage": {
+            "type": "string",
+            "example": ""
+          },
+          "ErrorCode": {
+            "type": "string",
+            "example": ""
+          },
+          "ImportJobID": {
+            "description": "Import job identification GUID number.",
+            "type": "string",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          }
+        }
+      },
+      "DiagnosticJobResponse": {
+        "type": "object",
+        "properties": {
+          "InformationMessage": {
+            "type": "string",
+            "example": "Diagnostic Import Job was properly started. Use the dedicated api endpoints to monitor job progress and state."
+          },
+          "IsSuccess": {
+            "type": "boolean",
+            "example": true
+          },
+          "ErrorMessage": {
+            "type": "string",
+            "example": ""
+          },
+          "ErrorCode": {
+            "type": "string",
+            "example": ""
+          },
+          "ImportJobID": {
+            "description": "Import job identification GUID number.",
+            "type": "string",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          }
+        }
+      },
+      "DiagnosticJobSettings": {
+        "type": "object",
+        "properties": {
+          "WorkspaceID": {
+            "type": "integer",
+            "description": "Indicates the WorkspaceID for which the import will be executed. If not provided the Relativity Starter Template workspace is used.",
+            "nullable": true,
+            "example": 1003663
+          },
+          "FileSharePath": {
+            "type": "string",
+            "description": "Custom provided fileshare location where dataset (load file) will be generated. When not provided the default fileshare location for selected workspace is used.",
+            "nullable": true,
+            "example": "C:\\DefaultFileRepository\\EDDS1015024\\DiagnosticJob"
+          }
+        }
+      },
+      "ImportDocumentSettings": {
+        "type": "object",
+        "properties": {
+          "Overlay": {
+            "$ref": "#/components/schemas/OverlaySettings",
+            "description": "Overlay settings. If not set append mode would be used."
+          },
+          "Native": {
+            "$ref": "#/components/schemas/NativeSettings",
+            "description": "Native file settings. If not set, no native files would be imported."
+          },
+          "Image": {
+            "$ref": "#/components/schemas/ImageSettings",
+            "description": "Image file settings. If not set, no image files would be imported."
+          },
+          "Fields": {
+            "$ref": "#/components/schemas/FieldsSettings",
+            "description": "Field settings. Required for every data source except image opticon load file which has defined structure."
+          },
+          "Folder": {
+            "$ref": "#/components/schemas/FolderSettings",
+            "description": "Folder settings. If not set, the root folder would be used as a parent for every document."
+          }
+        }
+      },
+      "ImportRdoSettings": {
+        "type": "object",
+        "properties": {
+          "Overlay": {
+            "$ref": "#/components/schemas/OverlaySettings",
+            "description": "Overlay settings. If not set append mode would be used."
+          },
+          "Fields": {
+            "$ref": "#/components/schemas/FieldsSettings",
+            "description": "Fields settings. Required for any object type."
+          },
+          "Rdo": {
+            "$ref": "#/components/schemas/RdoSettings",
+            "description": "Rdo settings. Required for any object type."
+          }
+        }
+      },
+      "OverlaySettings": {
+        "type": "object",
+        "properties": {
+          "Mode": {
+            "$ref": "#/components/schemas/OverlayMode",
+            "description": "Indicates whether records should be appended or overlaid."
+          },
+          "KeyField": {
+            "type": "string",
+            "description": "Represents a key field that is set only on Overwrite mode.",
+            "example": "KeyField"
+          },
+          "MultiFieldOverlayBehaviour": {
+            "$ref": "#/components/schemas/MultiFieldOverlayBehaviour",
+            "description": "Indicates the method for overlay imports with multiple choice and multiple object fields."
+          }
+        }
+      },
+      "NativeSettings": {
+        "type": "object",
+        "example": null,
+        "properties": {
+          "FilePathColumnIndex": {
+            "type": "integer",
+            "nullable": true,
+            "description": "The index of the column in the data source (count from zero) which contains path to the native file. Required.",
+            "example": 0
+          },
+          "FileNameColumnIndex": {
+            "type": "integer",
+            "nullable": true,
+            "description": "The index of the column in the data source (count from zero) which contains native file name metadata. If property is not set, value is retrieved from file.",
+            "example": 1
+          }
+        }
+      },
+      "ImageSettings": {
+        "type": "object",
+        "properties": {
+          "ProductionID": {
+            "type": "integer",
+            "description": "Indicates a valid ArtifactID for a production set. Optional.",
+            "example": 1003663
+          },
+          "PageNumbering": {
+            "$ref": "#/components/schemas/PageNumbering",
+            "description": "Determines whether a page number is automatically appended to a page-level identifier. When this property is set to True, a new incremental number (such as 01, 02) is added to the page-level identifier, creating a unique page number."
+          },
+          "LoadExtractedText": {
+            "type": "boolean",
+            "description": "Determines whether Extracted Text should be loaded together with images if Extracted Text file is available.",
+            "example": true
+          }
+        }
+      },
+      "FieldsSettings": {
+        "type": "object",
+        "properties": {
+          "FieldMappings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FieldMapping"
+            }
+          }
+        }
+      },
+      "FolderSettings": {
+        "type": "object",
+        "properties": {
+          "RootFolderID": {
+            "type": "integer",
+            "description": "Indicates the Import Destination folder under which documents and objects, as well as folders containing documents or objects, are built.",
+            "example": 1003663
+          },
+          "FolderPathColumnIndex": {
+            "type": "integer",
+            "description": "The index of the column in the data source (count from zero) which contains the folder path.",
+            "nullable": true,
+            "example": 2
+          }
+        }
+      },
+      "OtherSettings": {
+        "type": "object",
+        "properties": {
+          "ExtractedText": {
+            "$ref": "#/components/schemas/ExtractedTextSettings"
+          }
+        }
+      },
+      "RdoSettings": {
+        "type": "object",
+        "properties": {
+          "ArtifactTypeID": {
+            "type": "integer",
+            "description": "Indicates the ArtifactTypeId of the destination object type. This property is required.",
+            "example": 1003663
+          },
+          "ParentColumnIndex": {
+            "type": "integer",
+            "description": "The index of the column in data source (count from zero) which contains parent identifiers.",
+            "nullable": true,
+            "example": 3
+          }
+        }
+      },
+      "FieldMapping": {
+        "type": "object",
+        "properties": {
+          "ColumnIndex": {
+            "type": "integer",
+            "description": "The index of the column in the data source (count from zero).",
+            "example": 4
+          },
+          "Field": {
+            "type": "string",
+            "description": "The name of the field in the Workspace.",
+            "example": "one"
+          },
+          "ContainsID": {
+            "type": "boolean",
+            "description": "Indicates whether SingleObject or MultiObject field type contains ArtifactID or the actual text identifier.",
+            "example": false
+          },
+          "ContainsFilePath": {
+            "type": "boolean",
+            "description": "Indicates whether the Extracted Text field contains a path to the extracted text file or contains the actual extracted text.",
+            "example": false
+          }
+        }
+      },
+      "DataSourceSettings": {
+        "type": "object",
+        "description": "Settings for the data source.",
+        "properties": {
+          "Path": {
+            "type": "string",
+            "description": "File localization",
+            "example": "C:\\tmp_loadfile\\loadfile.dat"
+          },
+          "EndOfLine": {
+            "$ref": "#/components/schemas/DataSourceEndOfLine"
+          },
+          "Type": {
+            "$ref": "#/components/schemas/DataSourceType"
+          },
+          "FirstLineContainsColumnNames": {
+            "type": "boolean",
+            "example": true
+          },
+          "StartLine": {
+            "type": "integer",
+            "example": 0
+          },
+          "ColumnDelimiter": {
+            "type": "string",
+            "format": "char",
+            "description": "Character separating columns.",
+            "example": "|"
+          },
+          "QuoteDelimiter": {
+            "type": "string",
+            "format": "char",
+            "description": "Character indicating quote.",
+            "example": "^"
+          },
+          "NewLineDelimiter": {
+            "type": "string",
+            "format": "char",
+            "description": "Character indicating new line in filed value.",
+            "example": "#"
+          },
+          "MultiValueDelimiter": {
+            "type": "string",
+            "format": "char",
+            "description": "Represents the delimiter used to separate multiple values, such as different single-choice field values.",
+            "example": "$"
+          },
+          "NestedValueDelimiter": {
+            "type": "string",
+            "format": "char",
+            "description": "Represents the delimiter used to separate nested values, such as choices or child choices on a multi-choice field.",
+            "example": "&"
+          },
+          "Encoding": {
+            "type": "string",
+            "description": "Represents the encoding of the load file as a string (WebName) ex: \"utf-8\", \"utf-16\" \"utf-16BE\", \"Windows-1252\".",
+            "example": "utf-8"
+          },
+          "CultureInfo": {
+            "type": "string",
+            "description": "Represents the culture info used to parse dates from load file. Defined as a language tag - based on RFC 4646 and BCP 47. ex: \\en-US\\\", \\\"pl-PL\\\". When not specified invariant culture will be used by default.",
+            "example": "en-US"
+          }
+        }
+      },
+      "ExtractedTextSettings": {
+        "type": "object",
+        "properties": {
+          "Encoding": {
+            "type": "string",
+            "description": "Sets the encoding of the extracted text files.",
+            "example": "UTF-8"
+          },
+          "ValidateEncoding": {
+            "type": "boolean",
+            "description": "Enables or disables encoding checks for each file.",
+            "example": true
+          }
+        }
+      },
+      "FileTypeSettings": {
+        "type": "object",
+        "properties": {
+          "ValidateFileType": {
+            "type": "boolean",
+            "description": "Indicates if file type validation should be run in import service.",
+            "example": false
+          },
+          "OIFileIDColumnIndex": {
+            "type": "integer",
+            "description": "Indicates the column that contains the OutsideIn FileId used to determine and validate file type.",
+            "example": 4
+          },
+          "RelativityNativeTypeColumnIndex": {
+            "type": "integer",
+            "description": "Indicates the column that contains the RelativityNativeType field values.",
+            "example": 5
+          },
+          "SupportedByViewerColumnIndex": {
+            "type": "integer",
+            "description": "Indicates the column that contains the SupportedByViewer field values.",
+            "example": 6
+          }
+        }
+      },
+      "FileValidationSettings": {
+        "type": "object",
+        "properties": {
+          "ValidateFileLocation": {
+            "type": "boolean",
+            "example": true
+          },
+          "ValidateFileType": {
+            "type": "boolean",
+            "example": true
+          },
+          "AllowEmptyFiles": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "DataSources": {
+        "type": "object",
+        "properties": {
+          "Jobs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "uniqueItems": true,
+            "description": "Jobs sources ids.",
+            "example": [ "1D2F6FF7-D3BA-49D4-BAF0-808533EE5233", "00000000-0000-0000-0000-000000000000" ]
+          },
+          "TotalCount": {
+            "type": "integer",
+            "example": 2
+          }
+        }
+      },
+      "ImportErrors": {
+        "type": "object",
+        "properties": {
+          "DataSourceID": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Gets or sets Data Source Id.",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "Errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImportError"
+            },
+            "description": "Gets or sets collection of errors."
+          },
+          "TotalCount": {
+            "type": "integer",
+            "example": 1
+          },
+          "NumberOfSkippedRecords": {
+            "description": "Gets number of skipped item errors. Item errors are ordered by Line Number.",
+            "type": "integer",
+            "example": 0
+          },
+          "NumberOfRecords": {
+            "description": "Gets number of item errors in the Errors collection",
+            "type": "integer",
+            "example": 1
+          },
+          "HasMoreRecords": {
+            "description": "Returns true if there is more records for a given Data Source(NumberOfSkippedRecords + NumberOfRecords < TotalCount).",
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "ImportError": {
+        "type": "object",
+        "properties": {
+          "ErrorDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorDetail"
+            },
+            "description": "Gets or sets collection of error details."
+          },
+          "LineNumber": {
+            "type": "integer",
+            "example": 1
+          }
+        }
+      },
+      "ErrorDetail": {
+        "type": "object",
+        "properties": {
+          "ColumnIndex": {
+            "description": "Gets index of a column in the load file.",
+            "type": "integer",
+            "example": 1
+          },
+          "ErrorCode": {
+            "description": "Gets error code.",
+            "type": "string",
+            "example": "S.LN.INT.0001"
+          },
+          "ErrorMessage": {
+            "description": "Gets error message.",
+            "type": "string",
+            "example": "Error message."
+          },
+          "ErrorMessageTemplate": {
+            "description": "Gets error message template.",
+            "type": "string",
+            "example": "Template error message."
+          },
+          "ErrorProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Gets dictionary (key/value pairs of strings) of properties of a given errors. Structure of this dictionary is defined for each error code."
+          }
+        }
+      },
+      "MultiFieldOverlayBehaviour": {
+        "type": "string",
+        "example": "UseRelativityDefaults",
+        "enum": [
+          "Unknown",
+          "UseRelativityDefaults",
+          "MergeAll",
+          "ReplaceAll"
+        ]
+      },
+      "OverlayMode": {
+        "type": "string",
+        "example": "Overlay",
+        "enum": [
+          "Unknown",
+          "Overlay",
+          "AppendOverlay"
+        ]
+      },
+      "PageNumbering": {
+        "type": "string",
+        "example": "AutoNumberImages",
+        "enum": [
+          "Unknown",
+          "AutoNumberImages",
+          "ReadPageIDsFromInput"
+        ]
+      },
+      "DataSourceState": {
+        "type": "string",
+        "example": "New",
+        "enum": [
+          "Unknown",
+          "New",
+          "Scheduled",
+          "PendingInserting",
+          "Inserting",
+          "Canceled",
+          "Failed",
+          "CompletedWithItemErrors",
+          "Completed"
+        ]
+      },
+      "ImportState": {
+        "type": "string",
+        "example": "New",
+        "enum": [
+          "Unknown",
+          "New",
+          "Configured",
+          "ValidationErrors",
+          "InProgress",
+          "Paused",
+          "Canceled",
+          "Failed",
+          "Completed"
+        ]
+      },
+      "createJobBodyRequest": {
+        "type": "object",
+        "properties": {
+          "applicationName": {
+            "type": "string",
+            "description": "Application name.",
+            "example": "importini"
+          },
+          "correlationID": {
+            "type": "string",
+            "description": "External correlation ID.",
+            "example": "c0r31ati0n_ID"
+          }
+        }
+      },
+      "createDocumentConfigurationRequest": {
+        "type": "object",
+        "description": "Object of type ImportDocumentSettings.",
+        "properties": {
+          "importSettings": {
+            "$ref": "#/components/schemas/ImportDocumentSettings"
+          }
+        }
+      },
+      "createDataSourceSettingsRequest": {
+        "type": "object",
+        "description": "Object of type DataSourceSettings.",
+        "properties": {
+          "dataSourceSettings": {
+            "$ref": "#/components/schemas/DataSourceSettings"
+          }
+        }
+      },
+      "createRDOConfigurationRequest": {
+        "type": "object",
+        "description": "Object of type ImportRdoSettings.",
+        "properties": {
+          "importSettings": {
+            "$ref": "#/components/schemas/ImportRdoSettings"
+          }
+        }
+      },
+      "DataSourceEndOfLine": {
+        "type": "string",
+        "description": "Line ending standard of the load file",
+        "example": "Windows",
+        "enum": [
+          "Windows",
+          "Linux",
+          "Mac"
+        ]
+      },
+      "DataSourceType": {
+        "type": "string",
+        "description": "Type of the input load file",
+        "example": "Opticon",
+        "enum": [
+          "Unknown",
+          "Opticon",
+          "LoadFile"
+        ]
+      }
+    }
+  }
+}
