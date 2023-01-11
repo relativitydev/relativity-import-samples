@@ -1,15 +1,45 @@
 # relativity-import
+
+### Table of Contents
+**[Introduction](#introduction)**<br>
+**[Prerequisites](#prerequisites)**<br>
+**[Glossary](#glossary)**<br>
+**[Builders](#builders)**<br>
+**[Getting Started](#getting-started)**<br>
+**[Authorization](#authorization)**<br>
+**[Permissions](#prermisions)**<br>
+**[General Import flow ](#prermisions)**<br>
+**[Import documents flow](#import-documents-flow)**<br>
+**[Import images flow](#import-images-flow)**<br>
+**[Import Rdo flow](#import-rdos-flow)**<br>
+**[Responses description](#responses-description)**<br>
+**[Error Codes](#error-codes)**<br>
+**[Samples](#samples)**<br>
+#### *[.NET 7 Console Application](#net-7-code-samples)*<br>
+#### *[.NET Framework & Kepler Console Application](#keplerclient-code-samples)*<br>
+#### *[Powershell scripts](#powershell-script-samples)*<br>
+**[Error Codes](#error-codes)**<br>
+
+
+
 ## Introduction
-The ***Relativity Import Service API*** provides functionality for importing large numbers of documents, images, and Relativity Dynamic Objects (RDOs) into a Relativity workspace. It provides multiple REST endpoints for programmatically working with import jobs, data sources and their configurations.
+## The ***Relativity Import Service API*** provides functionality for importing large numbers of documents, images, and Relativity Dynamic Objects (RDOs) into a Relativity workspace. 
+// todo: need to be redacted
 Just create import job connected with your workspace where the data should be imported. New import job need to be configured first to define all specific properties related to data import.
 Add dataSource or data sources to existing import job defines the source of data tend to be imported. Each data source corresponds to the physical load file (or opticon file) which specified what data and/or external files will be imported.
-Starting import job triggers the process that add each added data sources to the queue as separate importing task. All task in queue is automatically scheduled and supervised by system in  background. Jobs and data sources are described by its states and progress that can be queried in their whole lifecycle.
-
-
-
-
+Starting import job triggers the process that add each added data sources to the queue as separate importing task. All task in queue is automatically scheduled and supervised by system in  background. Jobs and data sources are described by its states and progress that can be queried in their whole lifecycle.It provides multiple REST endpoints for programmatically working with import jobs, data sources and their configurations.
 
 Import Service is available as a RAP application in Relativity One.
+
+
+# Prerequisites
+
+1. Thew following relativity application need to be installed:
+- *Import*  - installed in Relativity workspace
+- *DataTransfer.Legacy*  - installed in Relativity instance scope.
+
+2. Appropriate [permissions](#permissions) need to be set
+3. Data set - load files, source files (native documents, images, text files) - need to be located on the destination file share.
 ### Glossary
 **ImportJob** - It is the main object in import service taking part in import flow. It represents single import entity described by its configuration, import state, progress, details and errors.
 It aggregates data sources – single import job can consists of many sources.
@@ -101,13 +131,13 @@ In general there are two ways to work with provided API:
 
     Please investigate dedicated code samples for .NET 4.6.2 with Kepler.
 ### **Installing via NuGet**  // DL legacy dla podgladu narazie !
-[![Version](https://img.shields.io/nuget/v/Relativity.DataExchange.Client.SDK.svg?color=royalblue)](https://www.nuget.org/packages/Relativity.DataExchange.Client.SDK)
-[![Downloads](https://img.shields.io/nuget/dt/Relativity.DataExchange.Client.SDK?color=green)](https://www.nuget.org/packages/Relativity.DataExchange.Client.SDK)
+[![Version](https://img.shields.io/nuget/v/Import.Service.SDK.svg?color=royalblue)](https://www.nuget.org/packages/Import.Service.SDK)
+[![Downloads](https://img.shields.io/nuget/dt/Import.Service.SDK?color=green)](https://www.nuget.org/packages/Import.Service.SDK)
 
 Install-Package Import.Service.SDK 
 
-[![Version](https://img.shields.io/nuget/v/Relativity.DataExchange.Client.SDK.svg?color=royalblue)](https://www.nuget.org/packages/Relativity.DataExchange.Client.SDK)
-[![Downloads](https://img.shields.io/nuget/dt/Relativity.DataExchange.Client.SDK?color=green)](https://www.nuget.org/packages/Relativity.DataExchange.Client.SDK)
+[![Version](https://img.shields.io/nuget/v/Import.Service.SDK.Models.svg?color=royalblue)](https://www.nuget.org/packages/Import.Service.SDK.Models)
+[![Downloads](https://img.shields.io/nuget/dt/Import.Service.SDK.Models?color=green)](https://www.nuget.org/packages/Import.Service.SDK.Models)
 
 Install-Package Import.Service.SDK.Models
 
@@ -164,8 +194,6 @@ The general flow includes several steps consisted in sending appropriate http re
 
 6. **End Import Job**  (optional)
   Ends import job that was already started. It is optional step but it is highly recommended in case when no more data source is plan to be added for particular job.
-
-
 
 ### Import Documents
 1. **Create Import Job** 
@@ -277,24 +305,6 @@ The general flow includes several steps consisted in sending appropriate http re
 4. **Begin Job** 
 5. **End Import Job**  (optional)
 
-# ImportDocumentSettings Description
-
-| Property                      | Description                                                                                                          |
-| ------------------------------| ---------------------------------------------------------------------------------------------------------------------|
-| Overlay                        | Overlay mode settings. If not set Append mode is used.                                  |
-| Overlay.Mode                         | Defineds the overlay mode (Overlay, AppendOverlay).                                  |
-| Overlay.KeyField                     | The Relativity field that is used to overlay records.                                                   |
-| Overlay.MultiFieldOverlayBehaviour   | The behaviour for overlay imports with multiple choice and multiple object fields.                      |
-| NativeSettings                | The native file settings. If not set, no native files would be imported.                                        |
-| FilePathColumnIndex           | the index of the column in the data source (count from zero) which contains path to the native file                   |
-| FileNameColumnIndex            | The index of the column in the data source (count from zero) which contains native file name metadata. If property is not set, value is retrieved from file.              |
-| ImageSettings                 | The total number of transferred metadata bytes.                                                                      |
-| PageNumbering                  | Enum Value indicating whether a page number is automatically appended to a page-level.identifier.                                                                                        |
-| ProductionID                     | The valid ArtifactID for a existing production set.                       |
-| LoadExtractedText                | value indicating whether Extracted Text should be loaded together with images if Extracted Text file is available.|
-| FileType                     | Value indicating whether Automatic detection of file type is used or file types are specified by user as images of PDF.|
-| ProductionID                     | The valid ArtifactID for a existing production set.                       |
-
 ## Responses
 
 Each response to POST requests has unified schema:
@@ -320,9 +330,138 @@ Each response to GET requests has unified schema:
         "ImportJobID": "00000000-0000-0000-0000-000000000000"
         }
 
+## Import Job States
+
+| value | State                       | Description                                                                                       |
+|-------|-----------------------------|---------------------------------------------------------------------------------------------------|
+| 10    | New                         | Initial state, job created.                                                                       |
+| 13    | Configured                  | Job has been configured and is ready to begin.                                                    |
+| 16    | InvalidConfiguration        | Job has been configured but the configuration is invalid.                                         |
+| 20    | Idle                        | Job is ready for running but is waiting on new data source or all data source has been processed. |
+| 22    | Scheduled                   | Job is ready waiting on queue to begin the process of import.                                     |
+| 25    | Inserting                   | Job is executing, import of data source is currently in progress.                                 |
+| 26    | PendingCompletion_Scheduled | Job is ended but data source is still waiting on queue to begin the process of import.            |
+| 27    | PendingCompletion_Inserting | Job is ended but the import of data source is currently in progress.                              |
+| 29    | Paused                      | Job is paused and waiting.                                                                        |
+| 30    | Canceled                    | Job canceled.                                                                                     |
+| 40    | Failed                      | Job has failed to import data.                                                                    |
+| 50    | Completed                   | Job has ended with success..                                                                      |
+
+## Import Data Source States
+
+| Value   |   State            |                   Description                                   |
+|----|-------------------------|-----------------------------------------------------------------|
+| 0  | Unknown                 | Invalid state for a data source                                 |
+| 10 | New                     | Initial state, data source was created                          |
+| 22 | Scheduled               | Data source is waiting on queue to begin the process of import. |
+| 24 | PendingInserting        | Data source has been sent to Worker to begin the import.        |
+| 25 | Inserting               | Data source is currently in progress of processing.             |
+| 30 | Canceled                | Data source canceled.                                           |
+| 40 | Failed                  | Failed to import data from Data source.                         |
+| 45 | CompletedWithItemErrors |  Data source processed, import finished with item errors.       |
+| 50 | Completed               | Data source processed, import finished.                         |
+|    |                         |                                                                 |
+
 # Error Codes
 
-// todo: list of error codes
+### Error code structure
+===
+Error code returned from the Import Service has the following structure:
+
+**[Resource].[Action].[ErrorType].[ErrorNumber]**
+
+Examples:
+
+|Error code      |Description                                      |
+|----------------|-------------------------------------------------|
+|J.CR.VLD.1501   |Cannot create job because validation has failed. |
+
+
+Resources
+---
+|Resource code|Description  |
+|-------------|-------------|
+|J            |Job          |
+|C            |Configuration|
+|S            |Source       |
+|E            |ItemErrors   |
+|L            |Libraries    |
+|A            |Application  |
+|D            |Diagnostic   |
+|Q            |Import Queue |
+|R            |RDO Conf.    |
+
+Actions
+---
+|Action   code|Description         |
+|-------------|--------------------|
+|BEG          |Begin               |
+|CR           |Create              |
+|CNL          |Cancel              |
+|END          |End                 |
+|GET          |Get                 |
+|GET_COL      |Get columns         |
+|GET_CFG      |Get config          |
+|GET_DAT      |Get data            |
+|GET_DTLS     |Get details         |
+|GET_PRG      |Get progress        |
+|LN           |Line                |
+|PS           |Pause               |
+|RD           |Read                |
+|RES          |Resume              |
+|RUN          |Run                 |
+|STAT_CHG     |Handle status change|
+|UPD_INF      |Update Info         |
+|UPD_PRG      |Update Progress     |
+|RSCH         |Reschedule DS import|
+|HLT          |App Health check    |
+|AGT_HLT      |Agent Helath check  |
+|PRV		  |Prv Endpoint access |
+|EX			  |Execute             |
+|UPD_HB       |Update Heart Beat   |
+|CONV         |Convert             |
+
+Error Types
+---
+|Error type code|Description                         |
+|---------------|------------------------------------|
+|INT            |Internal service error              |
+|EXT            |External dependency error           |
+|VLD            |Validation error                    |
+
+Error Numbers
+---
+Error number has 4 digits. Digits on the first and on the second position has the special meaning.
+
+Meaning of the first digit is the same for all error types.
+
+|Resource code|Description                                    |
+|-------------|-----------------------------------------------|
+|0XXX         |General error                                  |
+|1XXX         |Job related error                              |
+|2XXX         |Configuration related error                    |
+|3XXX         |Source related error                           |
+|4XXX         |ItemErrors related error                       |
+
+Meaning of the second digit differs for each error type.
+
+|Error Type |Resource code|Description                                    |
+|-----------|-------------|-----------------------------------------------|
+|INT        |X0XX         |General error                                  |
+|INT        |X1XX         |Create related error                           |
+|INT        |X2XX         |Read related error                             |
+|INT        |X3XX         |Update related error                           |
+|INT        |X4XX         |Delete related error                           |
+|EXT        |X0XX         |Object manager error                           |
+|EXT        |X1XX         |SQL error                                      |
+|EXT        |X2XX         |Stream error                                   |
+|EXT        |X3XX         |Other kepler error                             |
+|EXT        |X4XX         |Field manager error                            |
+|VLD        |X0XX         |Invalid input data                             |
+|VLD        |X5XX         |System state does not allow to execute request |
+|VLD        |X6XX         |Data in the system does not exist              |
+|VLD        |X7XX         |Data in the system is incorrect                |
+|VLD        |X9XX         |Data in the system is corrupted                |
 
 // Details models
 
@@ -369,7 +508,7 @@ List of samples:
  | Sample21_CancelStartedJob | [Sample21](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample21_CancelStartedJob.cs) | [Sample21](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample21_CancelStartedJob.cs) | [Sample21_](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample21-cancel-started-job.ps1) | 
  | Sample22_ReadResponse | [Sample22](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample22_ReadResponse.cs) | [Sample22](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample22_ReadResponse.cs) | [Sample22](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample22-read-response.ps1) | 
  | Sample23_GetDataSourceErrors | [Sample23](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample23_GetDataSourceErrors.cs) | [Sample23](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample23_GetDataSourceErrors.cs) | [Sample23](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample23-get-data-source-errors.ps1) | 
- 
+
 ## .NET 7 Code Samples
 
  
