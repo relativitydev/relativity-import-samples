@@ -24,77 +24,43 @@
 
 ## Introduction
 The ***Relativity Import Service API*** provides functionality for importing large numbers of documents, images, and Relativity Dynamic Objects (RDOs) into a Relativity workspace. 
-// todo: need to be redacted
-Just create import job connected with your workspace where the data should be imported. New import job need to be configured first to define all specific properties related to data import.
-Add dataSource or data sources to existing import job defines the source of data tend to be imported. Each data source corresponds to the physical load file (or opticon file) which specified what data and/or external files will be imported.
-Starting import job triggers the process that add each added data sources to the queue as separate importing task. All task in queue is automatically scheduled and supervised by system in  background. Jobs and data sources are described by its states and progress that can be queried in their whole lifecycle.It provides multiple REST endpoints for programmatically working with import jobs, data sources and their configurations.
+Thanks to RTESTful API you are able to easily create import job, configure it and run it. 
+Your dataset (metadata, native documents, images, text) that you want to import can be added as a data source to the job. The system (scheduler and supervisor) will take care of it in the background by adding it to the queue, start the import data to destination workspace, and if necessary, it will resume the import.
+All that remains for the user is to monitor the status of import and current progress.
+Job configuration and data sources allow you to flexibly adjust the import to your needs. Adopted error handling help you to identify the source of potential problems. 
 
 Import Service is available as a RAP application in Relativity One.
-
 
 # Prerequisites
 
 1. Thew following relativity application need to be installed:
-- *Import*  - installed in Relativity workspace
+- *Import*  - installed in Relativity workspace.
 - *DataTransfer.Legacy*  - installed in Relativity instance scope.
 
 2. Appropriate user [permissions](#permissions) need to be set.
 3. Data set - load files, source files (native documents, images, text files) - need to be located on the destination file share.
+4. [Import.Service.SDK](#importservicesdk) package added to client application 
+   NOTE: Required only when use with Kepler Proxy. 
 ## Glossary
-**ImportJob** - It is the main object in import service taking part in import flow. It represents single import entity described by its configuration, import state, progress, details and errors.
-It aggregates data sources – single import job can consists of many sources.
+**ImportJob** - It is the main object in import service taking part in import flow. It represents single import entity described by its configuration which decided about import behavior e.g. import type, overlay mode, fields mapping.  
+In additional ImportrJob object hold the information about its current state and importing progress.
+Import jobs aggregates dataSources -single import job can consists of many sources.
 
-**DataSource**  - It is an object relates to single set of data to be imported. Each data source has own configuration (e.g. path to load file).
-DataSource is described by its state, details, progress and errors.
-
-
-## Builders
-
-Builders (**ImportDocumentsSettingsBuilder, ImportRdoSettingsBuilder, DataSourceSettingsBuilder** ) provided in Import.Service.SDK.Models package help create settings for import job and data source in correct and consistent way. It is highly recommended to prepare these objects in such a way in .NET application. They've been implemented in fluent api pattern it is very easy to use them. Moreover using them in client application will avoid the risk of incorrect and inconsistent configuration
-which may lead to errors during import process.
-
-Builders are implemented in fluent API manner.
-
-    // Example of creating ImportDocumentSettings with dedicated builder.
-    ImportDocumentSettingsBuilder.Create()
-                .WithOverlayMode(x => x
-					.WithKeyField(overlayKeyField)
-					.WithMultiFieldOverlayBehaviour(MultiFieldOverlayBehaviour.MergeAll))
-				.WithNatives(x => x
-					.WithFilePathDefinedInColumn(filePathColumnIndex)
-					.WithFileNameDefinedInColumn(fileNameColumnIndex))
-				.WithoutImages()
-				.WithFieldsMapped(x => x
-					.WithField(controlNumberColumnIndex, "Control Number")
-					.WithExtractedTextField(extractedTextPathColumnIndex, e => e
-						.WithExtractedTextInSeparateFiles(f => f
-							.WithEncoding("UTF-8"))))
-				.WithFolders(f => f
-					.WithRootFolderID(rootFolderId, r => r
-						.WithFolderPathDefinedInColumn(folderPathColumnIndex)));
+**DataSource**  - It is an object that corresponds to single set of data to be imported. Each data source has own configuration that defines the physical location of data set (load file). Data set configuration affects also how data in load file are read.
+In additional data source stores the information about current state and import progress of particular source.
 
 
-     // Example of creating DataSourceSettings with dedicated builder.
-			DataSourceSettings dataSourceSettings = DataSourceSettingsBuilder.Create()
-				.ForLoadFile(loadFile01Path)
-				.WithDelimiters(d => d
-					.WithColumnDelimiters('|')
-					.WithQuoteDelimiter('^')
-					.WithNewLineDelimiter('#')
-					.WithNestedValueDelimiter('&')
-					.WithMultiValueDelimiter('$'))
-				.WithFirstLineContainingHeaders()
-				.WithEndOfLineForWindows()
-				.WithStartFromBeginning()
-				.WithDefaultEncoding()
-				.WithDefaultCultureInfo();
 
 
 ## Getting Started ##
-Relativity Import API provides set of RESTful endpoints. Each import (import documents, import images, import productions, import rdos) requires the calls to the endpoints in specific order. 
-In general there are two ways to work with provided API:
- - As an ordinary REST service - sending a http request from any http client in any technology
- In case of using .NET the Import.Service.SDK.Models package can be used (mentioned above).
+Import Service  API provides sets of endpoint that should be executed in correct order.
+In general there are two ways to work with them:
+    
+> As an ordinary REST API -
+
+by sending a HTTP request from your http client in any technology.
+In case of using .NET the [Import.Service.SDK.Models](#importservicesdkmodels) package can be used.
+
 
         HttpClient client = new HttpClient();
         //...
@@ -102,7 +68,9 @@ In general there are two ways to work with provided API:
 
   Please investigate dedicated code samples for .NET 7 or for PowerShell scripts.
 
-- As Kepler service - using Kepler's Proxy from Kepler framework and invoking endpoints as ordinary methods in client application. To do this Import.Service.SDK need to be installed in client application.
+> As Kepler service -
+
+ by using Kepler's Proxy from Kepler framework and invoking each endpoints as an ordinary methods in client application. To do this [Import.Service.SDK](importservicesdk) IS REQUIRED to be installed in client application.
 
         using (Relativity.Import.V1.Services.IImportJobController importJobController =_serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>()){
 
@@ -133,7 +101,12 @@ Install-Package Import.Service.SDK
 ## Import.Service.SDK.Models ###
 Import.Service.SDK.Models is a NET library that contains contract models for API and [builders](#builders) which help user to prepare payloads in correct and consistent way.
 Import.Service.SDK.Models targets .NET Standard 2.0. The NuGet package also includes direct targets for .NET Framework 4.6.2
-**NOTE: Use this standalone package when your application does not use keplers.**
+<br/>  
+**NOTE:**
+This package is automatically installed as dependency when using Import.Service.SDK.
+
+**NOTE:** You can install this package directly when your application does not use keplers.
+<br/> 
 
 [![Version](https://img.shields.io/nuget/v/Import.Service.SDK.Models.svg?color=royalblue)](https://www.nuget.org/packages/Import.Service.SDK.Models)
 [![Downloads](https://img.shields.io/nuget/dt/Import.Service.SDK.Models?color=green)](https://www.nuget.org/packages/Import.Service.SDK.Models)
@@ -169,6 +142,55 @@ The following Relativity permissions are required to use importing features in I
 | Admin Operation|
 | :---- |
 | •	Allow Import |
+
+<br>  
+
+## Builders
+
+Builders (**ImportDocumentsSettingsBuilder, ImportRdoSettingsBuilder, DataSourceSettingsBuilder** ) provided in Import.Service.SDK.Models package help create settings for import job and data source in correct and consistent way. It is highly recommended to prepare these objects in such a way in .NET application. They are implemented in fluent api pattern so it is very easy to use them. Moreover, using them in client application will avoid the risk of incorrect and inconsistent configuration
+which may lead to errors during import process.
+
+*ImportDocumentsSettingsBuilder* - builds ImportDocumentsSettings used for import job configuration (documents import).
+
+*ImportRdoSettingsBuilder* - builds ImportRdoSettings used for import job configuration (rdos import).
+
+*DataSourceSettingsBuilder* , builds DataSourceSettings used for data source configuration.
+
+
+    // Example of creating ImportDocumentSettings with dedicated builder.
+    ImportDocumentSettingsBuilder.Create()
+                .WithOverlayMode(x => x
+					.WithKeyField(overlayKeyField)
+					.WithMultiFieldOverlayBehaviour(MultiFieldOverlayBehaviour.MergeAll))
+				.WithNatives(x => x
+					.WithFilePathDefinedInColumn(filePathColumnIndex)
+					.WithFileNameDefinedInColumn(fileNameColumnIndex))
+				.WithoutImages()
+				.WithFieldsMapped(x => x
+					.WithField(controlNumberColumnIndex, "Control Number")
+					.WithExtractedTextField(extractedTextPathColumnIndex, e => e
+						.WithExtractedTextInSeparateFiles(f => f
+							.WithEncoding("UTF-8"))))
+				.WithFolders(f => f
+					.WithRootFolderID(rootFolderId, r => r
+						.WithFolderPathDefinedInColumn(folderPathColumnIndex)));
+
+
+     // Example of creating DataSourceSettings with dedicated builder.
+			DataSourceSettings dataSourceSettings = DataSourceSettingsBuilder.Create()
+				.ForLoadFile(loadFile01Path)
+				.WithDelimiters(d => d
+					.WithColumnDelimiters('|')
+					.WithQuoteDelimiter('^')
+					.WithNewLineDelimiter('#')
+					.WithNestedValueDelimiter('&')
+					.WithMultiValueDelimiter('$'))
+				.WithFirstLineContainingHeaders()
+				.WithEndOfLineForWindows()
+				.WithStartFromBeginning()
+				.WithDefaultEncoding()
+				.WithDefaultCultureInfo();
+
 
 ## General Import flow
 The general flow includes several steps consisted in sending appropriate http request.
@@ -516,7 +538,7 @@ The general flow includes several steps consisted in sending appropriate http re
 
     > curl
 
-        curl -X 'POST' \'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/77140fb9-f515-4b65-a2ce-c347492e2905/documents-configurations/' 
+        curl -X 'POST' \'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/77140fb9-f515-4b65-a2ce-c347492e2905/rdo-configurations/' 
         -H 'X-CSRF-Header: -' 
         -d $"importRdoSettings"'
 
@@ -661,7 +683,7 @@ The general flow includes several steps consisted in sending appropriate http re
         -H 'X-CSRF-Header: -' 
         -d ''
 
-## Responses
+# Responses
 
 Each response to POST requests has unified schema:
 
@@ -918,8 +940,10 @@ Meaning of the second digit differs for each error type.
 |VLD        |X7XX         |Data in the system is incorrect                |
 |VLD        |X9XX         |Data in the system is corrupted                |
 
-// Details models
 
+<br><br>
+
+---
 # Samples
 
 ## Samples types and structure
