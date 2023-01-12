@@ -1,66 +1,81 @@
 # relativity-import
 
 ### Table of Contents
-**[Introduction](#introduction)**<br>
+## **[Introduction](#introduction)**<br>
 **[Prerequisites](#prerequisites)**<br>
 **[Glossary](#glossary)**<br>
-**[Builders](#builders)**<br>
-**[Getting Started](#getting-started)**<br>
+## **[Getting Started](#getting-started)**<br>
+**[Nuget Libraries](#importservicesdk)**<br>
 **[Authorization](#authorization)**<br>
-**[Permissions](#prermisions)**<br>
-**[General Import flow ](#prermisions)**<br>
-**[Import documents flow](#import-documents-flow)**<br>
-**[Import images flow](#import-images-flow)**<br>
-**[Import Rdo flow](#import-rdos-flow)**<br>
-**[Responses description](#responses-description)**<br>
+**[Permissions](#permissions)**<br>
+**[Builders](#builders)**<br>
+**[General Import flow description ](#general-import-flow-description)**<br>
+**[Example Import flows](#simple-import-documents-example-flow)**<br>
+
+**[API Documentation](#rest-api)**<br>
+**[API Response](#api-response)**<br>
+**[ImportJob & DataSource States](#rest-api)**<br>
 **[Error Codes](#error-codes)**<br>
-**[Samples](#samples)**<br>
-#### *[.NET 7 Console Application](#net-7-code-samples)*<br>
-#### *[.NET Framework & Kepler Console Application](#keplerclient-code-samples)*<br>
-#### *[Powershell scripts](#powershell-script-samples)*<br>
-**[Error Codes](#error-codes)**<br>
-**[Open API](#rest-api)**<br>
+## **[Samples](#samples)**<br>
+**[.NET 7 Console Application - How To](#net-7-code-samples---how-to)**<br>
+**[.NET Framework & Kepler Console Application - How to](#keplerclient-code-samples---how-to)**<br>
+**[Powershell scripts - How to](#powershell-script-samples---how-to)**<br>
 
 
-## Introduction
-The ***Relativity Import Service API*** provides functionality for importing large numbers of documents, images, and Relativity Dynamic Objects (RDOs) into a Relativity workspace. 
-Thanks to RTESTful API you are able to easily create import job, configure it and run it. 
-Your dataset (metadata, native documents, images, text) that you want to import can be added as a data source to the job. The system (scheduler and supervisor) will take care of it in the background by adding it to the queue, start the import data to destination workspace, and if necessary, it will resume the import.
-All that remains for the user is to monitor the status of import and current progress.
-Job configuration and data sources allow you to flexibly adjust the import to your needs. Adopted error handling help you to identify the source of potential problems. 
 
-Import Service is available as a RAP application in Relativity One.
+# Introduction
+### The ***Relativity Import Service API*** provides functionality for importing large numbers of documents, images, and Relativity Dynamic Objects (RDOs) into a Relativity workspace. 
+### The imports process operates on structured data sets that are described by load file and placed in an accessible place for workspace  
+### The main principle of operation is based on creating managed importing job with a list of data set (intended for import) assigned to it.
+<br>
+
+### Thanks to RTESTful API you are able to easily create import job, configure it and run it. 
+### Dataset (containing structured data) that you want to import can be then added as a source to the job. The system (scheduler and supervisor) will take care of it in the background by adding source to the queue, starting the import data to destination workspace, and if necessary, resuming the import process. All that remains for the user is to monitor the status of import and current progress - all using  provided API.
+
+### Job and data sources configurations allow you to flexibly adjust the import to your needs.In additional, the adopted error handling helps you to identify the source of potential problems. 
+
+### NOTE: Import Service is available as a RAP application in Relativity One.
 
 # Prerequisites
 
-1. Thew following relativity application need to be installed:
-- *Import*  - installed in Relativity workspace.
-- *DataTransfer.Legacy*  - installed in Relativity instance scope.
+1. The following Relativity application must be installed:
+    - *Import*  - installed in Relativity workspace.
+    - *DataTransfer.Legacy*  - installed in Relativity instance.
 
-2. Appropriate user [permissions](#permissions) need to be set.
-3. Data set - load files, source files (native documents, images, text files) - need to be located on the destination file share.
-4. [Import.Service.SDK](#importservicesdk) package added to client application 
-   NOTE: Required only when use with Kepler Proxy. 
+
+2. Appropriate user [permissions](#permissions) need to be set. 
+
+
+3. Data set - load files, source files (native documents, images, text files) - need to be placed in the destination fileshare location accessible to workspace. 
+
+
+4. [Import.Service.SDK](#importservicesdk) package added to client application.
+
+   *NOTE*: Required only when Kepler Proxy is used. 
+***
 ## Glossary
+
+**importing** - Functionality that makes that structured data set goes into destination workspace.
+
+**dataset** - Structured data containing metadata, native documents, images, text files described by load file or opticon file.
+Such a dataset can be pointed during job configuration and must be located in accessible place for workspace. 
+
 **ImportJob** - It is the main object in import service taking part in import flow. It represents single import entity described by its configuration which decided about import behavior e.g. import type, overlay mode, fields mapping.  
 In additional ImportrJob object hold the information about its current state and importing progress.
 Import jobs aggregates dataSources -single import job can consists of many sources.
 
-**DataSource**  - It is an object that corresponds to single set of data to be imported. Each data source has own configuration that defines the physical location of data set (load file). Data set configuration affects also how data in load file are read.
+**DataSource**  - It is an object that corresponds to single set of data to be imported. Each data source has own configuration that indicates the physical location of data set (load file). Data set configuration affects also how data in load file are read.
 In additional data source stores the information about current state and import progress of particular source.
 
-
-
-
-## Getting Started ##
-Import Service  API provides sets of endpoint that should be executed in correct order.
+---
+# Getting Started ##
+Import Service API provides sets of endpoint that should be executed in correct order.\
 In general there are two ways to work with them:
     
-> As an ordinary REST API -
+> As with an ordinary Rest API endpoints 
 
-by sending a HTTP request from your http client in any technology.
+ ..by sending a HTTP request from your http client in any technology.\
 In case of using .NET the [Import.Service.SDK.Models](#importservicesdkmodels) package can be used.
-
 
         HttpClient client = new HttpClient();
         //...
@@ -68,9 +83,10 @@ In case of using .NET the [Import.Service.SDK.Models](#importservicesdkmodels) p
 
   Please investigate dedicated code samples for .NET 7 or for PowerShell scripts.
 
-> As Kepler service -
+> As with Kepler endpoints -
 
- by using Kepler's Proxy from Kepler framework and invoking each endpoints as an ordinary methods in client application. To do this [Import.Service.SDK](importservicesdk) IS REQUIRED to be installed in client application.
+  ..by using Kepler's Proxy from Kepler framework and invoking each endpoints as an ordinary methods in client application. \
+  To do this installation of [Import.Service.SDK](importservicesdk) package IS REQUIRED in client application.
 
         using (Relativity.Import.V1.Services.IImportJobController importJobController =_serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>()){
 
@@ -83,21 +99,26 @@ In case of using .NET the [Import.Service.SDK.Models](#importservicesdkmodels) p
             }
         }
 
-    Please investigate dedicated code samples for .NET 4.6.2 with Kepler.
-### Import.Service.SDK ###
+  Please investigate dedicated code samples for .NET 4.6.2 with Kepler.
+
+---
+## Import.Service.SDK ###
 
 Import.Service.SDK is a .NET library that contains keplers interfaces for import service.
 It provides and simplifies executing import in client application.
 Import.Service.SDK targets .NET Framework 4.6.2
 
 **NOTE: Use this package when your application USE keplers.**
-### **Installing via NuGet** 
+
 
 [![Version](https://img.shields.io/nuget/v/Import.Service.SDK.svg?color=royalblue)](https://www.nuget.org/packages/Import.Service.SDK)
 [![Downloads](https://img.shields.io/nuget/dt/Import.Service.SDK?color=green)](https://www.nuget.org/packages/Import.Service.SDK)
+<br>  
+
+### **Installing via NuGet** 
 
 Install-Package Import.Service.SDK 
-
+<br> 
 ## Import.Service.SDK.Models ###
 Import.Service.SDK.Models is a NET library that contains contract models for API and [builders](#builders) which help user to prepare payloads in correct and consistent way.
 Import.Service.SDK.Models targets .NET Standard 2.0. The NuGet package also includes direct targets for .NET Framework 4.6.2
@@ -108,12 +129,14 @@ This package is automatically installed as dependency when using Import.Service.
 **NOTE:** You can install this package directly when your application does not use keplers.
 <br/> 
 
+
 [![Version](https://img.shields.io/nuget/v/Import.Service.SDK.Models.svg?color=royalblue)](https://www.nuget.org/packages/Import.Service.SDK.Models)
 [![Downloads](https://img.shields.io/nuget/dt/Import.Service.SDK.Models?color=green)](https://www.nuget.org/packages/Import.Service.SDK.Models)
-
+### **Installing via NuGet** 
 Install-Package Import.Service.SDK.Models
 
-### Authorization
+---
+## Authorization
 > non-kepler application
 
 Import Service API conforms to the same authentication rules as the other Relativity REST APIs. 
@@ -126,8 +149,9 @@ The more details can be find under the following link:
 The Kepler framework uses a proxy to handle client requests. The more details can be find under the following link:
 [Proxies_and_authentication](https://platform.relativity.com/RelativityOne/Content/Kepler_framework/Proxies_and_authentication.htm#Service)
 
-### Permissions
-The following Relativity permissions are required to use importing features in Import Service API.
+---
+## Permissions
+The following Relativity permissions are required to use importing features provided in Import Service API.
 
 | Object Security section| Permission |
 | :---- | :----: |
@@ -142,12 +166,12 @@ The following Relativity permissions are required to use importing features in I
 | Admin Operation|
 | :---- |
 | •	Allow Import |
-
+---
 <br>  
 
 ## Builders
 
-Builders (**ImportDocumentsSettingsBuilder, ImportRdoSettingsBuilder, DataSourceSettingsBuilder** ) provided in Import.Service.SDK.Models package help create settings for import job and data source in correct and consistent way. It is highly recommended to prepare these objects in such a way in .NET application. They are implemented in fluent api pattern so it is very easy to use them. Moreover, using them in client application will avoid the risk of incorrect and inconsistent configuration
+Builders provided in Import.Service.SDK.Models package help to create settings for import job and data source in correct and consistent way. It is highly recommended to prepare these objects in such a way in .NET application. They are implemented in fluent api pattern so it is very easy to use them. Moreover, using them in client application will avoid the risk of incorrect and inconsistent configuration
 which may lead to errors during import process.
 
 *ImportDocumentsSettingsBuilder* - builds ImportDocumentsSettings used for import job configuration (documents import).
@@ -192,31 +216,40 @@ which may lead to errors during import process.
 				.WithDefaultCultureInfo();
 
 
-## General Import flow
-The general flow includes several steps consisted in sending appropriate http request.
+NOTE: Please review the samples to find more about builders.
+***
+## General Import flow description
+The general flow includes several steps consisted in sending appropriate HTTP requests.
 
 1. **Create Import Job** 
 
-   Creates import job entity in particular workspace. Job is defined by its unique Id provided in the request which is used in the next steps.
+   Creates import job entity in particular workspace. Job is defined by its unique Id generated by user and provided in the request which is used in the next steps.
 
 2. **Configure Import Job**
-  Configures existing import job by defining sets of significant parameters including import type, its mode, field mapping.
+
+    Configures existing import job by defining sets of significant parameters including import type, its mode, field mapping. This step covers two configuration options: 
+    - Documents Configuration 
+
+    - Rdos Configuration.
   
 3. **Add one or multiple DataSources**  (optional)
-  Creating data source entity (sets of its configuration) or entities for particular import job. Data source is identified by its unique Id provided in the request. Data source configuration includes path to “load file” and other significant parameters telling how data in load file will be read and interpreted by system.
 
-   Many data sources can be added to the same import job. Data sources can be added both before job is started and after.
+    Creating data source entity or entities for particular import job. It represents the configuration that corresponds to dataset being imported. Data source is identified by its unique Id generated by user and provided in the request. Data source configuration includes path to “load file” and other significant parameters telling how data in load file will be read and interpreted by system.
+
+    Many data sources can be added to the same import job. Data sources can be added both before job is started and after.
 
 
 4. **Begin Job**  
-  Starts Import Job which enables the process of executing import data to workspace based on the configuration assigned in previous steps.
+  Starts Import Job which enables the process that schedules importing data to workspace based on the configuration assigned in previous steps.
+  Started job does not mean that data are instantly imported. however DataSources are added to the queue and scheduled by background mechanism.
+  The import Job state or data source state shows the current stage. 
  
 5. **Add one or multiple DataSources**  (optional)  
 
 6. **End Import Job**  (optional)
   Ends import job that was already started. It is optional step but it is highly recommended in case when no more data source is plan to be added for particular job.
 
-### Simple Import Documents Example flow
+## Example of Simple Import Documents Flow
 1.  **Create Import Job** 
         
     > curl
@@ -344,7 +377,7 @@ The general flow includes several steps consisted in sending appropriate http re
             }
         }'
 
-    > C# & builders
+    > C# builders
    
 			DataSourceSettings dataSourceSettings = DataSourceSettingsBuilder.Create()
 				.ForLoadFile("//fileshare//path//load_file.dat)
@@ -400,7 +433,7 @@ The general flow includes several steps consisted in sending appropriate http re
 
 <br><br>
 
-# Import Images
+## Example of Simple Import Images Flow
 1. **Create Import Job** 
     > curl
 
@@ -522,7 +555,8 @@ The general flow includes several steps consisted in sending appropriate http re
         -d ''
 
 <br><br>
-## Import Relativity Dynamic Objects (RDO)
+
+## Example of Simple Import Relativity Dynamic Objects (RDO) Flow
 
 1. **Create Import Job** 
     > curl
@@ -682,10 +716,16 @@ The general flow includes several steps consisted in sending appropriate http re
         curl -X 'POST' 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/77140fb9-f515-4b65-a2ce-c347492e2905/end/'
         -H 'X-CSRF-Header: -' 
         -d ''
+---
 
-# Responses
+### REST API
 
-Each response to POST requests has unified schema:
+ Review the open API spec for import service: [OpenAPI spec](https://github.com/relativitydev/relativity-import-samples/blob/main/OpenAPI/openapidoc.json)
+
+
+## API Response
+
+Each HTTP response to POST request has unified schema:
 
         {
         "IsSuccess": true,
@@ -694,7 +734,7 @@ Each response to POST requests has unified schema:
         "ImportJobID": "00000000-0000-0000-0000-000000000000"
         }
 
-Each response to GET requests has unified schema:
+Each HTTP response to GET requests has unified schema:
 
         {
         "Value": {
@@ -707,9 +747,11 @@ Each response to GET requests has unified schema:
         "ImportJobID": "00000000-0000-0000-0000-000000000000"
         }
 
-
+---
 
 ## Import Job States
+
+Import job state can be read from  GET Import Job details response
 
 > curl 
 
@@ -753,7 +795,7 @@ Each response to GET requests has unified schema:
 
 ## Import Data Source States
 
-Data source state can be read get from Data source details response
+Data source state can be read from GET Data source details response
 
 > curl 
 
@@ -793,9 +835,9 @@ Data source state can be read get from Data source details response
 
 # Error Codes
 
-Error handling in import service returns Error Codes and Error Message
- - in every response for failed http request
- - requested by user for all item errors occurred for particular data source e.g.:
+Error handling in import service returns Error Codes and Error Message:
+ - in every response for failed HTTP request
+ - requested by user for all item errors occurred during import particular data source e.g.:
 
  > curl
 
@@ -803,7 +845,9 @@ Error handling in import service returns Error Codes and Error Message
         -H 'accept: application/json' 
         -H 'X-CSRF-Header: -'
 
-    > JSON reponse
+
+  > JSON response
+
                 {
         "Value": {
             "DataSourceID": "00000000-0000-0000-0000-000000000000",
@@ -836,7 +880,7 @@ Error handling in import service returns Error Codes and Error Message
         "ImportJobID": "00000000-0000-0000-0000-000000000000"
         }
 
-### Error code structure
+## Error code structure
 ===
 Error code returned from the Import Service API endpoint has the following structure:
 
@@ -988,7 +1032,7 @@ List of samples:
  | Sample22_ReadResponse | [Sample22](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample22_ReadResponse.cs) | [Sample22](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample22_ReadResponse.cs) | [Sample22](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample22-read-response.ps1) | 
  | Sample23_GetDataSourceErrors | [Sample23](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample23_GetDataSourceErrors.cs) | [Sample23](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample23_GetDataSourceErrors.cs) | [Sample23](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample23-get-data-source-errors.ps1) | 
 
-## .NET 7 Code Samples
+## .NET 7 Code Samples - How to
 
  
  To run a sample code:
@@ -1001,7 +1045,7 @@ List of samples:
 
             await sampleCollection.Sample10_ImportImagesInAppendOverlayMode();
 
- - Set the proper credentials and URI of your Relativity instance in [RelativityUserSettings](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/Helpers/RelativityUserSettings.cs) helper calls.
+ - Set the proper credentials and URI of your Relativity instance in [RelativityUserSettings](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/Helpers/RelativityUserSettings.cs) helper class.
 
         public class RelativityUserSettings
         {
@@ -1029,19 +1073,30 @@ List of samples:
 
 
 
-## KeplerClient Code Samples
+## KeplerClient Code Samples - How to
  
  To run a sample code:
  
  - Copy first the content of [sampeData](https://github.com/relativitydev/relativity-import-samples/tree/main/SampleDataSources) to your Relativity fileshare.
  - Uncomment line with sample invocation you want to run in Main method.
- - Set the proper credentials and host address of your Relativity instance in [RelativityUserSettings](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/ImportSampleHelpers/RelativityUserSettings.cs) helper calls.
+ - Set the proper credentials and host address of your Relativity instance in [RelativityUserSettings](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/ImportSampleHelpers/RelativityUserSettings.cs) helper class.
+
+
+ 	    public static class RelativityUserSettings
+	    {
+		public const string HostAddress = "https://host-address";
+
+		public const string UserName = "sample.user@test.com";
+
+		public const string Password = "password!";
+	    }
+
  - Update workspaceId const to the proper value equal Id of the workspace where you intend to import data. It is required in each sample. 
  - Updated other Ids related to your workspace - productionSetsArtifactId , rootFolderId,rdoArtifactTypeID. They are required only by specific samples.
  - Update const which defines the path to the load file (e.g. const string  loadFile01Path) according to the location where you copied sample data.
  - Run application 
 
-## Powershell Script Samples
+## Powershell Script Samples - How to
  
  To run a sample code:
  
@@ -1071,7 +1126,4 @@ List of samples:
 
  - Invoke run-sample-Import.ps1
 
-### REST API
-
- The entire list of import service endpoint: [OpenAPI spec](https://github.com/relativitydev/relativity-import-samples/blob/main/OpenAPI/openapidoc.json)
 
