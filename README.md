@@ -1,10 +1,10 @@
 # relativity-import
 
 ### Table of Contents
-## **[Introduction](#introduction)**<br>
+### **[Introduction](#introduction)**<br>
 **[Prerequisites](#prerequisites)**<br>
 **[Glossary](#glossary)**<br>
-## **[Getting Started](#getting-started)**<br>
+### **[Getting Started](#getting-started)**<br>
 **[Nuget Libraries](#importservicesdk)**<br>
 **[Authorization](#authorization)**<br>
 **[Permissions](#permissions)**<br>
@@ -16,7 +16,7 @@
 **[API Response](#api-response)**<br>
 **[ImportJob & DataSource States](#rest-api)**<br>
 **[Error Codes](#error-codes)**<br>
-## **[Samples](#samples)**<br>
+### **[Code Samples](#samples)**<br>
 **[.NET 7 Console Application - How To](#net-7-code-samples---how-to)**<br>
 **[.NET Framework & Kepler Console Application - How to](#keplerclient-code-samples---how-to)**<br>
 **[Powershell scripts - How to](#powershell-script-samples---how-to)**<br>
