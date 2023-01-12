@@ -5,7 +5,7 @@
 **[Prerequisites](#prerequisites)**<br>
 **[Glossary](#glossary)**<br>
 ### **[Getting Started](#getting-started)**<br>
-**[Nuget Libraries](#importservicesdk)**<br>
+**[NuGet Libraries](#importservicesdk)**<br>
 **[Authorization](#authorization)**<br>
 **[Permissions](#permissions)**<br>
 **[Builders](#builders)**<br>
@@ -17,22 +17,22 @@
 **[ImportJob & DataSource States](#rest-api)**<br>
 **[Error Codes](#error-codes)**<br>
 ### **[Code Samples](#samples)**<br>
-**[.NET 7 Console Application - How To](#net-7-code-samples---how-to)**<br>
-**[.NET Framework & Kepler Console Application - How to](#keplerclient-code-samples---how-to)**<br>
-**[Powershell scripts - How to](#powershell-script-samples---how-to)**<br>
+**[.NET 7 Console Application - How-to](#net-7-code-samples---how-to)**<br>
+**[.NET Framework & Kepler Console Application - How-to](#keplerclient-code-samples---how-to)**<br>
+**[Powershell scripts - How-to](#powershell-script-samples---how-to)**<br>
 
 
 
 # Introduction
-### The ***Relativity Import Service API*** provides functionality for importing large numbers of documents, images, and Relativity Dynamic Objects (RDOs) into a Relativity workspace. 
-### The imports process operates on structured data sets that are described by load file and placed in an accessible place for workspace  
-### The main principle of operation is based on creating managed importing job with a list of data set (intended for import) assigned to it.
+The ***Relativity Import Service API*** provides functionality for importing large numbers of documents, images, and Relativity Dynamic Objects (RDOs) into a Relativity workspace. 
+The import process operates on structured data sets that are described by load file and placed in an accessible place for workspace.  
+The main principle of operation is based on creating managed importing job with a list of data set (intended for import) assigned to it.
 <br>
 
-### Thanks to RTESTful API you are able to easily create import job, configure it and run it. 
-### Dataset (containing structured data) that you want to import can be then added as a source to the job. The system (scheduler and supervisor) will take care of it in the background by adding source to the queue, starting the import data to destination workspace, and if necessary, resuming the import process. All that remains for the user is to monitor the status of import and current progress - all using  provided API.
+Thanks to RESTful API you are able to easily create import job, configure it and run it. 
+Dataset (containing structured data) that you want to import can be then added as a source to the job. The system (scheduler and supervisor) will take care of it in the background by adding source to the queue, starting the import data to destination workspace, and if necessary, resuming the import process. All that remains for the user is to monitor the status of import and current progress - all using  provided API.
 
-### Job and data sources configurations allow you to flexibly adjust the import to your needs.In additional, the adopted error handling helps you to identify the source of potential problems. 
+Job and data sources configurations allow you to flexibly adjust the import to your needs. In additional, the adopted error handling helps you to identify the source of potential problems. 
 
 ### NOTE: Import Service is available as a RAP application in Relativity One.
 
@@ -58,14 +58,16 @@
 **importing** - Functionality that makes that structured data set goes into destination workspace.
 
 **dataset** - Structured data containing metadata, native documents, images, text files described by load file or opticon file.
-Such a dataset can be pointed during job configuration and must be located in accessible place for workspace. 
+Such a dataset can be pointed during data source configuration and must be located in accessible place for workspace. 
 
 **ImportJob** - It is the main object in import service taking part in import flow. It represents single import entity described by its configuration which decided about import behavior e.g. import type, overlay mode, fields mapping.  
-In additional ImportrJob object hold the information about its current state and importing progress.
+In additional ImportJob object hold the information about its current state and importing progress.
 Import jobs aggregates dataSources -single import job can consists of many sources.
 
 **DataSource**  - It is an object that corresponds to single set of data to be imported. Each data source has own configuration that indicates the physical location of data set (load file). Data set configuration affects also how data in load file are read.
 In additional data source stores the information about current state and import progress of particular source.
+
+**Kepler framework** - The Relativity Kepler framework provides you with the ability to build custom REST EndPoints via a .NET interface.Additionally, the Kepler framework includes a client proxy that you can use when interacting with the services through .NET. [See more information](https://platform.relativity.com/RelativityOne/index.htm#Kepler_framework/Kepler_framework.htm#Client-s)
 
 ---
 # Getting Started ##
@@ -117,8 +119,8 @@ Import.Service.SDK targets .NET Framework 4.6.2
 
 ### **Installing via NuGet** 
 
-Install-Package Import.Service.SDK 
-<br> 
+        Install-Package Import.Service.SDK 
+
 ## Import.Service.SDK.Models ###
 Import.Service.SDK.Models is a NET library that contains contract models for API and [builders](#builders) which help user to prepare payloads in correct and consistent way.
 Import.Service.SDK.Models targets .NET Standard 2.0. The NuGet package also includes direct targets for .NET Framework 4.6.2
@@ -133,7 +135,7 @@ This package is automatically installed as dependency when using Import.Service.
 [![Version](https://img.shields.io/nuget/v/Import.Service.SDK.Models.svg?color=royalblue)](https://www.nuget.org/packages/Import.Service.SDK.Models)
 [![Downloads](https://img.shields.io/nuget/dt/Import.Service.SDK.Models?color=green)](https://www.nuget.org/packages/Import.Service.SDK.Models)
 ### **Installing via NuGet** 
-Install-Package Import.Service.SDK.Models
+        Install-Package Import.Service.SDK.Models
 
 ---
 ## Authorization
@@ -178,7 +180,7 @@ which may lead to errors during import process.
 
 *ImportRdoSettingsBuilder* - builds ImportRdoSettings used for import job configuration (rdos import).
 
-*DataSourceSettingsBuilder* , builds DataSourceSettings used for data source configuration.
+*DataSourceSettingsBuilder* - builds DataSourceSettings used for data source configuration.
 
 
     // Example of creating ImportDocumentSettings with dedicated builder.
@@ -232,7 +234,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
 
     - Rdos Configuration.
   
-3. **Add one or multiple DataSources**  (optional)
+3. **Add one or multiple DataSources**
 
     Creating data source entity or entities for particular import job. It represents the configuration that corresponds to dataset being imported. Data source is identified by its unique Id generated by user and provided in the request. Data source configuration includes path to “load file” and other significant parameters telling how data in load file will be read and interpreted by system.
 
@@ -241,12 +243,13 @@ The general flow includes several steps consisted in sending appropriate HTTP re
 
 4. **Begin Job**  
   Starts Import Job which enables the process that schedules importing data to workspace based on the configuration assigned in previous steps.
-  Started job does not mean that data are instantly imported. however DataSources are added to the queue and scheduled by background mechanism.
+  Started job does not mean that data are instantly imported. However DataSources are added to the queue and scheduled by background mechanism.
   The import Job state or data source state shows the current stage. 
  
-5. **Add one or multiple DataSources**  (optional)  
+5. **Add one or multiple DataSources to running job**
+  User can add additional sources to running importJob.
 
-6. **End Import Job**  (optional)
+6. **End Import Job** 
   Ends import job that was already started. It is optional step but it is highly recommended in case when no more data source is plan to be added for particular job.
 
 ## Example of Simple Import Documents Flow
@@ -848,40 +851,40 @@ Error handling in import service returns Error Codes and Error Message:
 
   > JSON response
 
-                {
-        "Value": {
-            "DataSourceID": "00000000-0000-0000-0000-000000000000",
-            "Errors": [
+    {
+    "Value": {
+        "DataSourceID": "00000000-0000-0000-0000-000000000000",
+        "Errors": [
+        {
+            "ErrorDetails": [
             {
-                "ErrorDetails": [
-                {
-                    "ColumnIndex": 1,
-                    "ErrorCode": "S.LN.INT.0001",
-                    "ErrorMessage": "Error message.",
-                    "ErrorMessageTemplate": "Template error message.",
-                    "ErrorProperties": {
-                    "additionalProp1": "string",
-                    "additionalProp2": "string",
-                    "additionalProp3": "string"
-                    }
+                "ColumnIndex": 1,
+                "ErrorCode": "S.LN.INT.0001",
+                "ErrorMessage": "Error message.",
+                "ErrorMessageTemplate": "Template error message.",
+                "ErrorProperties": {
+                "additionalProp1": "string",
+                "additionalProp2": "string",
+                "additionalProp3": "string"
                 }
-                ],
-                "LineNumber": 1
             }
             ],
-            "TotalCount": 1,
-            "NumberOfSkippedRecords": 0,
-            "NumberOfRecords": 1,
-            "HasMoreRecords": false
-        },
-        "IsSuccess": true,
-        "ErrorMessage": "",
-        "ErrorCode": "",
-        "ImportJobID": "00000000-0000-0000-0000-000000000000"
+            "LineNumber": 1
         }
+        ],
+        "TotalCount": 1,
+        "NumberOfSkippedRecords": 0,
+        "NumberOfRecords": 1,
+        "HasMoreRecords": false
+    },
+    "IsSuccess": true,
+    "ErrorMessage": "",
+    "ErrorCode": "",
+    "ImportJobID": "00000000-0000-0000-0000-000000000000"
+    }
 
 ## Error code structure
-===
+
 Error code returned from the Import Service API endpoint has the following structure:
 
 **[Resource].[Action].[ErrorType].[ErrorNumber]**
@@ -894,9 +897,6 @@ Examples:
 
 
 
-Error code and error message for particular can be also requested by user:
-
-
 
 Resources
 ---
@@ -906,10 +906,6 @@ Resources
 |C            |Configuration|
 |S            |Source       |
 |E            |ItemErrors   |
-|L            |Libraries    |
-|A            |Application  |
-|D            |Diagnostic   |
-|Q            |Import Queue |
 |R            |RDO Conf.    |
 
 Actions
@@ -931,16 +927,6 @@ Actions
 |RD           |Read                |
 |RES          |Resume              |
 |RUN          |Run                 |
-|STAT_CHG     |Handle status change|
-|UPD_INF      |Update Info         |
-|UPD_PRG      |Update Progress     |
-|RSCH         |Reschedule DS import|
-|HLT          |App Health check    |
-|AGT_HLT      |Agent Helath check  |
-|PRV		  |Prv Endpoint access |
-|EX			  |Execute             |
-|UPD_HB       |Update Heart Beat   |
-|CONV         |Convert             |
 
 Error Types
 ---
@@ -968,16 +954,8 @@ Meaning of the second digit differs for each error type.
 
 |Error Type |Resource code|Description                                    |
 |-----------|-------------|-----------------------------------------------|
-|INT        |X0XX         |General error                                  |
-|INT        |X1XX         |Create related error                           |
-|INT        |X2XX         |Read related error                             |
-|INT        |X3XX         |Update related error                           |
-|INT        |X4XX         |Delete related error                           |
-|EXT        |X0XX         |Object manager error                           |
-|EXT        |X1XX         |SQL error                                      |
-|EXT        |X2XX         |Stream error                                   |
-|EXT        |X3XX         |Other kepler error                             |
-|EXT        |X4XX         |Field manager error                            |
+|INT        |X[0-9]XX     |Service errors                                  |
+|EXT        |X[0-9]XX     |Runtime errors                                  |
 |VLD        |X0XX         |Invalid input data                             |
 |VLD        |X5XX         |System state does not allow to execute request |
 |VLD        |X6XX         |Data in the system does not exist              |
@@ -1037,7 +1015,7 @@ List of samples:
  
  To run a sample code:
  
- - Copy first the content of [sampeData](https://github.com/relativitydev/relativity-import-samples/tree/main/SampleDataSources) to your Relativity fileshare.
+ - First, copy the content of [sample dataset](https://github.com/relativitydev/relativity-import-samples/tree/main/SampleDataSources) to your Relativity fileshare.
  - Uncomment line with sample invocation you want to run in Main method.  
 
             // await sampleCollection.Sample08_ImportImages();
@@ -1059,7 +1037,7 @@ List of samples:
  - Update workspaceId const to the proper value equals Id of the workspace where you intend to import data. It is required in each sample. 
 
  
-        destination workspace artifact Id.
+        // destination workspace artifact Id.
         const int workspaceId = 1000000;
 
  - Updated other Ids related to your workspace - productionSetsArtifactId , rootFolderId,rdoArtifactTypeID. They are required only by specific samples.
@@ -1077,7 +1055,7 @@ List of samples:
  
  To run a sample code:
  
- - Copy first the content of [sampeData](https://github.com/relativitydev/relativity-import-samples/tree/main/SampleDataSources) to your Relativity fileshare.
+ - First, copy the content of [sample dataset](https://github.com/relativitydev/relativity-import-samples/tree/main/SampleDataSources) to your Relativity fileshare.
  - Uncomment line with sample invocation you want to run in Main method.
  - Set the proper credentials and host address of your Relativity instance in [RelativityUserSettings](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/ImportSampleHelpers/RelativityUserSettings.cs) helper class.
 
@@ -1100,7 +1078,7 @@ List of samples:
  
  To run a sample code:
  
- - Copy first the content of [sampeData](https://github.com/relativitydev/relativity-import-samples/tree/main/SampleDataSources) to your Relativity fileshare.
+ - First, copy the content of [sample dataset](https://github.com/relativitydev/relativity-import-samples/tree/main/SampleDataSources) to your Relativity fileshare.
 
 - Uncomment line with sample invocation you want to run in [run-sample-Import.ps1](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/run-sample-Import.ps1).
 
