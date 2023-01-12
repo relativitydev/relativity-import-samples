@@ -1,22 +1,21 @@
 # relativity-import
 
 ### Table of Contents
-### **[Introduction](#introduction)**<br>
+### **[Introduction](#introduction)**
 **[Prerequisites](#prerequisites)**<br>
 **[Glossary](#glossary)**<br>
-### **[Getting Started](#getting-started)**<br>
+### **[Getting Started](#getting-started)**
 **[NuGet Libraries](#importservicesdk)**<br>
 **[Authorization](#authorization)**<br>
 **[Permissions](#permissions)**<br>
 **[Builders](#builders)**<br>
 **[General Import flow description ](#general-import-flow-description)**<br>
-**[Example Import flows](#simple-import-documents-example-flow)**<br>
-
+**[Example Import flows](#example-of-simple-import-documents-flow)**<br>
 **[API Documentation](#rest-api)**<br>
 **[API Response](#api-response)**<br>
 **[ImportJob & DataSource States](#rest-api)**<br>
 **[Error Codes](#error-codes)**<br>
-### **[Code Samples](#samples)**<br>
+### **[Code Samples](#samples)**
 **[.NET 7 Console Application - How-to](#net-7-code-samples---how-to)**<br>
 **[.NET Framework & Kepler Console Application - How-to](#keplerclient-code-samples---how-to)**<br>
 **[Powershell scripts - How-to](#powershell-script-samples---how-to)**<br>
@@ -55,9 +54,9 @@ Job and data sources configurations allow you to flexibly adjust the import to y
 ***
 ## Glossary
 
-**importing** - Functionality that makes that structured data set goes into destination workspace.
+**Data importing** - Functionality that makes that structured data set goes into destination workspace.
 
-**dataset** - Structured data containing metadata, native documents, images, text files described by load file or opticon file.
+**Dataset** - Structured data containing metadata, native documents, images, text files described by load file or opticon file.
 Such a dataset can be pointed during data source configuration and must be located in accessible place for workspace. 
 
 **ImportJob** - It is the main object in import service taking part in import flow. It represents single import entity described by its configuration which decided about import behavior e.g. import type, overlay mode, fields mapping.  
@@ -182,40 +181,45 @@ which may lead to errors during import process.
 
 *DataSourceSettingsBuilder* - builds DataSourceSettings used for data source configuration.
 
+> C#
 
-    // Example of creating ImportDocumentSettings with dedicated builder.
+    // Example of using ImportDocumentSettingsBuilder to create ImportDocumentSettings.
+
     ImportDocumentSettingsBuilder.Create()
-                .WithOverlayMode(x => x
-					.WithKeyField(overlayKeyField)
-					.WithMultiFieldOverlayBehaviour(MultiFieldOverlayBehaviour.MergeAll))
-				.WithNatives(x => x
-					.WithFilePathDefinedInColumn(filePathColumnIndex)
-					.WithFileNameDefinedInColumn(fileNameColumnIndex))
-				.WithoutImages()
-				.WithFieldsMapped(x => x
-					.WithField(controlNumberColumnIndex, "Control Number")
-					.WithExtractedTextField(extractedTextPathColumnIndex, e => e
-						.WithExtractedTextInSeparateFiles(f => f
-							.WithEncoding("UTF-8"))))
-				.WithFolders(f => f
-					.WithRootFolderID(rootFolderId, r => r
-						.WithFolderPathDefinedInColumn(folderPathColumnIndex)));
+        .WithOverlayMode(x => x
+            .WithKeyField(overlayKeyField)
+            .WithMultiFieldOverlayBehaviour(MultiFieldOverlayBehaviour.MergeAll))
+        .WithNatives(x => x
+            .WithFilePathDefinedInColumn(filePathColumnIndex)
+            .WithFileNameDefinedInColumn(fileNameColumnIndex))
+        .WithoutImages()
+        .WithFieldsMapped(x => x
+            .WithField(controlNumberColumnIndex, "Control Number")
+            .WithExtractedTextField(extractedTextPathColumnIndex, e => e
+                .WithExtractedTextInSeparateFiles(f => f
+                    .WithEncoding("UTF-8"))))
+        .WithFolders(f => f
+            .WithRootFolderID(rootFolderId, r => r
+                .WithFolderPathDefinedInColumn(folderPathColumnIndex)));
 
 
-     // Example of creating DataSourceSettings with dedicated builder.
-			DataSourceSettings dataSourceSettings = DataSourceSettingsBuilder.Create()
-				.ForLoadFile(loadFile01Path)
-				.WithDelimiters(d => d
-					.WithColumnDelimiters('|')
-					.WithQuoteDelimiter('^')
-					.WithNewLineDelimiter('#')
-					.WithNestedValueDelimiter('&')
-					.WithMultiValueDelimiter('$'))
-				.WithFirstLineContainingHeaders()
-				.WithEndOfLineForWindows()
-				.WithStartFromBeginning()
-				.WithDefaultEncoding()
-				.WithDefaultCultureInfo();
+> C#
+
+    // Example of using DataSourceSettingsBuilder to create DataSourceSettings.
+
+    DataSourceSettings dataSourceSettings = DataSourceSettingsBuilder.Create()
+        .ForLoadFile(loadFile01Path)
+        .WithDelimiters(d => d
+            .WithColumnDelimiters('|')
+            .WithQuoteDelimiter('^')
+            .WithNewLineDelimiter('#')
+            .WithNestedValueDelimiter('&')
+            .WithMultiValueDelimiter('$'))
+        .WithFirstLineContainingHeaders()
+        .WithEndOfLineForWindows()
+        .WithStartFromBeginning()
+        .WithDefaultEncoding()
+        .WithDefaultCultureInfo();
 
 
 NOTE: Please review the samples to find more about builders.
