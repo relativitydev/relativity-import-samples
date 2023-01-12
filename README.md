@@ -324,33 +324,33 @@ The general flow includes several steps consisted in sending appropriate HTTP re
     > C# 
 
         ImportDocumentSettings importSettings = new ImportDocumentSettings()
-			{
-				Overlay = null,
-				Native = new NativeSettings
-				{
-					FileNameColumnIndex = fileNameColumnIndex,
-					FilePathColumnIndex = filePathColumnIndex,
-				},
-				Fields = new FieldsSettings
-				{
-					FieldMappings = new[]
-					{
-						new FieldMapping
-						{
-							Field = "Control Number",
-							ContainsID = false,
-							ColumnIndex = 0,
-							ContainsFilePath = false,
-						},
-					},
-				},
-				Folder = new FolderSettings
-				{
-					FolderPathColumnIndex = folderPathColumnIndex,
-					RootFolderID = 1003663,
-				},
-				Other = null,
-			};
+        {
+            Overlay = null,
+            Native = new NativeSettings
+            {
+                FileNameColumnIndex = fileNameColumnIndex,
+                FilePathColumnIndex = filePathColumnIndex,
+            },
+            Fields = new FieldsSettings
+            {
+                FieldMappings = new[]
+                {
+                    new FieldMapping
+                    {
+                        Field = "Control Number",
+                        ContainsID = false,
+                        ColumnIndex = 0,
+                        ContainsFilePath = false,
+                    },
+                },
+            },
+            Folder = new FolderSettings
+            {
+                FolderPathColumnIndex = folderPathColumnIndex,
+                RootFolderID = 1003663,
+            },
+            Other = null,
+        };
 
 <br>
 
@@ -619,27 +619,27 @@ The general flow includes several steps consisted in sending appropriate HTTP re
     > C# 
 
         ImportRdoSettings importSettings = new ImportRdoSettings()
-			{
-				Overlay = null,
-				Fields = new FieldsSettings
-				{
-					FieldMappings = new[]
-					{
-						new FieldMapping
-						{
-							Field = "Name",
-							ContainsID = false,
-							ColumnIndex = nameColumnIndex,
-							ContainsFilePath = false,
-						},
-					},
-				},
-				Rdo = new RdoSettings
-				{
-					ArtifactTypeID = rdoArtifactTypeID,
-					ParentColumnIndex = null,
-				},
-			};
+        {
+            Overlay = null,
+            Fields = new FieldsSettings
+            {
+                FieldMappings = new[]
+                {
+                    new FieldMapping
+                    {
+                        Field = "Name",
+                        ContainsID = false,
+                        ColumnIndex = nameColumnIndex,
+                        ContainsFilePath = false,
+                    },
+                },
+            },
+            Rdo = new RdoSettings
+            {
+                ArtifactTypeID = rdoArtifactTypeID,
+                ParentColumnIndex = null,
+            },
+        };
 
 
 3. **Add DataSource (related to opticon file)** 
