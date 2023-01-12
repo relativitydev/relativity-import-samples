@@ -34,7 +34,7 @@ Dataset (containing structured data) that you want to import can be then added a
 
 Job and data sources configurations allow you to flexibly adjust the import to your needs. In additional, the adopted error handling helps you to identify the source of potential problems. 
 
-### NOTE: Import Service is available as a RAP application in Relativity One.
+ NOTE: Import Service is available as a RAP application in Relativity One.
 
 # Prerequisites
 
