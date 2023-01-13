@@ -11,7 +11,7 @@ $sourceId = New-Guid
 $global:Endpoints = [Endpoints]::new($workspaceId)
 $global:WriteInformation = [WriteInformation]::new()
 
-Context "Sample11 Import document settings for images" {
+Context "Sample11 Direct import settings for images" {
     Describe "Create job" {
         $uri = $global:Endpoints.importJobCreateUri($importId)
 
