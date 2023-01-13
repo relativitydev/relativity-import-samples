@@ -41,7 +41,7 @@ class Endpoints {
         return $this.baseAddress + "/import-jobs/$importId/sources"
     }
 
-    [String] importSourceUri($importId, $sourceId){
+    [String] importSourceAddUri($importId, $sourceId){
         return $this.baseAddress + "/import-jobs/$importId/sources/$sourceId"
     }
 
@@ -53,7 +53,7 @@ class Endpoints {
         return $this.baseAddress + "/import-jobs/$importId/sources/$sourceId/progress"
     }
 
-    [String] importSourcesItemErrorsUri($importId, $sourceId){
+    [String] importSourceItemErrorsUri($importId, $sourceId){
         return $this.baseAddress + "/import-jobs/$importId/sources/$sourceId/itemerrors"
     }
 

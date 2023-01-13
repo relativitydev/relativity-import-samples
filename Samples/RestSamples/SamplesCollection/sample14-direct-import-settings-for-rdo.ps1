@@ -13,7 +13,7 @@ $global:WriteInformation = [WriteInformation]::new()
 
 # Example of import  Relativity Dynamic Object (RDO).
 # NOTE: Existing RDO "Domain" is used in this example. Please insert documents from sample01 first.
-Context "Sample14 Import RDO settings" {
+Context "Sample14 Direct import settings for RDO" {
     Describe "Create job" {
         $uri = $global:Endpoints.importJobCreateUri($importId)
 
@@ -80,7 +80,7 @@ Context "Sample14 Import RDO settings" {
     }
 
     Describe "Add Source" {
-        $uri = $global:Endpoints.importSourceUri($importId, $sourceId)
+        $uri = $global:Endpoints.importSourceAddUri($importId, $sourceId)
         $dataSourceConfigurationBody = @{
             dataSourceSettings = @{
                 path = $loadFilePath

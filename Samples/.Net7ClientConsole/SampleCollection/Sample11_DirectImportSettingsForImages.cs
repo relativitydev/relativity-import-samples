@@ -1,4 +1,4 @@
-﻿// <copyright file="Sample07_ImportDocumentSettingsForNatives.cs" company="Relativity ODA LLC">
+﻿// <copyright file="Sample11_DirectImportSettingsForImages.cs" company="Relativity ODA LLC">
 // © Relativity All Rights Reserved.
 // </copyright>
 
@@ -12,8 +12,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 	using Relativity.Import.V1.Models.Sources;
 	using System.Net.Http.Json;
 	using Relativity.Import.V1.Models;
-	using System.Text.Json;
 	using System.Text.Json.Serialization;
+	using System.Text.Json;
 	using Relativity.Import.Samples.Net7Client.Helpers;
 
 	/// <summary>
@@ -22,86 +22,45 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 	public partial class ImportServiceSample
 	{
 		/// <summary>
-		/// Example of setting ImportDocumentSetting manually (without ImportDocumentSettingsBuilder).
-		/// Settings dedicated for image import.
+		/// Example of creating ImportDocumentSettings for image import manually - without using ImportDocumentSettingsBuilder.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-		public async Task Sample07_ImportDocumentSettingsForNatives()
+		public async Task Sample11_DirectImportSettingsForImages()
 		{
-			Console.WriteLine($"Running {nameof(Sample07_ImportDocumentSettingsForNatives)}");
+			Console.WriteLine($"Running {nameof(Sample11_DirectImportSettingsForImages)}");
 
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
 
-			// destination workspace and folder artifact Ids.
+			// destination workspace and root folder artifact Ids.
 			const int workspaceId = 1000000;
 			const int rootFolderId = 2000000;
 
-			// overlay keyField
-			const string keyField = "Control Number";
-
-			// set of columns indexes in load file used in import settings.
-			const int extractedTextFilePathColumnIndex = 12;
-			const int emailToColumnIndex = 11;
-			const int fileNameColumnIndex = 13;
-			const int filePathColumnIndex = 22;
-
-			// Create payload for request.
+			// Create request's payload
 			var createJobPayload = new
 			{
 				applicationName = "Import-service-sample-app",
-				correlationID = "Sample-job-0007"
+				correlationID = "Sample-job-0011"
 			};
 
-			// Configuration settings for document import. Example of set without using ImportDocumentSettingsBuilder.
+			// Example of configuration settings for images import created without ImportDocumentSettingsBuilder.
 			ImportDocumentSettings importSettings = new ImportDocumentSettings()
 			{
 				Overlay = new OverlaySettings
 				{
 					Mode = OverlayMode.AppendOverlay,
-					KeyField = keyField,
+					KeyField = default,
 					MultiFieldOverlayBehaviour = MultiFieldOverlayBehaviour.UseRelativityDefaults,
 				},
-				Native = new NativeSettings
+				Native = null,
+				Image = new ImageSettings
 				{
-					FileNameColumnIndex = fileNameColumnIndex,
-					FilePathColumnIndex = filePathColumnIndex,
+					PageNumbering = PageNumbering.AutoNumberImages,
+					ProductionID = null,
+					LoadExtractedText = true,
 				},
-				Fields = new FieldsSettings
-				{
-					FieldMappings = new[]
-					{
-						new FieldMapping
-						{
-							Field = "Control Number",
-							ContainsID = false,
-							ColumnIndex = 0,
-							ContainsFilePath = false,
-						},
-						new FieldMapping
-						{
-							Field = "Custodian - Single Choice",
-							ContainsID = false,
-							ColumnIndex = 1,
-							ContainsFilePath = false,
-						},
-						new FieldMapping
-						{
-							Field = "Email To",
-							ContainsID = false,
-							ColumnIndex = emailToColumnIndex,
-							ContainsFilePath = false,
-						},
-						new FieldMapping
-						{
-							Field = "Extracted Text",
-							ContainsID = false,
-							ColumnIndex = extractedTextFilePathColumnIndex,
-							ContainsFilePath = true,
-						},
-					},
-				},
+				Fields = null,
 				Folder = new FolderSettings
 				{
 					FolderPathColumnIndex = null,
@@ -111,7 +70,6 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 				{
 					ExtractedText = new ExtractedTextSettings
 					{
-						Encoding = null,
 						ValidateEncoding = true,
 					},
 				},
@@ -120,20 +78,20 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			// Create payload for request.
 			var importSettingPayload = new { importSettings };
 
-			// Example of data source configuration created without using DataSourceSettingsBuilder.
+			// Configuration settings for data source created without DataSourceSettingsBuilder.
 			DataSourceSettings dataSourceSettings = new DataSourceSettings
 			{
-				Type = DataSourceType.LoadFile,
-				Path = "C:\\DefaultFileRepository\\samples\\load_file_04.dat",
-				NewLineDelimiter = '#',
-				ColumnDelimiter = '|',
-				QuoteDelimiter = '^',
-				MultiValueDelimiter = '$',
-				NestedValueDelimiter = '&',
+				Type = DataSourceType.Opticon,
+				Path = "C:\\DefaultFileRepository\\samples\\opticon_01.opt",
+				NewLineDelimiter = default,
+				ColumnDelimiter = default,
+				QuoteDelimiter = default,
+				MultiValueDelimiter = default,
+				NestedValueDelimiter = default,
 				Encoding = null,
 				CultureInfo = "en-us",
 				EndOfLine = DataSourceEndOfLine.Windows,
-				FirstLineContainsColumnNames = true,
+				FirstLineContainsColumnNames = false,
 				StartLine = 0,
 			};
 
@@ -146,7 +104,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			// endpoint: POST /import-jobs/{importId}
 			var createImportJobUri = RelativityImportEndpoints.GetImportJobCreateUri(workspaceId, importId);
 
-			var response = await httpClient.PostAsJsonAsync(createImportJobUri,createJobPayload);
+			var response = await httpClient.PostAsJsonAsync(createImportJobUri, createJobPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
 			// Add import document settings to existing import job (configure import job).
@@ -176,23 +134,27 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			// It may take some time for import job to be completed. Request data source details to monitor the current state.
 			// NOTE: You can also request job details to verify if job is finished - see appropriate sample.
 			// endpoint: GET import-jobs/{importId}/sources/{sourceId}/details"
-			var importSourceDetailsUri = RelativityImportEndpoints.GetImportSourceDetailsUri(workspaceId, importId, sourceId);
+			var importSourceDetailsUri =
+				RelativityImportEndpoints.GetImportSourceDetailsUri(workspaceId, importId, sourceId);
 
 			JsonSerializerOptions options = new()
 			{
-				Converters = { new JsonStringEnumConverter() }
+				Converters = {new JsonStringEnumConverter()}
 			};
 
 			var dataSourceState = await ImportJobSampleHelper.WaitImportDataSourceToBeCompleted(
-				funcAsync: () => httpClient.GetFromJsonAsync<ValueResponse<DataSourceDetails>> (importSourceDetailsUri, options),
+				funcAsync: () =>
+					httpClient.GetFromJsonAsync<ValueResponse<DataSourceDetails>>(importSourceDetailsUri, options),
 				timeout: 10000);
 
 			// Get current import progress for specific data source.
 			// endpoint: GET import-jobs/{importId}/sources/{sourceId}/progress"
-			var importSourceProgressUri = RelativityImportEndpoints.GetImportSourceProgressUri(workspaceId, importId, sourceId);
+			var importSourceProgressUri =
+				RelativityImportEndpoints.GetImportSourceProgressUri(workspaceId, importId, sourceId);
 
-			var valueResponse = await httpClient.GetFromJsonAsync<ValueResponse<ImportProgress>>(importSourceProgressUri);
-			
+			var valueResponse =
+				await httpClient.GetFromJsonAsync<ValueResponse<ImportProgress>>(importSourceProgressUri);
+
 			if (valueResponse?.IsSuccess ?? false)
 			{
 				Console.WriteLine("\n");
@@ -202,7 +164,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 		}
 	}
 }
+
 /* Expected console result:
 	Data source state: Completed
-	Import data source progress: Total records: 2, Imported records: 2, Records with errors: 0
+	Import data source progress: Total records: 5, Imported records: 5, Records with errors: 0
  */

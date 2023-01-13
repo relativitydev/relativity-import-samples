@@ -1,4 +1,4 @@
-﻿// <copyright file="Sample14_ImportRdoSettings.cs" company="Relativity ODA LLC">
+﻿// <copyright file="Sample14_DirectImportSettingsForRdo.cs" company="Relativity ODA LLC">
 // © Relativity All Rights Reserved.
 // </copyright>
 
@@ -21,9 +21,9 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 		/// NOTE: Existing RDO "Domain" is used in this example. Please insert documents from sample01 first.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-		public async Task Sample14_ImportRdoSettings()
+		public async Task Sample14_DirectImportSettingsForRdo()
 		{
-			Console.WriteLine($"Running {nameof(Sample14_ImportRdoSettings)}");
+			Console.WriteLine($"Running {nameof(Sample14_DirectImportSettingsForRdo)}");
 
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();

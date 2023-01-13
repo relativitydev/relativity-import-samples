@@ -10,6 +10,9 @@ $password = "password!"
 $global:Auth = [Auth]::new($hostAddress, $userName, $password)
 $global:WebRequest = [WebRequest]::new($global:Auth)
 
+# Uncomment the samples you wish to run:
+# NOTE: Copy sample source files into destination location.
+
 Describe "Sample import" {
     . "$global:rootDir\SamplesCollection\sample01-import-native-files.ps1"
 
@@ -23,7 +26,7 @@ Describe "Sample import" {
 
     # . "$global:rootDir\SamplesCollection\sample06-import-documents-to-selected-folder.ps1"
 
-    # . "$global:rootDir\SamplesCollection\sample07-import-document-settings-for-natives.ps1"
+    # . "$global:rootDir\SamplesCollection\sample07-direct-import-settings-for-documents.ps1"
 
     # . "$global:rootDir\SamplesCollection\sample08-import-images.ps1"
 
@@ -31,13 +34,13 @@ Describe "Sample import" {
 
     # . "$global:rootDir\SamplesCollection\sample10-import-images-in-append-overlay-mode.ps1"
 
-    # . "$global:rootDir\SamplesCollection\sample11-import-document-settings-for-images.ps1"
+    # . "$global:rootDir\SamplesCollection\sample11-direct-import-settings-for-images.ps1"
 
     # . "$global:rootDir\SamplesCollection\sample12-import-relativity-dynamic-object.ps1"
 
     # . "$global:rootDir\SamplesCollection\sample13-import-rdo-with-parent.ps1"
 
-    # . "$global:rootDir\SamplesCollection\sample14-import-rdo-settings.ps1"
+    # . "$global:rootDir\SamplesCollection\sample14-direct-import-settings-for-rdo.ps1"
 
     # . "$global:rootDir\SamplesCollection\sample15-read-import-rdo-settings.ps1"
 

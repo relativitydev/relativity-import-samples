@@ -11,7 +11,7 @@ $sourceId = New-Guid
 $global:Endpoints = [Endpoints]::new($workspaceId)
 $global:WriteInformation = [WriteInformation]::new()
 
-Context "Sample07 Import document settings for natives" {
+Context "Sample07 Direct import settings for documents" {
     Describe "Create job" {
         $uri = $global:Endpoints.importJobCreateUri($importId)
 
@@ -86,7 +86,7 @@ Context "Sample07 Import document settings for natives" {
     }
 
     Describe "Add Source" {
-        $uri = $global:Endpoints.importSourceUri($importId, $sourceId)
+        $uri = $global:Endpoints.importSourceAddUri($importId, $sourceId)
         $dataSourceConfigurationBody = @{
             dataSourceSettings = @{
                 path = $loadFilePath
