@@ -59,7 +59,7 @@ Context "Sample06 Import documents to selected folder" {
     }
 
     Describe "Add Source" {
-        $uri = $global:Endpoints.importSourceUri($importId, $sourceId)
+        $uri = $global:Endpoints.importSourceAddUri($importId, $sourceId)
         
         $loadFilePath = $loadFilePath.replace('\','\\')
 

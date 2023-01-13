@@ -74,7 +74,7 @@ Context "Sample23 Get Data Source errors" {
     }
 
     Describe "Add Source 01" {
-        $uri = $global:Endpoints.importSourceUri($importId, $source01Id)
+        $uri = $global:Endpoints.importSourceAddUri($importId, $source01Id)
         $dataSourceConfigurationBody = @{
             dataSourceSettings = @{
                 path = $loadFile01Path
@@ -98,7 +98,7 @@ Context "Sample23 Get Data Source errors" {
     }
 
     Describe "Add Source 02" {
-        $uri = $global:Endpoints.importSourceUri($importId, $source02Id)
+        $uri = $global:Endpoints.importSourceAddUri($importId, $source02Id)
         $dataSourceConfigurationBody = @{
             dataSourceSettings = @{
                 path = $loadFile02Path

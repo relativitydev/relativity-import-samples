@@ -57,7 +57,7 @@ Context "Sample13 Import RDO with parent" {
     }
 
     Describe "Add Source" {
-        $uri = $global:Endpoints.importSourceUri($importId, $sourceId)
+        $uri = $global:Endpoints.importSourceAddUri($importId, $sourceId)
         
         $loadFilePath = $loadFilePath.replace('\','\\')
 

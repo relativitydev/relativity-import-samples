@@ -75,7 +75,7 @@ Context "Sample12 Import relativity dynamic object" {
     }
 
     Describe "Add Source" {
-        $uri = $global:Endpoints.importSourceUri($importId, $sourceId)
+        $uri = $global:Endpoints.importSourceAddUri($importId, $sourceId)
 
         $loadFilePath = $loadFilePath.replace('\','\\')
 

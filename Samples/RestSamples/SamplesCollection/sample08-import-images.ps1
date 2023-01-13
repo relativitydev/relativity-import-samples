@@ -46,7 +46,7 @@ Context "Sample08 Import images" {
     }
 
     Describe "Add Source" {
-        $uri = $global:Endpoints.importSourceUri($importId, $sourceId)
+        $uri = $global:Endpoints.importSourceAddUri($importId, $sourceId)
         $dataSourceConfigurationBody = @{
             dataSourceSettings = @{
                 Path = $opticonFilePath
