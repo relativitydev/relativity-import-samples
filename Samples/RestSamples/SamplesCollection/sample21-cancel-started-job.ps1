@@ -60,7 +60,7 @@ Context "Sample21 Cancel stared Job" {
 
         for ($i = 0; $i -lt $sourcesCount; $i++) {
             $sourceId = New-Guid
-            $uri = $global:Endpoints.importSourceUri($importId, $sourceId)            
+            $uri = $global:Endpoints.importSourceAddUri($importId, $sourceId)
 
             $dataSourceConfigurationBody = @{
                 dataSourceSettings = @{

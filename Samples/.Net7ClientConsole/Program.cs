@@ -36,7 +36,7 @@ namespace Relativity.Import.Samples.Net7Client
 
 					// await sampleCollection.Sample06_ImportDocumentsToSelectedFolder();
 
-					// await sampleCollection.Sample07_ImportDocumentSettingsForNatives();
+					// await sampleCollection.Sample07_DirectImportSettingsForDocuments();
 
 					// await sampleCollection.Sample08_ImportImages();
 
@@ -44,13 +44,13 @@ namespace Relativity.Import.Samples.Net7Client
 
 					// await sampleCollection.Sample10_ImportImagesInAppendOverlayMode();
 
-					//await sampleCollection.Sample11_ImportDocumentSettingsForImages();
+					//await sampleCollection.Sample11_DirectImportSettingsForImages();
 
 					// await sampleCollection.Sample12_ImportRelativityDynamicObject();
 
 					// await sampleCollection.Sample13_ImportRdoWithParent();
 
-					// await sampleCollection.Sample14_ImportRdoSettings();
+					// await sampleCollection.Sample14_DirectImportSettingsForRdo();
 
 					// await sampleCollection.Sample15_ReadImportRdoSettings();
 

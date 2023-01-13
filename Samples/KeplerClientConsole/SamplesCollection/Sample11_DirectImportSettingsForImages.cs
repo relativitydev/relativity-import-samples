@@ -1,4 +1,4 @@
-﻿// <copyright file="Sample11_ImportDocumentSettingsForImages.cs" company="Relativity ODA LLC">
+﻿// <copyright file="Sample11_DirectImportSettingsForImages.cs" company="Relativity ODA LLC">
 // © Relativity All Rights Reserved.
 // </copyright>
 
@@ -21,9 +21,9 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 		/// Example of creating ImportDocumentSettings for image import manually - without using ImportDocumentSettingsBuilder.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-		public async Task Sample11_ImportDocumentSettingsForImages()
+		public async Task Sample11_DirectImportSettingsForImages()
 		{
-			Console.WriteLine($"Running {nameof(Sample11_ImportDocumentSettingsForImages)}");
+			Console.WriteLine($"Running {nameof(Sample11_DirectImportSettingsForImages)}");
 
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();

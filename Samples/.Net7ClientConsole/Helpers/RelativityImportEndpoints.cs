@@ -36,7 +36,7 @@ namespace Relativity.Import.Samples.Net7Client.Helpers
 		
 		public static string GetImportSourceProgressUri(int workspaceId, Guid importId, Guid sourceId) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/{importId}/sources/{sourceId}/progress";
 		
-		public static string GetImportSourcesItemErrorsUri(int workspaceId, Guid importId, Guid sourceId, int start, int length) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/{importId}/sources/{sourceId}/itemerrors?start={start}&length={length}";
+		public static string GetImportSourceItemErrorsUri(int workspaceId, Guid importId, Guid sourceId, int start, int length) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/{importId}/sources/{sourceId}/itemerrors?start={start}&length={length}";
 
 	}
 }

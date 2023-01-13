@@ -83,7 +83,7 @@ Context "Sample 02 Import documents in overlay mode" {
     }
 
     Describe "Add Source" {
-        $uri = $global:Endpoints.importSourceUri($importId, $sourceId)
+        $uri = $global:Endpoints.importSourceAddUri($importId, $sourceId)
         $dataSourceConfigurationBody = @{
             dataSourceSettings = @{
                 path = $loadFilePath

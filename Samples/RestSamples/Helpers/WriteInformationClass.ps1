@@ -23,7 +23,7 @@ class WriteInformation {
             Write-Information -MessageData "Data source failed due to errors: $jobLevelErrors" -InformationAction Continue
         }
         elseif ($state -eq "CompletedWithItemErrors") {
-            $itemErrorsUri = $global:Endpoints.importSourcesItemErrorsUri($importId, $sourceId)
+            $itemErrorsUri = $global:Endpoints.importSourceItemErrorsUri($importId, $sourceId)
             $sourceItemErrorsResponse = $global:WebRequest.callGet($itemErrorsUri)
             $errors = $sourceItemErrorsResponse."Value"."Errors" | ConvertTo-Json -Depth 10
             Write-Information -MessageData "Data source item errors: $errors" -InformationAction Continue

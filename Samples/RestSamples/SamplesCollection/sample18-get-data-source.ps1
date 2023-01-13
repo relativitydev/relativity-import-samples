@@ -61,7 +61,7 @@ Context "Sample18 Read Data sources for Import Job" {
     Describe "Add n data sources to the existing job." {
         for ($i = 0; $i -lt $sourcesCount; $i++) {
             $sourceId = New-Guid
-            $uri = $global:Endpoints.importSourceUri($importId, $sourceId)
+            $uri = $global:Endpoints.importSourceAddUri($importId, $sourceId)
             $dataSourceConfigurationBody = @{
                 dataSourceSettings = @{
                     path = $loadFilePath + $i
