@@ -197,7 +197,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 						// Get Item Errors for each source.
 						// GET import-jobs/{importId}/sources/{sourceId}/itemerrors?{start}&{length}"
-						var getItemErrorUrl = RelativityImportEndpoints.GetImportSourcesItemErrorsUri(workspaceId, importId, sourceId,0 , 20);
+						var getItemErrorUrl = RelativityImportEndpoints.GetImportSourceItemErrorsUri(workspaceId, importId, sourceId,0 , 20);
 						ValueResponse<ImportErrors>? valueResponseErrors = await httpClient.GetFromJsonAsync<ValueResponse<ImportErrors>>(getItemErrorUrl);
 
 						if (valueResponseErrors is {IsSuccess: true})
