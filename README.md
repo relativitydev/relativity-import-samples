@@ -23,7 +23,7 @@
 
 
 # Introduction
-The ***Relativity Import Service API*** provides functionality for importing large numbers of documents, images, and Relativity Dynamic Objects (RDOs) into a Relativity workspace. 
+The ***Relativity Import Service API***  is a Kepler service that provides functionality for importing large numbers of documents, images, and Relativity Dynamic Objects (RDOs) into a Relativity workspace. 
 The import process operates on structured data sets that are described by load file and placed in an accessible place for workspace.  
 The main principle of operation is based on creating managed importing job with a list of data set (intended for import) assigned to it.
 <br>
@@ -33,13 +33,18 @@ Dataset (containing structured data) that you want to import can be then added a
 
 Job and data sources configurations allow you to flexibly adjust the import to your needs. In additional, the adopted error handling helps you to identify the source of potential problems. 
 
- NOTE: Import Service is available as a RAP application in Relativity One.
+ NOTE: Import Service (*Import*) is delivered as a RAP application installed in Relativity One.
 
 # Prerequisites
 
 1. The following Relativity application must be installed:
-    - *Import*  - installed in Relativity workspace.
-    - *DataTransfer.Legacy*  - installed in Relativity instance.
+
+
+
+    | application name     | application Guid                      | where installed     |
+    |----------------------|---------------------------------------|---------------------|
+    |*Import*              | 21F65FDC-3016-4F2B-9698-DE151A6186A2  |  workspace          |
+    |*DataTransfer.Legacy* | 9f9d45ff-5dcd-462d-996d-b9033ea8cfce  |  instance           |
 
 
 2. Appropriate user [permissions](#permissions) need to be set. 
@@ -48,16 +53,18 @@ Job and data sources configurations allow you to flexibly adjust the import to y
 3. Data set - load files, source files (native documents, images, text files) - need to be placed in the destination fileshare location accessible to workspace. 
 
 
-4. [Import.Service.SDK](#importservicesdk) package added to client application.
+4. The following packages installed in client application:
+   - [Import.Service.SDK](#importservicesdk) 
+   - [Relativity.Kepler.Client.SDK](https://www.nuget.org/packages/Relativity.Kepler.Client.SDK)
 
-   *NOTE*: Required only when Kepler Proxy is used. 
+   *NOTE*: Required only when Kepler .NET client is used.
 ***
 ## Glossary
 
 **Data importing** - Functionality that makes that structured data set goes into destination workspace.
 
 **Dataset** - Structured data containing metadata, native documents, images, text files described by load file or opticon file.
-Such a dataset can be pointed during data source configuration and must be located in accessible place for workspace. 
+Such a dataset can be pointed during data source configuration and MUST be located in accessible place for workspace. 
 
 **ImportJob** - It is the main object in import service taking part in import flow. It represents single import entity described by its configuration which decided about import behavior e.g. import type, overlay mode, fields mapping.  
 In additional ImportJob object hold the information about its current state and importing progress.
@@ -66,31 +73,37 @@ Import jobs aggregates dataSources -single import job can consists of many sourc
 **DataSource**  - It is an object that corresponds to single set of data to be imported. Each data source has own configuration that indicates the physical location of data set (load file). Data set configuration affects also how data in load file are read.
 In additional data source stores the information about current state and import progress of particular source.
 
-**Kepler framework** - The Relativity Kepler framework provides you with the ability to build custom REST EndPoints via a .NET interface.Additionally, the Kepler framework includes a client proxy that you can use when interacting with the services through .NET. [See more information](https://platform.relativity.com/RelativityOne/index.htm#Kepler_framework/Kepler_framework.htm#Client-s)
+**Kepler service** - API service created bt using the Relativity Kepler framework. This framework provides you with the ability to build custom REST Endpoints via a .NET interface. Additionally, the Kepler framework includes a client proxy that you can use when interacting with the services through .NET. [See more information](https://platform.relativity.com/RelativityOne/index.htm#Kepler_framework/Kepler_framework.htm#Client-s)
 
 ---
 # Getting Started ##
-Import Service API provides sets of endpoint that should be executed in correct order.\
-In general there are two ways to work with them:
+Import Service is built as a standard Relativity Kepler Service. It provides sets of endpoints that must be called sequentially in order to execute import.
+The following sections outline how to make calls to import service.
     
-> As with an ordinary Rest API endpoints 
+> HTTP clients 
 
- ..by sending a HTTP request from your http client in any technology.\
-In case of using .NET the [Import.Service.SDK.Models](#importservicesdkmodels) package can be used.
+ You can make calls to a import service using any standard REST or HTTP client, because all APIs (Keplers APIs) are exposed over the HTTP protocol. You need to set the required X-CSRF-Header. [more details](https://platform.relativity.com/RelativityOne/index.htm#Kepler_framework/Kepler_framework.htm#Client-s) 
 
         HttpClient client = new HttpClient();
-        //...
-        var response = await httpClient.PostAsJsonAsync(createImportJobUri,createJobPayload);
+        client.DefaultRequestHeaders.Add("X-CSRF-Header", "-");
+
+        createImportJobUri = $"{host}/Relativity.REST/api/import.service/v1....
+        
+        var response = await httpClient.PostAsJsonAsync(createImportJobUri, payload);
+
+In case of using .NET client the [Import.Service.SDK.Models](#importservicesdkmodels) package containing contract models would be used.
 
   Please investigate dedicated code samples for .NET 7 or for PowerShell scripts.
 
-> As with Kepler endpoints -
+> Kepler .NET client
 
-  ..by using Kepler's Proxy from Kepler framework and invoking each endpoints as an ordinary methods in client application. \
-  To do this installation of [Import.Service.SDK](importservicesdk) package IS REQUIRED in client application.
+You can access Kepler service from any .NET language using the client library provided as part of the Kepler framework. It exposes a factory class that you can use to create the client proxy by passing URIs to import services and credentials. Then use .NET proxy to interact with a import service as a set of .NET objects. When you call a member method, the proxy makes a corresponding HTTP request to the respective service endpoint. [more details](https://platform.relativity.com/RelativityOne/index.htm#Kepler_framework/Kepler_framework.htm#Client-s) 
 
-        using (Relativity.Import.V1.Services.IImportJobController importJobController =_serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>()){
+Kepler contract for import service are exposed in [Import.Service.SDK](importservicesdk) package.
 
+
+        using (Relativity.Import.V1.Services.IImportJobController importJobController =_serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
+        {
             // Create import job.
             Response response = await importJobController.CreateAsync(
                 importJobID: importId,
@@ -138,14 +151,14 @@ This package is automatically installed as dependency when using Import.Service.
 
 ---
 ## Authorization
-> non-kepler application
+> HTTP clients 
 
-Import Service API conforms to the same authentication rules as the other Relativity REST APIs. 
+Import Service API conforms to the same authentication rules like others Relativity REST APIs. 
 
 The more details can be find under the following link:
 [REST_API_authentication](https://platform.relativity.com/RelativityOne/Content/REST_API/REST_API_authentication.htm)
 
-> kepler application
+> Kepler .NET client
 
 The Kepler framework uses a proxy to handle client requests. The more details can be find under the following link:
 [Proxies_and_authentication](https://platform.relativity.com/RelativityOne/Content/Kepler_framework/Proxies_and_authentication.htm#Service)
@@ -429,9 +442,10 @@ The general flow includes several steps consisted in sending appropriate HTTP re
 
 <br>
 
-5. **End Import Job**  (optional)
+5. **End Import Job** 
 
     > curl
+
         curl -X 'POST' 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/e694ad62-198d-4ecb-936d-1862ddfa4235/end/'
         -H 'X-CSRF-Header: -' 
         -d ''
@@ -554,7 +568,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
         -H 'X-CSRF-Header: -' 
         -d ''
 
-5. **End Import Job**  (optional)
+5. **End Import Job** 
     > curl
 
         curl -X 'POST' 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/4c4215bf-d8a3-48d4-a3e0-3a40428415e7/end/'
@@ -716,7 +730,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
         -H 'X-CSRF-Header: -' 
         -d ''
 
-5. **End Import Job**  (optional)
+5. **End Import Job** 
 
     > curl
 
