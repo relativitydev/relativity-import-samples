@@ -1,4 +1,4 @@
-﻿// <copyright file="Sample11_ImportDocumentSettingsForImages.cs" company="Relativity ODA LLC">
+﻿// <copyright file="Sample14_DirectImportSettingsForRdo.cs" company="Relativity ODA LLC">
 // © Relativity All Rights Reserved.
 // </copyright>
 
@@ -22,76 +22,106 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 	public partial class ImportServiceSample
 	{
 		/// <summary>
-		/// Example of creating ImportDocumentSettings for image import manually - without using ImportDocumentSettingsBuilder.
+		/// Example of import  Relativity Dynamic Object (RDO).
+		/// NOTE: Existing RDO "Domain" is used in this example. Please insert documents from sample01 first.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-		public async Task Sample11_ImportDocumentSettingsForImages()
+		public async Task Sample14_DirectImportSettingsForRdo()
 		{
-			Console.WriteLine($"Running {nameof(Sample11_ImportDocumentSettingsForImages)}");
+			Console.WriteLine($"Running {nameof(Sample14_DirectImportSettingsForRdo)}");
 
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
 			Guid sourceId = Guid.NewGuid();
 
-			// destination workspace and root folder artifact Ids.
+			// destination workspace artifact Id.
 			const int workspaceId = 1000000;
-			const int rootFolderId = 2000000;
+
+			// set of columns indexes in load file used in import settings.Example import of Domain RDO.
+			const int nameColumnIndex = 0;
+			const int domainEmailCcColumnIndex = 3;
+			const int domainEmailFromColumnIndex = 4;
+			const int domainEmailToColumnIndex = 5;
+
+			// RDO artifact type id
+			const int rdoArtifactTypeID = 1000027;
 
 			// Create request's payload
 			var createJobPayload = new
 			{
 				applicationName = "Import-service-sample-app",
-				correlationID = "Sample-job-0011"
+				correlationID = "Sample-job-0014"
 			};
 
-			// Example of configuration settings for images import created without ImportDocumentSettingsBuilder.
-			ImportDocumentSettings importSettings = new ImportDocumentSettings()
+			// Configuration of RDO import settings. Create settings manually - without builder.
+			ImportRdoSettings importSettings = new ImportRdoSettings()
 			{
 				Overlay = new OverlaySettings
 				{
 					Mode = OverlayMode.AppendOverlay,
-					KeyField = default,
+					KeyField = "Name",
 					MultiFieldOverlayBehaviour = MultiFieldOverlayBehaviour.UseRelativityDefaults,
 				},
-				Native = null,
-				Image = new ImageSettings
+				Fields = new FieldsSettings
 				{
-					PageNumbering = PageNumbering.AutoNumberImages,
-					ProductionID = null,
-					LoadExtractedText = true,
-				},
-				Fields = null,
-				Folder = new FolderSettings
-				{
-					FolderPathColumnIndex = null,
-					RootFolderID = rootFolderId,
-				},
-				Other = new OtherSettings
-				{
-					ExtractedText = new ExtractedTextSettings
+					FieldMappings = new[]
 					{
-						ValidateEncoding = true,
+						new FieldMapping
+						{
+							Field = "Name",
+							ContainsID = false,
+							ColumnIndex = nameColumnIndex,
+							ContainsFilePath = false,
+						},
+						// Use sample01 and load_file_01.dat first to import documents. The following fields have reference to these documents.
+						// If you do not use these fields please just comment them.
+						new FieldMapping
+						{
+							Field = "Domains (Email CC)",
+							ContainsID = false,
+							ColumnIndex = domainEmailCcColumnIndex,
+							ContainsFilePath = false,
+						},
+						new FieldMapping
+						{
+							Field = "Domains (Email From)",
+							ContainsID = false,
+							ColumnIndex = domainEmailFromColumnIndex,
+							ContainsFilePath = false,
+						},
+						new FieldMapping
+						{
+							Field = "Domains (Email To)",
+							ContainsID = false,
+							ColumnIndex = domainEmailToColumnIndex,
+							ContainsFilePath = false,
+						},
 					},
+				},
+				Rdo = new RdoSettings
+				{
+					ArtifactTypeID = rdoArtifactTypeID,
+					ParentColumnIndex = null,
 				},
 			};
 
 			// Create payload for request.
 			var importSettingPayload = new { importSettings };
 
-			// Configuration settings for data source created without DataSourceSettingsBuilder.
+			// Configuration settings for data source. Create settings manually - without builder.
 			DataSourceSettings dataSourceSettings = new DataSourceSettings
 			{
-				Type = DataSourceType.Opticon,
-				Path = "C:\\DefaultFileRepository\\samples\\opticon_01.opt",
-				NewLineDelimiter = default,
-				ColumnDelimiter = default,
-				QuoteDelimiter = default,
-				MultiValueDelimiter = default,
-				NestedValueDelimiter = default,
+				Type = DataSourceType.LoadFile,
+				Path = "C:\\DefaultFileRepository\\samples\\rdo_load_file_02.dat",
+				NewLineDelimiter = '#',
+				ColumnDelimiter = '|',
+				QuoteDelimiter = '^',
+				MultiValueDelimiter = '$',
+				NestedValueDelimiter = '&',
 				Encoding = null,
 				CultureInfo = "en-us",
 				EndOfLine = DataSourceEndOfLine.Windows,
-				FirstLineContainsColumnNames = false,
+				FirstLineContainsColumnNames = true,
 				StartLine = 0,
 			};
 
@@ -107,10 +137,10 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			var response = await httpClient.PostAsJsonAsync(createImportJobUri, createJobPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
-			// Add import document settings to existing import job (configure import job).
-			// endpoint: POST /import-jobs/{importId}/documents-configurations
-			var documentConfigurationUri = RelativityImportEndpoints.GetDocumentConfigurationUri(workspaceId, importId);
-			response = await httpClient.PostAsJsonAsync(documentConfigurationUri, importSettingPayload);
+			// Add import rdo settings to existing import job (configure import job).
+			// endpoint: POST /import-jobs/{importId}/rdos-configurations
+			var rdoConfigurationUri = RelativityImportEndpoints.GetRdoConfigurationUri(workspaceId, importId);
+			response = await httpClient.PostAsJsonAsync(rdoConfigurationUri, importSettingPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
 			// Add data source settings to existing import job.
@@ -159,7 +189,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			{
 				Console.WriteLine("\n");
 				Console.WriteLine($"Data source state: {dataSourceState}");
-				Console.WriteLine($"Import data source progress: Total records: {valueResponse.Value.TotalRecords}, Imported records: {valueResponse.Value.ImportedRecords}, Records with errors: {valueResponse.Value.ErroredRecords}");
+				Console.WriteLine(
+					$"Import data source progress: Total records: {valueResponse.Value.TotalRecords}, Imported records: {valueResponse.Value.ImportedRecords}, Records with errors: {valueResponse.Value.ErroredRecords}");
 			}
 		}
 	}
@@ -167,5 +198,5 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 
 /* Expected console result:
 	Data source state: Completed
-	Import data source progress: Total records: 5, Imported records: 5, Records with errors: 0
+	Import data source progress: Total records: 3, Imported records: 3, Records with errors: 0
  */

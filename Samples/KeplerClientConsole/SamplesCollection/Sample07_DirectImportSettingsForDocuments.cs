@@ -1,4 +1,4 @@
-﻿// <copyright file="Sample07_ImportDocumentSettingsForNatives.cs" company="Relativity ODA LLC">
+﻿// <copyright file="Sample07_DirectImportSettingsForDocuments.cs" company="Relativity ODA LLC">
 // © Relativity All Rights Reserved.
 // </copyright>
 
@@ -21,9 +21,9 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 		/// Settings to be used to import images.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-		public async Task Sample07_ImportDocumentSettingsForNatives()
+		public async Task Sample07_DirectImportSettingsForDocuments()
 		{
-			Console.WriteLine($"Running {nameof(Sample07_ImportDocumentSettingsForNatives)}");
+			Console.WriteLine($"Running {nameof(Sample07_DirectImportSettingsForDocuments)}");
 
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
