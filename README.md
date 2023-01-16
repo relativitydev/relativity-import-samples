@@ -5,7 +5,7 @@
 **[Prerequisites](#prerequisites)**<br>
 **[Glossary](#glossary)**<br>
 ### **[Getting Started](#getting-started-1)**
-**[NuGet Libraries](#importservicesdk)**<br>
+**[NuGet Libraries](#relativityimportsdk)**<br>
 **[Authorization](#authorization)**<br>
 **[Permissions](#permissions)**<br>
 **[Builders](#builders)**<br>
@@ -54,7 +54,7 @@ Job and data sources configurations allow you to flexibly adjust the import to y
 
 
 4. The following packages installed in client application:
-   - [Import.Service.SDK](#importservicesdk) 
+   - [Relativity.Import.SDK](#relativityimportsdk) 
    - [Relativity.Kepler.Client.SDK](https://www.nuget.org/packages/Relativity.Kepler.Client.SDK)
 
    *NOTE*: Required only when Kepler .NET client is used.
@@ -93,7 +93,7 @@ The following sections outline how to make calls to import service.
         
         var response = await httpClient.PostAsJsonAsync(createImportJobUri, payload);
 
-In case of using .NET client the [Import.Service.SDK.Models](#importservicesdkmodels) package containing contract models would be used.
+In case of using .NET client the [Relativity.Import.Models.SDK](#relativityimportmodelssdk) package containing contract models would be used.
 
   Please look at dedicated [code samples](#samples) for .NET 7 or for PowerShell scripts.
 
@@ -101,7 +101,7 @@ In case of using .NET client the [Import.Service.SDK.Models](#importservicesdkmo
 
 You can access Kepler service from any .NET language using the client library provided as part of the Kepler framework. It exposes a factory class that you can use to create the client proxy by passing URIs to import services and credentials. Then use .NET proxy to interact with a import service as a set of .NET objects. When you call a member method, the proxy makes a corresponding HTTP request to the respective service endpoint. [more details](https://platform.relativity.com/RelativityOne/index.htm#Kepler_framework/Kepler_framework.htm#Client-s) 
 
-Kepler contract for import service are exposed in [Import.Service.SDK](importservicesdk) package.
+Kepler contract for import service are exposed in [Relativity.Import.SDK](relativityimportsdk) package.
 
 
         using (Relativity.Import.V1.Services.IImportJobController importJobController =_serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
@@ -118,38 +118,38 @@ Kepler contract for import service are exposed in [Import.Service.SDK](importser
   Please look at dedicated [code samples](#samples) for .NET 4.6.2 with Kepler.
 
 ---
-## Import.Service.SDK ###
+## Relativity.Import.SDK ###
 
-Import.Service.SDK is a .NET library that contains kepler interfaces for import service.
+Relativity.Import.SDK is a .NET library that contains kepler interfaces for import service.
 It provides and simplifies executing import in client application.
-Import.Service.SDK targets .NET Framework 4.6.2
+Relativity.Import.SDK targets .NET Framework 4.6.2
 
 **NOTE: Use this package when your application USE keplers.**
 
 
-[![Version](https://img.shields.io/nuget/v/Import.Service.SDK.svg?color=royalblue)](https://www.nuget.org/packages/Import.Service.SDK)
-[![Downloads](https://img.shields.io/nuget/dt/Import.Service.SDK?color=green)](https://www.nuget.org/packages/Import.Service.SDK)
+[![Version](https://img.shields.io/nuget/v/Relativity.Import.SDK.svg?color=royalblue)](https://www.nuget.org/packages/Relativity.Import.SDK)
+[![Downloads](https://img.shields.io/nuget/dt/Relativity.Import.SDK?color=green)](https://www.nuget.org/packages/Relativity.Import.SDK)
 <br>  
 
 ### **Installing via NuGet** 
 
-        Install-Package Import.Service.SDK 
+        Install-Package Relativity.Import.SDK 
 
-## Import.Service.SDK.Models ###
-Import.Service.SDK.Models is a .NET library that contains contract models for API and [builders](#builders) which help user to prepare payloads in correct and consistent way.
-Import.Service.SDK.Models targets .NET Standard 2.0. The NuGet package also includes direct targets for .NET Framework 4.6.2.
+## Relativity.Import.Models.SDK ###
+Relativity.Import.Models.SDK is a .NET library that contains contract models for API and [builders](#builders) which help user to prepare payloads in correct and consistent way.
+Relativity.Import.Models.SDK targets .NET Standard 2.0. The NuGet package also includes direct targets for .NET Framework 4.6.2.
 <br/>  
 **NOTE:**
-This package is automatically installed as dependency when using Import.Service.SDK.
+This package is automatically installed as dependency when using Relativity.Import.SDK.
 
-**NOTE:** You can install this package directly when your application does not use keplers.
+**NOTE:** You can install this package directly when your application does not use Kepler.
 <br/> 
 
 
-[![Version](https://img.shields.io/nuget/v/Import.Service.SDK.Models.svg?color=royalblue)](https://www.nuget.org/packages/Import.Service.SDK.Models)
-[![Downloads](https://img.shields.io/nuget/dt/Import.Service.SDK.Models?color=green)](https://www.nuget.org/packages/Import.Service.SDK.Models)
+[![Version](https://img.shields.io/nuget/v/Relativity.Import.Models.SDK.svg?color=royalblue)](https://www.nuget.org/packages/Relativity.Import.Models.SDK)
+[![Downloads](https://img.shields.io/nuget/dt/Relativity.Import.Models.SDK?color=green)](https://www.nuget.org/packages/Relativity.Import.Models.SDK)
 ### **Installing via NuGet** 
-        Install-Package Import.Service.SDK.Models
+        Install-Package Relativity.Import.Models.SDK
 
 ---
 ## Authorization
@@ -187,7 +187,7 @@ The following Relativity permissions are required to use import features provide
 
 ## Builders
 
-Builders provided in Import.Service.SDK.Models package help to create settings for import job and data source in correct and consistent way. It is highly recommended to prepare these objects in such a way in .NET application. They are implemented in fluent api pattern so it is very easy to use them. Moreover, using them in client application will avoid the risk of incorrect and inconsistent configuration
+Builders provided in Relativity.Import.Models.SDK package help to create settings for import job and data source in correct and consistent way. It is highly recommended to prepare these objects in such a way in .NET application. They are implemented in fluent api pattern so it is very easy to use them. Moreover, using them in client application will avoid the risk of incorrect and inconsistent configuration
 which may lead to errors during import process.
 
 *ImportDocumentsSettingsBuilder* - builds ImportDocumentsSettings used for import job configuration (documents import).
