@@ -4,7 +4,7 @@
 ### **[Introduction](#introduction)**
 **[Prerequisites](#prerequisites)**<br>
 **[Glossary](#glossary)**<br>
-### **[Getting Started](#getting-started)**
+### **[Getting Started](#getting-started-1)**
 **[NuGet Libraries](#importservicesdk)**<br>
 **[Authorization](#authorization)**<br>
 **[Permissions](#permissions)**<br>
@@ -61,13 +61,13 @@ Job and data sources configurations allow you to flexibly adjust the import to y
 ***
 ## Glossary
 
-**Data importing** - Functionality that makes that structured data set are uploading into destination workspace.
+**Data importing** - Functionality that makes that structured data set are uploaded into destination workspace.
 
 **Dataset** - Structured data containing metadata, native documents, images, text files described by load file or opticon file.
-Such a dataset can be pointed during data source configuration and MUST be located in accessible place for workspace. 
+Such a dataset can be pointed during data source configuration and MUST be located in place accessible for workspace. 
 
 **ImportJob** - It is the main object in import service taking part in import flow. It represents single import entity described by its configuration which decides about import behavior e.g. import type, overlay mode, fields mapping, etc.  
-In addition, ImportJob object holds the information about its current state and importing progress.
+In addition, ImportJob object holds the information about its current state and import progress.
 Import jobs aggregates dataSources - single import job can consists of many sources.
 
 **DataSource**  - It is an object that corresponds to single set of data to be imported. Each data source has own configuration that indicates the physical location of data set (load file). Data set configuration affects also how data in load file are read.
@@ -76,7 +76,7 @@ In addition, data source stores the information about current state and import p
 **Kepler service** - API service created but using the Relativity Kepler framework. This framework provides you with the ability to build custom REST Endpoints via a .NET interface. Additionally, the Kepler framework includes a client proxy that you can use when interacting with the services through .NET. [See more information](https://platform.relativity.com/RelativityOne/index.htm#Kepler_framework/Kepler_framework.htm#Client-s)
 
 ---
-# Getting Started ##
+# Getting Started
 Import Service is built as a standard Relativity Kepler Service. It provides sets of endpoints that must be called sequentially in order to execute import.
 The following sections outline how to make calls to import service.
     
@@ -858,7 +858,7 @@ Data source state can be read from GET Data source details response
 
 Error handling in Import Service returns Error Codes and Error Messages:
  - in every response for failed HTTP request
- - when requested by user for all item errors that occurred during importing particular data source e.g.:
+ - when requested by user for all item errors that occurred during importing of particular data source e.g.:
 
  > curl
 
