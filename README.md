@@ -25,19 +25,19 @@
 # Introduction
 The ***Relativity Import Service API***  is a Kepler service that provides functionality for importing large numbers of documents, images, and Relativity Dynamic Objects (RDOs) into a Relativity workspace. 
 The import process operates on structured data sets that are described by load file and placed in an accessible place for workspace.  
-The main principle of operation is based on creating managed importing job with a list of data set (intended for import) assigned to it.
+The main principle of operation is based on creating managed importing job with a list of data sets (intended for import) assigned to it.
 <br>
 
 Thanks to RESTful API you are able to easily create import job, configure it and run it. 
-Dataset (containing structured data) that you want to import can be then added as a source to the job. The system (scheduler and supervisor) will take care of it in the background by adding source to the queue, starting the import data to destination workspace, and if necessary, resuming the import process. All that remains for the user is to monitor the status of import and current progress - all using  provided API.
+Dataset (containing structured data) that you want to import can be then added as a source to the job. The system will take care of it in the background by adding this source to the queue, scheduling and finally starting the import data to destination workspace, and if necessary, resuming the import process. All that remains for the user is to monitor the status of import and current progress - all using  provided API.
 
-Job and data sources configurations allow you to flexibly adjust the import to your needs. In additional, the adopted error handling helps you to identify the source of potential problems. 
+Job and data sources configurations allow you to flexibly adjust the import to your needs. In addition, the adopted error handling helps you to identify the source of potential problems. 
 
  NOTE: Import Service (*Import*) is delivered as a RAP application installed in Relativity One.
 
 # Prerequisites
 
-1. The following Relativity application must be installed:
+1. The following Relativity applications must be installed:
 
 
 
@@ -66,14 +66,14 @@ Job and data sources configurations allow you to flexibly adjust the import to y
 **Dataset** - Structured data containing metadata, native documents, images, text files described by load file or opticon file.
 Such a dataset can be pointed during data source configuration and MUST be located in accessible place for workspace. 
 
-**ImportJob** - It is the main object in import service taking part in import flow. It represents single import entity described by its configuration which decided about import behavior e.g. import type, overlay mode, fields mapping.  
-In additional ImportJob object hold the information about its current state and importing progress.
-Import jobs aggregates dataSources -single import job can consists of many sources.
+**ImportJob** - It is the main object in import service taking part in import flow. It represents single import entity described by its configuration which decides about import behavior e.g. import type, overlay mode, fields mapping, etc.  
+In addition, ImportJob object hold the information about its current state and importing progress.
+Import jobs aggregates dataSources - single import job can consists of many sources.
 
 **DataSource**  - It is an object that corresponds to single set of data to be imported. Each data source has own configuration that indicates the physical location of data set (load file). Data set configuration affects also how data in load file are read.
-In additional data source stores the information about current state and import progress of particular source.
+In addition, data source stores the information about current state and import progress of particular source.
 
-**Kepler service** - API service created bt using the Relativity Kepler framework. This framework provides you with the ability to build custom REST Endpoints via a .NET interface. Additionally, the Kepler framework includes a client proxy that you can use when interacting with the services through .NET. [See more information](https://platform.relativity.com/RelativityOne/index.htm#Kepler_framework/Kepler_framework.htm#Client-s)
+**Kepler service** - API service created but using the Relativity Kepler framework. This framework provides you with the ability to build custom REST Endpoints via a .NET interface. Additionally, the Kepler framework includes a client proxy that you can use when interacting with the services through .NET. [See more information](https://platform.relativity.com/RelativityOne/index.htm#Kepler_framework/Kepler_framework.htm#Client-s)
 
 ---
 # Getting Started ##
@@ -93,7 +93,7 @@ The following sections outline how to make calls to import service.
 
 In case of using .NET client the [Import.Service.SDK.Models](#importservicesdkmodels) package containing contract models would be used.
 
-  Please investigate dedicated code samples for .NET 7 or for PowerShell scripts.
+  Please investigate dedicated [code samples](#samples) for .NET 7 or for PowerShell scripts.
 
 > Kepler .NET client
 
@@ -113,7 +113,7 @@ Kepler contract for import service are exposed in [Import.Service.SDK](importser
             }
         }
 
-  Please investigate dedicated code samples for .NET 4.6.2 with Kepler.
+  Please investigate dedicated [code samples](#samples) for .NET 4.6.2 with Kepler.
 
 ---
 ## Import.Service.SDK ###
@@ -134,7 +134,7 @@ Import.Service.SDK targets .NET Framework 4.6.2
         Install-Package Import.Service.SDK 
 
 ## Import.Service.SDK.Models ###
-Import.Service.SDK.Models is a NET library that contains contract models for API and [builders](#builders) which help user to prepare payloads in correct and consistent way.
+Import.Service.SDK.Models is a .NET library that contains contract models for API and [builders](#builders) which help user to prepare payloads in correct and consistent way.
 Import.Service.SDK.Models targets .NET Standard 2.0. The NuGet package also includes direct targets for .NET Framework 4.6.2
 <br/>  
 **NOTE:**
@@ -856,9 +856,9 @@ Data source state can be read from GET Data source details response
 
 # Error Codes
 
-Error handling in import service returns Error Codes and Error Message:
+Error handling in Import Service returns Error Codes and Error Messages:
  - in every response for failed HTTP request
- - requested by user for all item errors occurred during import particular data source e.g.:
+ - when requested by user for all item errors that occurred during importing particular data source e.g.:
 
  > curl
 
@@ -921,10 +921,10 @@ Resources
 |Resource code|Description  |
 |-------------|-------------|
 |J            |Job          |
-|C            |Configuration|
+|C            |Document Configuration|
 |S            |Source       |
 |E            |ItemErrors   |
-|R            |RDO Conf.    |
+|R            |RDO Configuration.    |
 
 Actions
 ---
@@ -987,19 +987,18 @@ Meaning of the second digit differs for each error type.
 # Samples
 
 ## Samples types and structure
-There are three types of sample application that presents the using of import service API features.
-- .Net7ConsoleClient: C# console application  (targets .NET 7)
-- .KeplerClientConsole: C# console application (targets .NET 4.6.2 and using Kepler client)
-- Rest Samples: sets of powershell scripts
+There are three types of sample application that demonstrate the use of Import Service API features.
+- .Net7ConsoleClient - .NET console application  (.NET 7, C#).
+- KeplerClientConsole - .NET console application (.NET Framework 4.6.2, Kepler client, C#).
+- REST client -  Powershell scripts.
 
-Sample structure
-- Each sample import flow is presented in separate file (e.g. [Sample04_AddDataSourceToRunningJob.cs](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample04_AddDataSourceToRunningJob.cs).
-- Each code file/class with sample flow is numbered
-- All samples for each application are consistent. e.g. Sample 08 presenting the same import flow  in Net7ConsoleClient, KeplerClientConsole and powerhsell script.
-- Sample code contains comments related to invoking endpoints
-- Sample code contains expected result for each presenting import flow. 
-- Samples code contains also sets of data (natives, images, loadfiles)
-
+Examples structure:
+- Each code example for particular import flow is contained in separate file (e.g. [Sample04_AddDataSourceToRunningJob.cs](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample04_AddDataSourceToRunningJob.cs)).
+- Each sample is numbered. Number of sample is included in file and class name.
+- The individual samples for each application are consistent. For instance Sample_08 in Net7ConsoleClient presents the same import flow as in KeplerClientConsole and in PS scripts.
+- Sample code contains accurate comments describing the flow. 
+- Expected console result of demonstrated sample flow is included at the end of the file. 
+- Repository with samples contains also structured data set used in all examples - load files, opticon files, folders structure with native files, images, text files.
 
 List of samples:
 | Sample name | .Net with Kepler| .NET | PowerShell |
@@ -1010,14 +1009,14 @@ List of samples:
 | Sample04_AddDataSourceToRunningJob|  [Sample04](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample04_AddDataSourceToRunningJob.cs) | [Sample04](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample04_AddDataSourceToRunningJob.cs) | [Sample04](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample04-add-data-source-to-running-job.ps1) | 
 | Sample05_ImportDocumentsWithExtractedText | [Sample05](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample05_ImportDocumentsWithExtractedText.cs) | [Sample05](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample05_ImportDocumentsWithExtractedText.cs) | [Sample05](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample05-import-documents-with-extracted-text.ps1) | 
 | Sample06_ImportDocumentsToSelectedFolder | [Sample06](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample06_ImportDocumentsToSelectedFolder.cs) | [Sample06](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample06_ImportDocumentsToSelectedFolder.cs) | [Sample06](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample06-import-documents-to-selected-folder.ps1) | 
-| Sample07_ImportDocumentSettingsForNatives | [Sample07](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample07_ImportDocumentSettingsForNatives.cs) | [Sample07](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample07_ImportDocumentSettingsForNatives.cs) | [Sample07](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample07-import-document-settings-for-natives.ps1) | 
+| Sample07_DirectImportSettingsForDocuments.cs | [Sample07](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample07_DirectImportSettingsForDocuments.cs) | [Sample07](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample07_DirectImportSettingsForDocuments.cs) | [Sample07](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample07-direct-import-settings-for-documents.ps1) | 
 | Sample08_ImportImages | [Sample08](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample08_ImportImages.cs) | [Sample08](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample08_ImportImages.cs) | [Sample08](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample08-import-images.ps1) | 
  | Sample09_ImportProductionFiles | [Sample09](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample09_ImportProductionFiles.cs) | [Sample09](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample09_ImportProductionFiles.cs) | [Sample09](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample09-import-production-files.ps1) | 
  | Sample10_ImportImagesInAppendOverlayMode |[Sample10](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample10_ImportImagesInAppendOverlayMode.cs) | [Sample10](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample10_ImportImagesInAppendOverlayMode.cs) | [Sample10](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample10-import-images-in-append-overlay-mode.ps1) | 
- | Sample11_ImportDocumentSettingsForImages| [Sample11](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample11_ImportDocumentSettingsForImages.cs) | [Sample11](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample11_ImportDocumentSettingsForImages.cs) | [Sample11](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample11-import-document-settings-for-images.ps1) | 
+ | Sample11_DirectImportSettingsForImages| [Sample11](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample11_DirectImportSettingsForImages.cs) | [Sample11](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample11_DirectImportSettingsForImages.cs) | [Sample11](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample11-direct-import-settings-for-images.ps1) | 
  | Sample12_ImportRelativityDynamicObject | [Sample12](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample12_ImportRelativityDynamicObject.cs) | [Sample12](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample12_ImportRelativityDynamicObject.cs) | [Sample12](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample12-import-relativity-dynamic-object.ps1) | 
  | Sample13_ImportRdoWithParent | [Sample13](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample13_ImportRdoWithParent.cs) | [Sample13](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample13_ImportRdoWithParent.cs) | [Sample13](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample13-import-rdo-with-parent.ps1) | 
- | Sample14_ImportRdoSettings | [Sample14](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample14_ImportRdoSettings.cs) | [Sample14](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample14_ImportRdoSettings.cs) | [Sample14](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample14-import-rdo-settings.ps1) | 
+ | Sample14_DirectImportSettingsForRdo | [Sample14](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample14_DirectImportSettingsForRdo.cs) | [Sample14](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample14_DirectImportSettingsForRdo.cs) | [Sample14](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample14-direct-import-settings-for-rdo.ps1) | 
  | Sample15_ReadImportRdoSettings|  [Sample15](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample15_ReadImportRdoSettings.cs) | [Sample15](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample15_ReadImportRdoSettings.cs) | [Sample15](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample15-read-import-rdo-settings.ps1) | 
  | Sample16_ReadImportDocumentSettings | [Sample16](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample16_ReadImportDocumentSettings.cs) | [Sample16](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample16_ReadImportDocumentSettings.cs) | [Sample16](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample16-read-import-document-settings.ps1) | 
  | Sample17_GetImportJobs | [Sample17](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample17_GetImportJobs.cs) | [Sample17](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample17_GetImportJobs.cs) | [Sample17](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample17-read-import-jobs.ps1) | 
@@ -1033,7 +1032,7 @@ List of samples:
  
  To run a sample code:
  
- - First, copy the content of [sample dataset](https://github.com/relativitydev/relativity-import-samples/tree/main/SampleDataSources) to your Relativity fileshare.
+ - Copy the content of [sample dataset](https://github.com/relativitydev/relativity-import-samples/tree/main/SampleDataSources) to your Relativity fileshare.
  - Uncomment line with sample invocation you want to run in Main method.  
 
             // await sampleCollection.Sample08_ImportImages();
@@ -1058,7 +1057,7 @@ List of samples:
         // destination workspace artifact Id.
         const int workspaceId = 1000000;
 
- - Updated other Ids related to your workspace - productionSetsArtifactId , rootFolderId,rdoArtifactTypeID. They are required only by specific samples.
+ - Update other Ids related to your workspace - productionSetsArtifactId , rootFolderId,rdoArtifactTypeID. They are required only by specific samples.
  - Update const which defines the path to the load file (e.g. const string  loadFile01Path) according to the location where you copied sample data.
 
  
@@ -1073,7 +1072,7 @@ List of samples:
  
  To run a sample code:
  
- - First, copy the content of [sample dataset](https://github.com/relativitydev/relativity-import-samples/tree/main/SampleDataSources) to your Relativity fileshare.
+ - Copy the content of [sample dataset](https://github.com/relativitydev/relativity-import-samples/tree/main/SampleDataSources) to your Relativity fileshare.
  - Uncomment line with sample invocation you want to run in Main method.
  - Set the proper credentials and host address of your Relativity instance in [RelativityUserSettings](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/ImportSampleHelpers/RelativityUserSettings.cs) helper class.
 
@@ -1088,7 +1087,7 @@ List of samples:
 	    }
 
  - Update workspaceId const to the proper value equal Id of the workspace where you intend to import data. It is required in each sample. 
- - Updated other Ids related to your workspace - productionSetsArtifactId , rootFolderId,rdoArtifactTypeID. They are required only by specific samples.
+ - Update other Ids related to your workspace - productionSetsArtifactId , rootFolderId,rdoArtifactTypeID. They are required only by specific samples.
  - Update const which defines the path to the load file (e.g. const string  loadFile01Path) according to the location where you copied sample data.
  - Run application 
 
@@ -1096,7 +1095,10 @@ List of samples:
  
  To run a sample code:
  
- - First, copy the content of [sample dataset](https://github.com/relativitydev/relativity-import-samples/tree/main/SampleDataSources) to your Relativity fileshare.
+ - Install Powershell "Pester" Module  (ver. >= 5.3.3)
+ 
+        Find-Module -Name "Pester" | Install-Module -Force;
+ - Copy the content of [sample dataset](https://github.com/relativitydev/relativity-import-samples/tree/main/SampleDataSources) to your Relativity fileshare.
 
 - Uncomment line with sample invocation you want to run in [run-sample-Import.ps1](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/run-sample-Import.ps1).
 
@@ -1118,8 +1120,9 @@ List of samples:
         $workspaceId = 1000000
         $loadFilePath = "C:\DefaultFileRepository\samples\load_file_01.dat"
 
- - Updated other Ids related to your workspace - productionSetsArtifactId , rootFolderId,rdoArtifactTypeID. They are required only by specific samples.
+ - Update other Ids related to your workspace - productionSetsArtifactId , rootFolderId,rdoArtifactTypeID. They are required only by specific samples.
 
- - Invoke run-sample-Import.ps1
+
+ - Invoke run-sample-import.ps1
 
 
