@@ -24,7 +24,7 @@
 
 # Introduction
 The ***Relativity Import Service API***  is a Kepler service that provides functionality for importing large numbers of documents, images, and Relativity Dynamic Objects (RDOs) into a Relativity workspace. 
-The import process operates on structured data sets that are described by load file and placed in an accessible place for workspace.  
+The import process operates on structured data sets that are described by load file and located in a place accessible for workspace.  
 The main principle of operation is based on creating managed importing job with a list of data sets (intended for import) assigned to it.
 <br>
 
@@ -61,13 +61,13 @@ Job and data sources configurations allow you to flexibly adjust the import to y
 ***
 ## Glossary
 
-**Data importing** - Functionality that makes that structured data set goes into destination workspace.
+**Data importing** - Functionality that makes that structured data set are uploading into destination workspace.
 
 **Dataset** - Structured data containing metadata, native documents, images, text files described by load file or opticon file.
 Such a dataset can be pointed during data source configuration and MUST be located in accessible place for workspace. 
 
 **ImportJob** - It is the main object in import service taking part in import flow. It represents single import entity described by its configuration which decides about import behavior e.g. import type, overlay mode, fields mapping, etc.  
-In addition, ImportJob object hold the information about its current state and importing progress.
+In addition, ImportJob object holds the information about its current state and importing progress.
 Import jobs aggregates dataSources - single import job can consists of many sources.
 
 **DataSource**  - It is an object that corresponds to single set of data to be imported. Each data source has own configuration that indicates the physical location of data set (load file). Data set configuration affects also how data in load file are read.
@@ -93,7 +93,7 @@ The following sections outline how to make calls to import service.
 
 In case of using .NET client the [Import.Service.SDK.Models](#importservicesdkmodels) package containing contract models would be used.
 
-  Please investigate dedicated [code samples](#samples) for .NET 7 or for PowerShell scripts.
+  Please look at dedicated [code samples](#samples) for .NET 7 or for PowerShell scripts.
 
 > Kepler .NET client
 
@@ -113,12 +113,12 @@ Kepler contract for import service are exposed in [Import.Service.SDK](importser
             }
         }
 
-  Please investigate dedicated [code samples](#samples) for .NET 4.6.2 with Kepler.
+  Please look at dedicated [code samples](#samples) for .NET 4.6.2 with Kepler.
 
 ---
 ## Import.Service.SDK ###
 
-Import.Service.SDK is a .NET library that contains keplers interfaces for import service.
+Import.Service.SDK is a .NET library that contains kepler interfaces for import service.
 It provides and simplifies executing import in client application.
 Import.Service.SDK targets .NET Framework 4.6.2
 
@@ -135,7 +135,7 @@ Import.Service.SDK targets .NET Framework 4.6.2
 
 ## Import.Service.SDK.Models ###
 Import.Service.SDK.Models is a .NET library that contains contract models for API and [builders](#builders) which help user to prepare payloads in correct and consistent way.
-Import.Service.SDK.Models targets .NET Standard 2.0. The NuGet package also includes direct targets for .NET Framework 4.6.2
+Import.Service.SDK.Models targets .NET Standard 2.0. The NuGet package also includes direct targets for .NET Framework 4.6.2.
 <br/>  
 **NOTE:**
 This package is automatically installed as dependency when using Import.Service.SDK.
@@ -153,24 +153,24 @@ This package is automatically installed as dependency when using Import.Service.
 ## Authorization
 > HTTP clients 
 
-Import Service API conforms to the same authentication rules like others Relativity REST APIs. 
+Import Service API conforms to the same authentication rules as other Relativity REST APIs. 
 
-The more details can be find under the following link:
+The more details can be found under the following link:
 [REST_API_authentication](https://platform.relativity.com/RelativityOne/Content/REST_API/REST_API_authentication.htm)
 
 > Kepler .NET client
 
-The Kepler framework uses a proxy to handle client requests. The more details can be find under the following link:
+The Kepler framework uses a proxy to handle client requests. The more details can be found under the following link:
 [Proxies_and_authentication](https://platform.relativity.com/RelativityOne/Content/Kepler_framework/Proxies_and_authentication.htm#Service)
 
 ---
 ## Permissions
-The following Relativity permissions are required to use importing features provided in Import Service API.
+The following Relativity permissions are required to use import features provided in Import Service API.
 
 | Object Security section| Permission |
 | :---- | :----: |
 | •	Document |	View, Add, Edit |
-| •	Relativity Import Job: View, Add, Edit |	View, Add, Edit |
+| •	Relativity Import Job: |	View, Add, Edit |
 | •	Relativity Import Data Source |	View, Add, Edit |
 
 | Tab Visibility|
@@ -246,7 +246,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
 
 2. **Configure Import Job**
 
-    Configures existing import job by defining sets of significant parameters including import type, its mode, field mapping. This step covers two configuration options: 
+    Configures existing import job by defining sets of significant parameters including import type, its mode, fields mapping. This step covers two configuration options: 
     - Documents Configuration 
 
     - Rdos Configuration.
@@ -267,14 +267,14 @@ The general flow includes several steps consisted in sending appropriate HTTP re
   User can add additional sources to running importJob.
 
 6. **End Import Job** 
-  Ends import job that was already started. It is optional step but it is highly recommended in case when no more data source is plan to be added for particular job.
+  Ends import job that was already started. It is optional step but it is highly recommended in case when no more data source is plan to be added for particular job. All data sources added to the job before the end request was sent will be imported.
 
 ## Example of Simple Import Documents Flow
 1.  **Create Import Job** 
         
     > curl
     
-         curl -X 'POST' 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/e694ad62-198d-4ecb-936d-1862ddfa4235"
+         curl -X POST 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/e694ad62-198d-4ecb-936d-1862ddfa4235'
         -H 'X-CSRF-Header: -' 
         -d '{
         "applicationName": "simpleImportDocuments",
@@ -286,7 +286,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
 
     > curl
 
-        curl -X 'POST' \'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/e694ad62-198d-4ecb-936d-1862ddfa4235/documents-configurations/' 
+        curl -X POST \'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/e694ad62-198d-4ecb-936d-1862ddfa4235/documents-configurations/' 
         -H 'X-CSRF-Header: -' 
         -d "$importSettingsPayloadJson"
 
@@ -370,7 +370,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
 3. **Add DataSource** 
     > curl
 
-        curl -X 'POST' 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/e694ad62-198d-4ecb-936d-1862ddfa4235/sources/0cb922a2-8df4-42fd-9429-c241410a0d1e'
+        curl -X POST 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/e694ad62-198d-4ecb-936d-1862ddfa4235/sources/0cb922a2-8df4-42fd-9429-c241410a0d1e'
         -H 'X-CSRF-Header: -' \
         -H 'Content-Type: application/json' 
         -d "$dataSourceSettingsJson"
@@ -382,7 +382,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
 
         {
         "dataSourceSettings": {
-            "Path": "//fileshare//path//load_file.dat",
+            "Path": "C:\\DefaultFileRepository\\samples\\load_file.dat",
             "FirstLineContainsColumnNames": true,
             "StartLine": 1,
             "ColumnDelimiter": "|",
@@ -400,7 +400,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
     > C# builders
    
 			DataSourceSettings dataSourceSettings = DataSourceSettingsBuilder.Create()
-				.ForLoadFile("//fileshare//path//load_file.dat)
+				.ForLoadFile("C:\\DefaultFileRepository\\samples\\load_file.dat")
 				.WithDelimiters(d => d
 					.WithColumnDelimiters('|')
 					.WithQuoteDelimiter('^')
@@ -418,7 +418,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
 			DataSourceSettings dataSourceSettings = new DataSourceSettings
 			{
 				Type = DataSourceType.LoadFile,
-				Path = "//fileshare//path//load_file.dat",
+				Path = "C:\\DefaultFileRepository\\samples\\load_file.dat",
 				NewLineDelimiter = '#',
 				ColumnDelimiter = '|',
 				QuoteDelimiter = '^',
@@ -436,7 +436,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
 4. **Begin Job**
     > curl
 
-        curl -X 'POST' 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/e694ad62-198d-4ecb-936d-1862ddfa4235/begin/' 
+        curl -X POST 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/e694ad62-198d-4ecb-936d-1862ddfa4235/begin/' 
         -H 'X-CSRF-Header: -' 
         -d ''
 
@@ -446,7 +446,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
 
     > curl
 
-        curl -X 'POST' 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/e694ad62-198d-4ecb-936d-1862ddfa4235/end/'
+        curl -X POST 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/e694ad62-198d-4ecb-936d-1862ddfa4235/end/'
         -H 'X-CSRF-Header: -' 
         -d ''
 
@@ -458,7 +458,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
 1. **Create Import Job** 
     > curl
 
-        curl -X 'POST' 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/4c4215bf-d8a3-48d4-a3e0-3a40428415e7/'
+        curl -X POST 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/4c4215bf-d8a3-48d4-a3e0-3a40428415e7/'
         -H 'X-CSRF-Header: -' 
         -d '{
         "applicationName": "simpleImportImages",
@@ -468,7 +468,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
 2. **Create Import Job Configuration**
     > curl
 
-        curl -X 'POST' \'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/4c4215bf-d8a3-48d4-a3e0-3a40428415e7/documents-configurations/' 
+        curl -X POST \'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/4c4215bf-d8a3-48d4-a3e0-3a40428415e7/documents-configurations/' 
         -H 'X-CSRF-Header: -' 
         -d "$importSettings"
 
@@ -510,7 +510,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
 
     > curl
 
-            curl -X 'POST' 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/4c4215bf-d8a3-48d4-a3e0-3a40428415e7/sources/0cb922a2-8df4-42fd-9429-c241410a0002'
+            curl -X POST 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/4c4215bf-d8a3-48d4-a3e0-3a40428415e7/sources/0cb922a2-8df4-42fd-9429-c241410a0002'
             -H 'X-CSRF-Header: -' \
             -H 'Content-Type: application/json' 
             -d "$dataSourceSettingsJson"
@@ -520,7 +520,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
     
         {
         "dataSourceSettings": {
-            "Path": "//fileshare//path//opticon_file.opt",
+            "Path": "C:\\DefaultFileRepository\\samples\\opticon_file.opt",
             "FirstLineContainsColumnNames": false,
             "StartLine": 0;
             "EndOfLine" = 0
@@ -534,7 +534,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
     > C# Builders
 
 			DataSourceSettings dataSourceSettings = DataSourceSettingsBuilder.Create()
-				.ForOpticonFile("//fileshare//path//opticon_file.opt")
+				.ForOpticonFile("C:\\DefaultFileRepository\\samples\\opticon_file.opt")
 				.WithDefaultDelimitersForOpticonFile()
 				.WithEndOfLineForWindows()
 				.WithStartFromBeginning()
@@ -546,7 +546,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
 			DataSourceSettings dataSourceSettings = new DataSourceSettings
 			{
 				Type = DataSourceType.Opticon,
-				Path = "//fileshare//path//opticon_file.opt",
+				Path = "C:\\DefaultFileRepository\\samples\\opticon_file.opt",
 				NewLineDelimiter = default,
 				ColumnDelimiter = default,
 				QuoteDelimiter = default,
@@ -564,14 +564,14 @@ The general flow includes several steps consisted in sending appropriate HTTP re
 4. **Begin Job** 
     > curl
 
-        curl -X 'POST' 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/4c4215bf-d8a3-48d4-a3e0-3a40428415e7/begin/' 
+        curl -X POST 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/4c4215bf-d8a3-48d4-a3e0-3a40428415e7/begin/' 
         -H 'X-CSRF-Header: -' 
         -d ''
 
 5. **End Import Job** 
     > curl
 
-        curl -X 'POST' 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/4c4215bf-d8a3-48d4-a3e0-3a40428415e7/end/'
+        curl -X POST 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/4c4215bf-d8a3-48d4-a3e0-3a40428415e7/end/'
         -H 'X-CSRF-Header: -' 
         -d ''
 
@@ -582,7 +582,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
 1. **Create Import Job** 
     > curl
     
-        curl -X 'POST' 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/77140fb9-f515-4b65-a2ce-c347492e2905/'
+        curl -X POST 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/77140fb9-f515-4b65-a2ce-c347492e2905/'
         -H 'X-CSRF-Header: -' 
         -d '{
         "applicationName": "simpleImportRdo",
@@ -593,7 +593,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
 
     > curl
 
-        curl -X 'POST' \'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/77140fb9-f515-4b65-a2ce-c347492e2905/rdo-configurations/' 
+        curl -X POST \'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/77140fb9-f515-4b65-a2ce-c347492e2905/rdo-configurations/' 
         -H 'X-CSRF-Header: -' 
         -d $"importRdoSettings"'
 
@@ -656,10 +656,10 @@ The general flow includes several steps consisted in sending appropriate HTTP re
         };
 
 
-3. **Add DataSource (related to opticon file)** 
+3. **Add DataSource** 
     > curl
 
-        curl -X 'POST' 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/4c4215bf-d8a3-48d4-a3e0-3a40428415e7/sources/0cb922a2-8df4-42fd-9429-c241410a0002'
+        curl -X POST 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/4c4215bf-d8a3-48d4-a3e0-3a40428415e7/sources/0cb922a2-8df4-42fd-9429-c241410a0002'
         -H 'X-CSRF-Header: -' \
         -H 'Content-Type: application/json' 
         -d "$dataSourceSettingsJson"
@@ -671,7 +671,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
 
         {
         "dataSourceSettings": {
-            "Path": "//fileshare//path//load_file.dat",
+            "Path": "C:\\DefaultFileRepository\\samples\\load_file.dat",
             "FirstLineContainsColumnNames": true,
             "StartLine": 1,
             "ColumnDelimiter": "|",
@@ -689,7 +689,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
     > C# builder
    
 			DataSourceSettings dataSourceSettings = DataSourceSettingsBuilder.Create()
-				.ForLoadFile("//fileshare//path//load_file.dat)
+				.ForLoadFile("C:\\DefaultFileRepository\\samples\\load_file.dat)
 				.WithDelimiters(d => d
 					.WithColumnDelimiters('|')
 					.WithQuoteDelimiter('^')
@@ -707,7 +707,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
 			DataSourceSettings dataSourceSettings = new DataSourceSettings
 			{
 				Type = DataSourceType.LoadFile,
-				Path = "//fileshare//path//load_file.dat",
+				Path = "C:\\DefaultFileRepository\\samples\\load_file.dat",
 				NewLineDelimiter = '#',
 				ColumnDelimiter = '|',
 				QuoteDelimiter = '^',
@@ -726,7 +726,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
 
     > curl
 
-        curl -X 'POST' 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/77140fb9-f515-4b65-a2ce-c347492e2905/begin/' 
+        curl -X POST 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/77140fb9-f515-4b65-a2ce-c347492e2905/begin/' 
         -H 'X-CSRF-Header: -' 
         -d ''
 
@@ -734,7 +734,7 @@ The general flow includes several steps consisted in sending appropriate HTTP re
 
     > curl
 
-        curl -X 'POST' 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/77140fb9-f515-4b65-a2ce-c347492e2905/end/'
+        curl -X POST 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/77140fb9-f515-4b65-a2ce-c347492e2905/end/'
         -H 'X-CSRF-Header: -' 
         -d ''
 ---
@@ -776,7 +776,7 @@ Import job state can be read from  GET Import Job details response
 
 > curl 
 
-    curl -X 'GET' 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/ca04baf0-4a1a-4787-94d8-5bba89d2eb0f/details' 
+    curl -X GET 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/ca04baf0-4a1a-4787-94d8-5bba89d2eb0f/details' 
     -H 'X-CSRF-Header: -'
 
  > response JSON
@@ -812,7 +812,7 @@ Import job state can be read from  GET Import Job details response
 | 29    | Paused                      | Job is paused and waiting.                                                                        |
 | 30    | Canceled                    | Job canceled.                                                                                     |
 | 40    | Failed                      | Job has failed to import data.                                                                    |
-| 50    | Completed                   | Job has ended with success..                                                                      |
+| 50    | Completed                   | Job has ended with success.                                                                      |
 
 ## Import Data Source States
 
@@ -820,7 +820,7 @@ Data source state can be read from GET Data source details response
 
 > curl 
 
-    curl -X 'GET' 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/ca04baf0-4a1a-4787-94d8-5bba89d2eb0f/sources/40ddb007-4330-41cc-b5aa-2ea6961073a5/details' 
+    curl -X GET 'https://relativity-host/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/ca04baf0-4a1a-4787-94d8-5bba89d2eb0f/sources/40ddb007-4330-41cc-b5aa-2ea6961073a5/details' 
     -H 'X-CSRF-Header: -'
 
  > response JSON
@@ -843,8 +843,8 @@ Data source state can be read from GET Data source details response
 
 | Value   |   State            |                   Description                                   |
 |----|-------------------------|-----------------------------------------------------------------|
-| 0  | Unknown                 | Invalid state for a data source                                 |
-| 10 | New                     | Initial state, data source was created                          |
+| 0  | Unknown                 | Invalid state for a data source.                                |
+| 10 | New                     | Initial state, data source was created.                         |
 | 22 | Scheduled               | Data source is waiting on queue to begin the process of import. |
 | 24 | PendingInserting        | Data source has been sent to Worker to begin the import.        |
 | 25 | Inserting               | Data source is currently in progress of processing.             |
@@ -862,7 +862,7 @@ Error handling in Import Service returns Error Codes and Error Messages:
 
  > curl
 
-        curl -X 'GET' 'https://relativity.roadie.so/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/00000000-0000-0000-0000-000000000000/sources/00000000-0000-0000-0000-000000000000/itemerrors?start=0&length=10'
+        curl -X GET 'https://relativity.roadie.so/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/00000000-0000-0000-0000-000000000000/sources/00000000-0000-0000-0000-000000000000/itemerrors?start=0&length=10'
         -H 'accept: application/json' 
         -H 'X-CSRF-Header: -'
 
@@ -924,7 +924,7 @@ Resources
 |C            |Document Configuration|
 |S            |Source       |
 |E            |ItemErrors   |
-|R            |RDO Configuration.    |
+|R            |RDO Configuration    |
 
 Actions
 ---
