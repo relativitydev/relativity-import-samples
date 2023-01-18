@@ -53,11 +53,14 @@ Job and data sources configurations allow you to flexibly adjust the import to y
 3. Data set - load files, source files (native documents, images, text files) - need to be placed in the destination fileshare location accessible to workspace. 
 
 
-4. The following packages installed in client application:
-   - [Relativity.Import.SDK](#relativityimportsdk) 
-   - [Relativity.Kepler.Client.SDK](https://www.nuget.org/packages/Relativity.Kepler.Client.SDK)
-
+4. The following packages need to be installed in client application:
    *NOTE*: Required only when Kepler .NET client is used.
+   - [Relativity.Import.SDK](#relativityimportsdk)
+   - [Relativity.Import.Models.SDK](#relativityimportsdk) (added automatically as dependency to Relativity.Import.SDK)
+   - [Relativity.Kepler.Client.SDK](https://www.nuget.org/packages/Relativity.Kepler.Client.SDK)
+   (added automatically as dependency to Relativity.Import.SDK)
+
+
 ***
 ## Glossary
 
@@ -124,7 +127,7 @@ Relativity.Import.SDK is a .NET library that contains kepler interfaces for impo
 It provides and simplifies executing import in client application.
 Relativity.Import.SDK targets .NET Framework 4.6.2
 
-**NOTE: Use this package when your application USE keplers.**
+**NOTE: Use this package when your application USE Kepler.**
 
 
 [![Version](https://img.shields.io/nuget/v/Relativity.Import.SDK.svg?color=royalblue)](https://www.nuget.org/packages/Relativity.Import.SDK)
@@ -1002,7 +1005,7 @@ Examples structure:
 - Repository with samples contains also structured data set used in all examples - load files, opticon files, folders structure with native files, images, text files.
 
 List of samples:
-| Sample name | .Net with Kepler| .NET | PowerShell |
+| Sample name | .Net with Kepler| .NET 7 | PowerShell |
 | :---- | :----: | :----: | :----: |
  | Sample01_ImportNativeFiles | [Sample01](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample01_ImportNativeFiles.cs) | [Sample01](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample01_ImportNativeFiles.cs) | [Sample01](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample01-import-native-files.ps1) | 
  | Sample02_ImportDocumentsInOverlayMode | [Sample02](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample02_ImportDocumentsInOverlayMode.cs) | [Sample02](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample02_ImportDocumentsInOverlayMode.cs) | [Sample02](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample02-import-documents-in-overlay-mode.ps1) | 
