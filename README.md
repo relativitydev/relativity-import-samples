@@ -51,7 +51,7 @@ Job and data sources configurations allow you to flexibly adjust the import to y
 
 
 3. Data set - load files, source files (native documents, images, text files) - need to be placed in the destination fileshare location accessible to workspace. 
-
+   You can use TAPI (https://github.com/relativitydev/transfer-api-samples) to upload all files to destination location.
 
 4. The following packages need to be installed in client application:
    *NOTE*: Required only when Kepler .NET client is used.
