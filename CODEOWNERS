@@ -1,0 +1,4 @@
+# CODEOWNERS file docs at https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Developer Documentation team: This team will review and approve PRs for updates to any markdown files in relativitydev/relativity-import-samples
+*.md @relativitydev/documentation-platform
