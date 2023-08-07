@@ -19,6 +19,8 @@
 **[.NET 7 Console Application - How-to](#net-7-code-samples---how-to)**<br>
 **[.NET Framework & Kepler Console Application - How-to](#keplerclient-code-samples---how-to)**<br>
 **[Powershell scripts - How-to](#powershell-script-samples---how-to)**<br>
+### **[Performance Best Practices](#performance-best-practices)**
+**[Encoding and FileSize settings](#encoding-and-filesize-settings)**<br>
 
 
 
@@ -1128,5 +1130,14 @@ List of samples:
 
 
  - Invoke run-sample-import.ps1
+
+<br><br>
+
+---
+# Performance Best Practices
+
+## Encoding and FileSize settings
+
+TODO
 
 
