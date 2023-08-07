@@ -215,9 +215,9 @@ which may lead to errors during import process.
         .WithoutImages()
         .WithFieldsMapped(x => x
             .WithField(controlNumberColumnIndex, "Control Number")
-            .WithExtractedTextField(extractedTextPathColumnIndex, e => e
-                .WithExtractedTextInSeparateFiles(f => f
-                    .WithEncoding("UTF-8"))))
+            .WithExtractedTextInSeparateFiles(f => f
+		.WithEncoding("UTF-16")
+		.WithFileSizeDefinedInColumn(fileSizeColumnIndex))))
         .WithFolders(f => f
             .WithRootFolderID(rootFolderId, r => r
                 .WithFolderPathDefinedInColumn(folderPathColumnIndex)));
@@ -1142,6 +1142,33 @@ List of samples:
 For improved performance when dealing with fileshare data on ADLS, we highly recommend encoding files in UTF-16. By doing so, you can avoid the need for conversion to the correct encoding, leading to significant time savings in your document and image workflows.
 
 For the document workflow, set **FieldMapping.Encoding** to UTF-16. Similarly, for the image workflow, configure **ImageSettings.ExtractedTextEncoding** as UTF-16. With these settings in place, the conversion overhead is eliminated, and your files will be copied directly in the unicode encoding, resulting in faster processing times.
+
+			ImportDocumentSettings importDocuments = ImportDocumentSettingsBuilder.Create()
+				.WithAppendMode()
+				.WithNatives(x => x
+					.WithFilePathDefinedInColumn(filePathColumnIndex)
+					.WithFileNameDefinedInColumn(fileNameColumnIndex))
+				.WithoutImages()
+				.WithFieldsMapped(x => x
+					.WithField(controlNumberColumnIndex, "Control Number")
+					.WithExtractedTextField(extractedTextPathColumnIndex, e => e
+						.WithExtractedTextInSeparateFiles(f => f
+							.WithEncoding("UTF-16")
+							.WithFileSizeDefinedInColumn(fileSizeColumnIndex))))
+				.WithoutFolders();
+
+    
+			ImportDocumentSettings importImages = ImportDocumentSettingsBuilder.Create()
+				.WithAppendMode()
+				.WithoutNatives()
+				.WithImages(i => i
+					.WithAutoNumberImages()
+					.WithoutProduction()
+					.WithExtractedText(e => e.WithEncoding("UTF-16"))
+					.WithFileTypeAutoDetection())
+				.WithoutFieldsMapped()
+				.WithoutFolders();
+ 
 
 ### FileSizeColumnIndex
 Another valuable setting that can enhance performance is the **FieldMapping.FileSizeColumnIndex**. By configuring this setting, the need for manual file size calculations can be eliminated. The file sizes will be automatically extracted from the load file, streamlining the process and saving valuable processing time.
