@@ -79,9 +79,9 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 				{
 					// Reading of example fields.
 					Console.WriteLine($"Native.FileNameColumnIndex: {documentSettings.Value.Native.FileNameColumnIndex}");
-					Console.WriteLine($"ExtractedText.Encoding: {documentSettings.Value.Other?.ExtractedText?.Encoding}");
 					Console.WriteLine($"FieldMappings[0].ColumnIndex: {documentSettings.Value.Fields.FieldMappings[0].ColumnIndex}");
-					Console.WriteLine($"FieldMappings[0].FileSizeColumnIndex: {documentSettings.Value.Fields.FieldMappings[0].FileSizeColumnIndex}");
+					Console.WriteLine($"FieldMappings[2].Encoding: {documentSettings.Value.Fields.FieldMappings[2].Encoding}");
+					Console.WriteLine($"FieldMappings[2].FileSizeColumnIndex: {documentSettings.Value.Fields.FieldMappings[2].FileSizeColumnIndex}");
 				}
 			}
 		}
@@ -90,7 +90,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 
 /* Expected console result:
 	Native.FileNameColumnIndex: 13
-	ExtractedText.Encoding: UTF-8
 	FieldMappings[0].ColumnIndex: 0
-	FieldMappings[0].FileSizeColumnIndex: 14
+	FieldMappings[2].Encoding: UTF-8
+	FieldMappings[2].FileSizeColumnIndex: 14
 */

@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Relativity.Import.Models.SDK" Version="1.0.22" />
     <PackageReference Include="Relativity.Import.SDK" Version="1.0.22" />
   </ItemGroup>
 
