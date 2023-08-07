@@ -38,16 +38,12 @@ Context "Sample11 Direct import settings for images" {
                     PageNumbering = 1
                     ProductionID = $null
                     LoadExtractedText = $true
+                    ExtractedTextEncoding = "UTF-8"
                 }
                 Fields = $null
                 Folder = @{
                     FolderPathColumnIndex = $null
                     RootFolderID = $rootFolderId
-                }
-                Other = @{
-                    ExtractedText = @{
-						ValidateEncoding = $true
-					}
                 }
             }
         } | ConvertTo-Json  -Depth 10

@@ -16,7 +16,7 @@ Context "Sample05 Import documents with extracted text" {
 
         $body = @{
             applicationName = "Import-service-sample-app"
-            correlationID = "Sample-job-0005"
+            correlationID   = "Sample-job-0005"
         } | ConvertTo-Json -Depth 10
 		
         $response = $global:WebRequest.callPost($uri, $body)
@@ -47,15 +47,11 @@ Context "Sample05 Import documents with extracted text" {
                             "ColumnIndex": 12,
                             "Field": "Extracted Text",
                             "ContainsID": false,
-                            "ContainsFilePath": true
+                            "ContainsFilePath": true,
+                            "Encoding": "UTF-8",
+                            "FileSizeColumnIndex": 14
                         }
                     ]
-                },
-                "Other":{
-                    "ExtractedText":{
-                        "Encoding": "UTF-8",
-                        "ValidateEncoding": false
-                    }
                 },
                 "Folder":null
             }
@@ -69,18 +65,18 @@ Context "Sample05 Import documents with extracted text" {
         $uri = $global:Endpoints.importSourceAddUri($importId, $sourceId)
         $dataSourceConfigurationBody = @{
             dataSourceSettings = @{
-                path = $loadFilePath
+                path                         = $loadFilePath
                 firstLineContainsColumnNames = $true
-                startLine = 0
-                columnDelimiter = "|"
-                quoteDelimiter = "^"
-                newLineDelimiter = "#"
-                nestedValueDelimiter = "&"
-                multiValueDelimiter = "$"
-                endOfLine = 0
-                encoding = $null
-                cultureInfo = "en-us"
-                type = 2
+                startLine                    = 0
+                columnDelimiter              = "|"
+                quoteDelimiter               = "^"
+                newLineDelimiter             = "#"
+                nestedValueDelimiter         = "&"
+                multiValueDelimiter          = "$"
+                endOfLine                    = 0
+                encoding                     = $null
+                cultureInfo                  = "en-us"
+                type                         = 2
             }
         } | ConvertTo-Json -Depth 10
 		
@@ -114,8 +110,7 @@ Context "Sample05 Import documents with extracted text" {
 
         [int]$sleepTime = 5
 
-        while($isJobFinished -ne $true)
-        {
+        while ($isJobFinished -ne $true) {
             Start-Sleep -Seconds $sleepTime
             $jobDetailsResponse = $global:WebRequest.callGet($uri)
             $isJobFinished = $jobDetailsResponse."Value"."IsFinished"
