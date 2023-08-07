@@ -1139,10 +1139,14 @@ List of samples:
 ## Import Job Settings
 
 ### Encoding
-In the Document Workflow on ADLS, optimizing the Encoding setting can lead to significant time improvements. When setting the Encoding to UTF-16 in the FieldMapping options, there is no need for conversion to the appropriate encoding during processing. This can result in a substantial performance boost, as the system can directly handle the data in the specified Unicode format.
+For improved performance when dealing with fileshare data on ADLS, we highly recommend encoding files in UTF-16. By doing so, you can avoid the need for conversion to the correct encoding, leading to significant time savings in your document and image workflows.
+
+For the document workflow, set **FieldMapping.Encoding** to UTF-16. Similarly, for the image workflow, configure **ImageSettings.ExtractedTextEncoding** as UTF-16. With these settings in place, the conversion overhead is eliminated, and your files will be copied directly in the unicode encoding, resulting in faster processing times.
 
 ### FileSizeColumnIndex
-Another valuable setting that can enhance performance is the FileSizeColumnIndex in FieldMapping options. By configuring this setting, the need for manual file size calculations can be eliminated. The file sizes will be automatically extracted from the load file, streamlining the process and saving valuable processing time. Keep in mind that this setting will only be used if ContainsFilePath is set to true and Encoding is set to UTF-16.
+Another valuable setting that can enhance performance is the **FieldMapping.FileSizeColumnIndex**. By configuring this setting, the need for manual file size calculations can be eliminated. The file sizes will be automatically extracted from the load file, streamlining the process and saving valuable processing time.
+
+**Note:** The FileSizeColumnIndex setting will only take effect if FieldMapping.ContainsFilePath is set to true, and the FieldMapping.Encoding is set to UTF-16. This property applies only to long text fields stored in Data Grid, including Extracted Text.
 
 
 
