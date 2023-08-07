@@ -41,6 +41,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			const int controlNumberColumnIndex = 0;
 			const int extractedTextPathColumnIndex = 12;
 			const int fileNameColumnIndex = 13;
+			const int fileSizeColumnIndex = 14;
 			const int filePathColumnIndex = 22;
 
 			// Path to the load file used in data source settings.
@@ -63,7 +64,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 					.WithField(controlNumberColumnIndex, "Control Number")
 					.WithExtractedTextField(extractedTextPathColumnIndex, e => e
 						.WithExtractedTextInSeparateFiles(f => f
-							.WithEncoding("UTF-8"))))
+							.WithEncoding("UTF-8")
+							.WithFileSizeDefinedInColumn(fileSizeColumnIndex))))
 				.WithoutFolders();
 
 			// Create payload for request.

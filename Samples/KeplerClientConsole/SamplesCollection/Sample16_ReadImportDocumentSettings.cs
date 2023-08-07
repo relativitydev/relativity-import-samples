@@ -33,6 +33,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 			const int controlNumberColumnIndex = 0;
 			const int emailToColumnIndex = 11;
 			const int fileNameColumnIndex = 13;
+			const int fileSizeColumnIndex = 14;
 			const int filePathColumnIndex = 22;
 
 			// Configuration of document import. Builder is used to create the settings.
@@ -47,7 +48,8 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 					.WithField(emailToColumnIndex, "Email To")
 					.WithExtractedTextField(10,
 						e => e.WithExtractedTextInSeparateFiles(
-								a => a.WithEncoding("UTF-8"))))
+								a => a.WithEncoding("UTF-8")
+									.WithFileSizeDefinedInColumn(fileSizeColumnIndex))))
 				.WithoutFolders();
 
 			using (Relativity.Import.V1.Services.IDocumentConfigurationController documentConfiguration =
@@ -79,6 +81,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 					Console.WriteLine($"Native.FileNameColumnIndex: {documentSettings.Value.Native.FileNameColumnIndex}");
 					Console.WriteLine($"ExtractedText.Encoding: {documentSettings.Value.Other?.ExtractedText?.Encoding}");
 					Console.WriteLine($"FieldMappings[0].ColumnIndex: {documentSettings.Value.Fields.FieldMappings[0].ColumnIndex}");
+					Console.WriteLine($"FieldMappings[0].FileSizeColumnIndex: {documentSettings.Value.Fields.FieldMappings[0].FileSizeColumnIndex}");
 				}
 			}
 		}
@@ -89,4 +92,5 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 	Native.FileNameColumnIndex: 13
 	ExtractedText.Encoding: UTF-8
 	FieldMappings[0].ColumnIndex: 0
+	FieldMappings[0].FileSizeColumnIndex: 14
 */
