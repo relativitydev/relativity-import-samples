@@ -79,8 +79,6 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 							ContainsID = false,
 							ColumnIndex = 0,
 							ContainsFilePath = false,
-							Encoding = "UTF-8",
-							FileSizeColumnIndex = fileSizeColumnIndex
 						},
 						new FieldMapping
 						{
@@ -88,8 +86,6 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 							ContainsID = false,
 							ColumnIndex = 1,
 							ContainsFilePath = false,
-							Encoding = "UTF-8",
-							FileSizeColumnIndex = fileSizeColumnIndex
 						},
 						new FieldMapping
 						{
@@ -97,8 +93,6 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 							ContainsID = false,
 							ColumnIndex = emailToColumnIndex,
 							ContainsFilePath = false,
-							Encoding = "UTF-8",
-							FileSizeColumnIndex = fileSizeColumnIndex
 						},
 						new FieldMapping
 						{
