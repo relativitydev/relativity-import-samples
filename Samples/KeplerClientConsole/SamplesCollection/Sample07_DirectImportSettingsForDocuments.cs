@@ -40,6 +40,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 			const int extractedTextFilePathColumnIndex = 12;
 			const int emailToColumnIndex = 11;
 			const int fileNameColumnIndex = 13;
+			const int fileSizeColumnIndex = 14;
 			const int filePathColumnIndex = 22;
 
 			// Configuration settings for document import. Example of set without using ImportDocumentSettingsBuilder.
@@ -87,6 +88,8 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 							ContainsID = false,
 							ColumnIndex = extractedTextFilePathColumnIndex,
 							ContainsFilePath = true,
+							Encoding = "UTF-8",
+							FileSizeColumnIndex = fileSizeColumnIndex
 						},
 					},
 				},
@@ -94,15 +97,7 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 				{
 					FolderPathColumnIndex = null,
 					RootFolderID = rootFolderId,
-				},
-				Other = new OtherSettings
-				{
-					ExtractedText = new ExtractedTextSettings
-					{
-						Encoding = null,
-						ValidateEncoding = true,
-					},
-				},
+				}
 			};
 
 			// Example of data source configuration created without using DataSourceSettingsBuilder.

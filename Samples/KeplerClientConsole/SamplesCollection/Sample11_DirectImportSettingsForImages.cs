@@ -48,20 +48,14 @@ namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
 					PageNumbering = PageNumbering.AutoNumberImages,
 					ProductionID = null,
 					LoadExtractedText = true,
+					ExtractedTextEncoding = "UTF-8"
 				},
 				Fields = null,
 				Folder = new FolderSettings
 				{
 					FolderPathColumnIndex = null,
 					RootFolderID = rootFolderId,
-				},
-				Other = new OtherSettings
-				{
-					ExtractedText = new ExtractedTextSettings
-					{
-						ValidateEncoding = true,
-					},
-				},
+				}
 			};
 
 			// Configuration settings for data source created without DataSourceSettingsBuilder.
