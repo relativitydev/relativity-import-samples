@@ -59,20 +59,14 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 					PageNumbering = PageNumbering.AutoNumberImages,
 					ProductionID = null,
 					LoadExtractedText = true,
+					ExtractedTextEncoding = "UTF-8"
 				},
 				Fields = null,
 				Folder = new FolderSettings
 				{
 					FolderPathColumnIndex = null,
 					RootFolderID = rootFolderId,
-				},
-				Other = new OtherSettings
-				{
-					ExtractedText = new ExtractedTextSettings
-					{
-						ValidateEncoding = true,
-					},
-				},
+				}
 			};
 
 			// Create payload for request.

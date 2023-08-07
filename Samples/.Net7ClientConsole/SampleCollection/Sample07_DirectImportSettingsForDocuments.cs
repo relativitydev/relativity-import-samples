@@ -45,6 +45,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 			const int extractedTextFilePathColumnIndex = 12;
 			const int emailToColumnIndex = 11;
 			const int fileNameColumnIndex = 13;
+			const int fileSizeColumnIndex = 14;
 			const int filePathColumnIndex = 22;
 
 			// Create payload for request.
@@ -78,6 +79,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 							ContainsID = false,
 							ColumnIndex = 0,
 							ContainsFilePath = false,
+							Encoding = "UTF-8",
+							FileSizeColumnIndex = fileSizeColumnIndex
 						},
 						new FieldMapping
 						{
@@ -85,6 +88,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 							ContainsID = false,
 							ColumnIndex = 1,
 							ContainsFilePath = false,
+							Encoding = "UTF-8",
+							FileSizeColumnIndex = fileSizeColumnIndex
 						},
 						new FieldMapping
 						{
@@ -92,6 +97,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 							ContainsID = false,
 							ColumnIndex = emailToColumnIndex,
 							ContainsFilePath = false,
+							Encoding = "UTF-8",
+							FileSizeColumnIndex = fileSizeColumnIndex
 						},
 						new FieldMapping
 						{
@@ -99,6 +106,8 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 							ContainsID = false,
 							ColumnIndex = extractedTextFilePathColumnIndex,
 							ContainsFilePath = true,
+							Encoding = "UTF-8",
+							FileSizeColumnIndex = fileSizeColumnIndex
 						},
 					},
 				},
@@ -106,15 +115,7 @@ namespace Relativity.Import.Samples.Net7Client.SampleCollection
 				{
 					FolderPathColumnIndex = null,
 					RootFolderID = rootFolderId,
-				},
-				Other = new OtherSettings
-				{
-					ExtractedText = new ExtractedTextSettings
-					{
-						Encoding = null,
-						ValidateEncoding = true,
-					},
-				},
+				}
 			};
 
 			// Create payload for request.
