@@ -20,7 +20,7 @@
 **[.NET Framework & Kepler Console Application - How-to](#keplerclient-code-samples---how-to)**<br>
 **[Powershell scripts - How-to](#powershell-script-samples---how-to)**<br>
 ### **[Performance Best Practices](#performance-best-practices)**
-**[Encoding and FileSize settings](#encoding-and-filesize-settings)**<br>
+**[Import Job Settings](#import-job-settings)**<br>
 
 
 
@@ -1136,8 +1136,13 @@ List of samples:
 ---
 # Performance Best Practices
 
-## Encoding and FileSize settings
+## Import Job Settings
 
-TODO
+### Encoding
+In the Document Workflow on ADLS, optimizing the Encoding setting can lead to significant time improvements. When setting the Encoding to UTF-16 in the FieldMapping options, there is no need for conversion to the appropriate encoding during processing. This can result in a substantial performance boost, as the system can directly handle the data in the specified Unicode format.
+
+### FileSizeColumnIndex
+Another valuable setting that can enhance performance is the FileSizeColumnIndex in FieldMapping options. By configuring this setting, the need for manual file size calculations can be eliminated. The file sizes will be automatically extracted from the load file, streamlining the process and saving valuable processing time. Keep in mind that this setting will only be used if ContainsFilePath is set to true and Encoding is set to UTF-16.
+
 
 
