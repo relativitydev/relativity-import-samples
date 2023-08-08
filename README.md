@@ -1139,7 +1139,7 @@ List of samples:
 ## Import Job Settings
 
 ### Encoding
-For improved performance when dealing with fileshare data on ADLS, we highly recommend encoding files in UTF-16. By doing so, you can avoid the need for conversion to the correct encoding, leading to significant time savings in your document and image workflows.
+For improved performance when dealing with fileshare data on ADLS, we highly recommend using extracted text or other long text files encoded in UTF-16. By doing so, you can avoid the need for conversion to the correct encoding, leading to significant time savings in your document and image workflows.
 
 For the document workflow, set **FieldMapping.Encoding** to UTF-16. Similarly, for the image workflow, configure **ImageSettings.ExtractedTextEncoding** as UTF-16. With these settings in place, the conversion overhead is eliminated, and your files will be copied directly in the unicode encoding, resulting in faster processing times.
 
