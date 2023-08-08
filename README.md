@@ -1171,7 +1171,7 @@ For the document workflow, set **FieldMapping.Encoding** to UTF-16. Similarly, f
  
 
 ### FileSizeColumnIndex
-Another valuable setting that can enhance performance is the **FieldMapping.FileSizeColumnIndex**. By configuring this setting, the need for manual file size calculations can be eliminated. The file sizes will be automatically extracted from the load file, streamlining the process and saving valuable processing time.
+Another valuable setting that can enhance performance is the **FieldMapping.FileSizeColumnIndex**. By configuring this setting, the need for additional file size calculations can be eliminated. The file sizes will be automatically extracted from the load file, streamlining the process and saving valuable processing time.
 
 **Note:** The FileSizeColumnIndex setting will only take effect if FieldMapping.ContainsFilePath is set to true, and the FieldMapping.Encoding is set to UTF-16. This property applies only to long text fields stored in Data Grid, including Extracted Text.
 
