@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Relativity.Import.SDK" Version="1.0.8" />
+    <PackageReference Include="Relativity.Import.SDK" Version="1.0.22" />
   </ItemGroup>
 
 </Project>

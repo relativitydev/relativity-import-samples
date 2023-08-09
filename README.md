@@ -19,6 +19,8 @@
 **[.NET 7 Console Application - How-to](#net-7-code-samples---how-to)**<br>
 **[.NET Framework & Kepler Console Application - How-to](#keplerclient-code-samples---how-to)**<br>
 **[Powershell scripts - How-to](#powershell-script-samples---how-to)**<br>
+### **[Performance Best Practices](#performance-best-practices)**
+**[Import Job Settings](#import-job-settings)**<br>
 
 
 
@@ -213,9 +215,9 @@ which may lead to errors during import process.
         .WithoutImages()
         .WithFieldsMapped(x => x
             .WithField(controlNumberColumnIndex, "Control Number")
-            .WithExtractedTextField(extractedTextPathColumnIndex, e => e
-                .WithExtractedTextInSeparateFiles(f => f
-                    .WithEncoding("UTF-8"))))
+            .WithExtractedTextInSeparateFiles(f => f
+		.WithEncoding("UTF-16")
+		.WithFileSizeDefinedInColumn(fileSizeColumnIndex))))
         .WithFolders(f => f
             .WithRootFolderID(rootFolderId, r => r
                 .WithFolderPathDefinedInColumn(folderPathColumnIndex)));
@@ -1128,5 +1130,50 @@ List of samples:
 
 
  - Invoke run-sample-import.ps1
+
+<br><br>
+
+---
+# Performance Best Practices
+
+## Import Job Settings
+
+### Encoding
+For improved performance when dealing with fileshare data on ADLS, we highly recommend using extracted text or other long text files encoded in UTF-16. By doing so, you can avoid the need for conversion to the correct encoding, leading to significant time savings in your document and image workflows.
+
+For the document workflow, set **FieldMapping.Encoding** to UTF-16. Similarly, for the image workflow, configure **ImageSettings.ExtractedTextEncoding** as UTF-16. With these settings in place, the conversion overhead is eliminated, and your files will be copied directly in the unicode encoding, resulting in faster processing times.
+
+			ImportDocumentSettings importDocuments = ImportDocumentSettingsBuilder.Create()
+				.WithAppendMode()
+				.WithNatives(x => x
+					.WithFilePathDefinedInColumn(filePathColumnIndex)
+					.WithFileNameDefinedInColumn(fileNameColumnIndex))
+				.WithoutImages()
+				.WithFieldsMapped(x => x
+					.WithField(controlNumberColumnIndex, "Control Number")
+					.WithExtractedTextField(extractedTextPathColumnIndex, e => e
+						.WithExtractedTextInSeparateFiles(f => f
+							.WithEncoding("UTF-16")
+							.WithFileSizeDefinedInColumn(fileSizeColumnIndex))))
+				.WithoutFolders();
+
+    
+			ImportDocumentSettings importImages = ImportDocumentSettingsBuilder.Create()
+				.WithAppendMode()
+				.WithoutNatives()
+				.WithImages(i => i
+					.WithAutoNumberImages()
+					.WithoutProduction()
+					.WithExtractedText(e => e.WithEncoding("UTF-16"))
+					.WithFileTypeAutoDetection())
+				.WithoutFieldsMapped()
+				.WithoutFolders();
+ 
+
+### FileSizeColumnIndex
+Another valuable setting that can enhance performance is the **FieldMapping.FileSizeColumnIndex**. By configuring this setting, the need for additional file size calculations can be eliminated. The file sizes will be automatically extracted from the load file, streamlining the process and saving valuable processing time.
+
+**Note:** The FileSizeColumnIndex setting will only take effect if FieldMapping.ContainsFilePath is set to true, and the FieldMapping.Encoding is set to UTF-16. This property applies only to long text fields stored in Data Grid, including Extracted Text.
+
 
 

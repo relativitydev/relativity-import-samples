@@ -17,7 +17,7 @@ Context "Sample07 Direct import settings for documents" {
 
         $body = @{
             applicationName = "Import-service-sample-app"
-            correlationID = "Sample-job-0007-doc-settings"
+            correlationID   = "Sample-job-0007-doc-settings"
         } | ConvertTo-Json -Depth 10
 		
         $response = $global:WebRequest.callPost($uri, $body)
@@ -28,55 +28,51 @@ Context "Sample07 Direct import settings for documents" {
     Describe "Create document configuration" {
         $uri = $global:Endpoints.documentConfigurationUri($importId)
         $field1 = @{
-            ColumnIndex = 0
-            Field = "Control Number"
-            ContainsID = $false
+            ColumnIndex      = 0
+            Field            = "Control Number"
+            ContainsID       = $false
             ContainsFilePath = $false
         }
         $field2 = @{
-            ColumnIndex = 1
-            Field = "Custodian - Single Choice"
-            ContainsID = $false
+            ColumnIndex      = 1
+            Field            = "Custodian - Single Choice"
+            ContainsID       = $false
             ContainsFilePath = $false
         }
         $field3 = @{
-            ColumnIndex = 11
-            Field = "Email To"
-            ContainsID = $false
+            ColumnIndex      = 11
+            Field            = "Email To"
+            ContainsID       = $false
             ContainsFilePath = $false
         }
         $field4 = @{
-            ColumnIndex = 12
-            Field = "Extracted Text"
-            ContainsID = $false
-            ContainsFilePath = $true
+            ColumnIndex         = 12
+            Field               = "Extracted Text"
+            ContainsID          = $false
+            ContainsFilePath    = $true
+            Encoding            = "UTF-8"
+            FileSizeColumnIndex = 14
         }
         $fields = @($field1, $field2, $field3, $field4)
         $jobConfigurationBody = @{
             importSettings =
             @{
                 Overlay = @{
-                    Mode = 3
-                    KeyField = "Control Number"
+                    Mode                       = 3
+                    KeyField                   = "Control Number"
                     MultiFieldOverlayBehaviour = 1
                 }
-                Native = @{
-                    FilePathColumnIndex =  22
+                Native  = @{
+                    FilePathColumnIndex = 22
                     FileNameColumnIndex = 13
                 }
-                Image = $null
-                Fields = @{
+                Image   = $null
+                Fields  = @{
                     FieldMappings = $fields
                 }
-                Folder = @{
-                    RootFolderID = $rootFolderId
+                Folder  = @{
+                    RootFolderID          = $rootFolderId
                     FolderPathColumnIndex = $null
-                }
-                Other = @{
-                    ExtractedText = @{
-                        Encoding = $null
-						ValidateEncoding = $true
-                    }
                 }
             }
         } | ConvertTo-Json -Depth 10
@@ -89,18 +85,18 @@ Context "Sample07 Direct import settings for documents" {
         $uri = $global:Endpoints.importSourceAddUri($importId, $sourceId)
         $dataSourceConfigurationBody = @{
             dataSourceSettings = @{
-                path = $loadFilePath
+                path                         = $loadFilePath
                 firstLineContainsColumnNames = $true
-                startLine = 0
-                columnDelimiter = "|"
-                quoteDelimiter = "^"
-                newLineDelimiter = "#"
-                nestedValueDelimiter = "&"
-                multiValueDelimiter = "$"
-                endOfLine = 0
-                encoding = $null
-                cultureInfo = "en-us"
-                type = 2
+                startLine                    = 0
+                columnDelimiter              = "|"
+                quoteDelimiter               = "^"
+                newLineDelimiter             = "#"
+                nestedValueDelimiter         = "&"
+                multiValueDelimiter          = "$"
+                endOfLine                    = 0
+                encoding                     = $null
+                cultureInfo                  = "en-us"
+                type                         = 2
             }
         } | ConvertTo-Json -Depth 10
 		
@@ -134,8 +130,7 @@ Context "Sample07 Direct import settings for documents" {
 
         [int]$sleepTime = 5
 
-        while($isJobFinished -ne $true)
-        {
+        while ($isJobFinished -ne $true) {
             Start-Sleep -Seconds $sleepTime
             $jobDetailsResponse = $global:WebRequest.callGet($uri)
             $isJobFinished = $jobDetailsResponse."Value"."IsFinished"
