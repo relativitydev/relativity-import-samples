@@ -1106,14 +1106,14 @@ List of samples:
         Find-Module -Name "Pester" | Install-Module -Force;
  - Copy the content of [sample dataset](https://github.com/relativitydev/relativity-import-samples/tree/main/SampleDataSources) to your Relativity fileshare.
 
-- Uncomment line with sample invocation you want to run in [run-sample-Import.ps1](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/run-sample-Import.ps1).
+- Uncomment line with sample invocation you want to run in [run-sample-import.ps1](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/run-sample-import.ps1).
 
         Describe "Sample import" {
         . "$global:rootDir\SamplesCollection\sample01-import-native-files.ps1"
 
         # . "$global:rootDir\SamplesCollection\sample02-import-documents-in-overlay-mode.ps1"
 
- - Set the proper credentials and host address of your Relativity instance in "run-sample-Import.ps1".
+ - Set the proper credentials and host address of your Relativity instance in "run-sample-import.ps1".
 
         $hostAddress = "https://sample-host/"
         $userName = "sample@username"
