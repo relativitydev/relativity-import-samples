@@ -1007,7 +1007,7 @@ Examples structure:
 - Repository with samples contains also structured data set used in all examples - load files, opticon files, folders structure with native files, images, text files.
 
 List of samples:
-| Sample name | .Net with Kepler| .NET 7 | PowerShell |
+| Sample name | .NET 7 | .Net with Kepler | PowerShell |
 | :---- | :----: | :----: | :----: |
  | Sample01_ImportNativeFiles | [Sample01](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample01_ImportNativeFiles.cs) | [Sample01](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample01_ImportNativeFiles.cs) | [Sample01](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample01-import-native-files.ps1) | 
  | Sample02_ImportDocumentsInOverlayMode | [Sample02](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/.Net7ClientConsole/SampleCollection/Sample02_ImportDocumentsInOverlayMode.cs) | [Sample02](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/KeplerClientConsole/SamplesCollection/Sample02_ImportDocumentsInOverlayMode.cs) | [Sample02](https://github.com/relativitydev/relativity-import-samples/blob/main/Samples/RestSamples/SamplesCollection/sample02-import-documents-in-overlay-mode.ps1) | 
