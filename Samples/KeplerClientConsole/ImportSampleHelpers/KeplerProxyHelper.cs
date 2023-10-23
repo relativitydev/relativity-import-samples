@@ -1,7 +1,7 @@
 ﻿using Relativity.Services.ServiceProxy;
 using System;
 
-namespace Relativity.Import.Samples.NetFrameworkClient.ImportSampleHelpers
+namespace Relativity.Import.Samples.DotNetFrameworkClient.ImportSampleHelpers
 {
 	public static class KeplerProxyHelper
 	{
