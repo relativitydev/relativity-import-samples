@@ -994,7 +994,7 @@ Meaning of the second digit differs for each error type.
 
 ## Samples types and structure
 There are three types of sample application that demonstrate the use of Import Service API features.
-- .NetConsoleClient - .NET console application  (.NET 7, C#).
+- DotNetClientConsole - .NET console application  (.NET 7, C#).
 - KeplerClientConsole - .NET console application (.NET Framework 4.6.2, Kepler client, C#).
 - REST client -  Powershell scripts.
 
