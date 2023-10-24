@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relativity.Import.Samples.NetFrameworkClient", "KeplerClientConsole\Relativity.Import.Samples.NetFrameworkClient.csproj", "{CB2F2C99-73B5-4FCA-8419-19B93862642A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relativity.Import.Samples.DotNetFrameworkClient", "KeplerClientConsole\Relativity.Import.Samples.DotNetFrameworkClient.csproj", "{CB2F2C99-73B5-4FCA-8419-19B93862642A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relativity.Import.Samples.Net7Client", ".Net7ClientConsole\Relativity.Import.Samples.Net7Client.csproj", "{8BFF16C9-3750-45DE-B112-199CC8AC3425}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relativity.Import.Samples.DotNetClient", "DotNetClientConsole\Relativity.Import.Samples.DotNetClient.csproj", "{8BFF16C9-3750-45DE-B112-199CC8AC3425}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataSources", "DataSources", "{8F26CC26-699A-4A46-BAB5-A35D76E2F0FA}"
 	ProjectSection(SolutionItems) = preProject

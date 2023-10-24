@@ -2,12 +2,12 @@
 // © Relativity All Rights Reserved.
 // </copyright>
 
-namespace Relativity.Import.Samples.NetFrameworkClient.SamplesCollection
+namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 {
 	using System;
 	using System.Threading.Tasks;
 
-	using Relativity.Import.Samples.NetFrameworkClient.ImportSampleHelpers;
+	using Relativity.Import.Samples.DotNetFrameworkClient.ImportSampleHelpers;
 	using Relativity.Import.V1;
 	using Relativity.Import.V1.Models.Settings;
 	using Relativity.Import.V1.Models.Sources;

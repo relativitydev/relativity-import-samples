@@ -2,26 +2,25 @@
 // © Relativity All Rights Reserved.
 // </copyright>
 
-namespace Relativity.Import.Samples.DotNetFrameworkClient
+namespace Relativity.Import.Samples.DotNetClient
 {
 	using System;
 	using System.Threading.Tasks;
-	using Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection;
 
 	/// <summary>
-	/// Console application presenting using Relativity.Import.sdk in samples.
+	/// Console application presenting using Relativity.Import.sdk.models in samples.
 	/// </summary>
 	internal class Program
 	{
 		private static void Main(string[] args)
 		{
-			var sampleCollection = new ImportServiceSample();
 
 			// Execute samples:
-
-			// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			var sampleCollection = new SampleCollection.ImportServiceSample();
+			// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 			// Uncomment the samples you wish to run:
-			// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			// NOTE: Copy sample source files into destination location.
+			// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 			var task = Task.Run(
 				async () =>
 				{
@@ -45,7 +44,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient
 
 					// await sampleCollection.Sample10_ImportImagesInAppendOverlayMode();
 
-					// await sampleCollection.Sample11_DirectImportSettingsForImages();
+					//await sampleCollection.Sample11_DirectImportSettingsForImages();
 
 					// await sampleCollection.Sample12_ImportRelativityDynamicObject();
 
