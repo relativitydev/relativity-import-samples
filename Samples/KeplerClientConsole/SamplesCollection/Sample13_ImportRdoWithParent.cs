@@ -1,5 +1,5 @@
 // <copyright file="Sample13_ImportRdoWithParent.cs" company="Relativity ODA LLC">
-// © Relativity All Rights Reserved.
+// ï¿½ Relativity All Rights Reserved.
 // </copyright>
 
 namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
@@ -42,7 +42,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 			const int rdoArtifactTypeID = 2000000;
 
 			// Path to the load file used in data source settings.
-			const string rdoLoadFile = "C:\\DefaultFileRepository\\samples\\rdo_load_file_03.dat";
+			const string rdoLoadFile = "\\files\\<TenantNumber>\\Files\\SampleDataSources\\rdo_load_file_03.dat";
 
 			// Configuration RDO settings for Relativity Dynamic Objects (RDOs) import. Builder is used to create settings.
 			ImportRdoSettings importSettings = ImportRdoSettingsBuilder.Create()

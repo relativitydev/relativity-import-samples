@@ -34,7 +34,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 			const int workspaceId = 1000000;
 
 			// Path to the file in opticon format used in data source settings.
-			const string filePath = "C:\\DefaultFileRepository\\samples\\opticon_01.opt";
+			const string filePath = "\\files\\<TenantNumber>\\Files\\SampleDataSources\\opticon_01.opt";
 
 			// Configuration settings for document import. Builder is used to create settings.
 			// Default keyField is used for overlay mode.

@@ -1,5 +1,5 @@
 // <copyright file="Sample21_CancelStartedJob.cs" company="Relativity ODA LLC">
-// © Relativity All Rights Reserved.
+// ï¿½ Relativity All Rights Reserved.
 // </copyright>
 
 namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
@@ -38,7 +38,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 			const int filePathColumnIndex = 11;
 			const int fileNameColumnIndex = 13;
 
-			const string loadFile07PathTemplate = "C:\\DefaultFileRepository\\samples\\load_file_07_{0}.dat";
+			const string loadFile07PathTemplate = "\\files\\<TenantNumber>\\Files\\SampleDataSources\\load_file_07_{0}.dat";
 
 			ImportDocumentSettings importSettings = ImportDocumentSettingsBuilder.Create()
 				.WithAppendOverlayMode(x => x

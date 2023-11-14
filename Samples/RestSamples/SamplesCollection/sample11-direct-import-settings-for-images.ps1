@@ -4,7 +4,7 @@
 
 $workspaceId = 1000000
 $rootFolderId = 1000001
-$opticonFilePath = "C:\DefaultFileRepository\samples\opticon_01.opt"
+$opticonFilePath = "\\files\<TenantNumber>\Files\SampleDataSources\opticon_01.opt"
 
 $importId = New-Guid
 $sourceId = New-Guid

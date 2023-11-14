@@ -3,8 +3,8 @@
 . "$global:rootDir\Helpers\WriteInformationClass.ps1"
 
 $workspaceId = 1000000
-$loadFile01Path = "C:\DefaultFileRepository\samples\load_file_01.dat"
-$loadFile02Path = "C:\DefaultFileRepository\samples\load_file_02.dat"
+$loadFile01Path = "\\files\<TenantNumber>\Files\SampleDataSources\load_file_01.dat"
+$loadFile02Path = "\\files\<TenantNumber>\Files\SampleDataSources\load_file_02.dat"
 
 $importId = New-Guid
 $source01Id = New-Guid

@@ -1,5 +1,5 @@
 // <copyright file="Sample03_ImportFromTwoDataSources.cs" company="Relativity ODA LLC">
-// © Relativity All Rights Reserved.
+// ï¿½ Relativity All Rights Reserved.
 // </copyright>
 
 namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
@@ -42,8 +42,8 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 			const int filePathColumnIndex = 22;
 
 			// Path to the load files used in data source settings.
-			const string loadFile01Path = "C:\\DefaultFileRepository\\samples\\load_file_01.dat";
-			const string loadFile02Path = "C:\\DefaultFileRepository\\samples\\load_file_02.dat";
+			const string loadFile01Path = "\\files\\<TenantNumber>\\Files\\SampleDataSources\\load_file_01.dat";
+			const string loadFile02Path = "\\files\\<TenantNumber>\\Files\\SampleDataSources\\load_file_02.dat";
 
 			// Configuration settings for document import. Builder is used to create settings.
 			ImportDocumentSettings importSettings = ImportDocumentSettingsBuilder.Create()
