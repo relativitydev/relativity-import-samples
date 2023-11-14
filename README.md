@@ -388,7 +388,7 @@ User can cancel running Import Job in every moment. All related data sources wil
 
         {
         "dataSourceSettings": {
-            "Path": "C:\\DefaultFileRepository\\samples\\load_file.dat",
+            "Path": "\\files\\<TenantNumber>\\Files\\SampleDataSources\\load_file.dat",
             "FirstLineContainsColumnNames": true,
             "StartLine": 1,
             "ColumnDelimiter": "|",
@@ -406,7 +406,7 @@ User can cancel running Import Job in every moment. All related data sources wil
     > C# builders
    
 			DataSourceSettings dataSourceSettings = DataSourceSettingsBuilder.Create()
-				.ForLoadFile("C:\\DefaultFileRepository\\samples\\load_file.dat")
+				.ForLoadFile("\\files\\<TenantNumber>\\Files\\SampleDataSources\\load_file.dat")
 				.WithDelimiters(d => d
 					.WithColumnDelimiters('|')
 					.WithQuoteDelimiter('^')
@@ -424,7 +424,7 @@ User can cancel running Import Job in every moment. All related data sources wil
 			DataSourceSettings dataSourceSettings = new DataSourceSettings
 			{
 				Type = DataSourceType.LoadFile,
-				Path = "C:\\DefaultFileRepository\\samples\\load_file.dat",
+				Path = "\\files\\<TenantNumber>\\Files\\SampleDataSources\\load_file.dat",
 				NewLineDelimiter = '#',
 				ColumnDelimiter = '|',
 				QuoteDelimiter = '^',
@@ -526,7 +526,7 @@ User can cancel running Import Job in every moment. All related data sources wil
     
         {
         "dataSourceSettings": {
-            "Path": "C:\\DefaultFileRepository\\samples\\opticon_file.opt",
+            "Path": "\\files\\<TenantNumber>\\Files\\SampleDataSources\\opticon_file.opt",
             "FirstLineContainsColumnNames": false,
             "StartLine": 0;
             "EndOfLine" = 0
@@ -540,7 +540,7 @@ User can cancel running Import Job in every moment. All related data sources wil
     > C# Builders
 
 			DataSourceSettings dataSourceSettings = DataSourceSettingsBuilder.Create()
-				.ForOpticonFile("C:\\DefaultFileRepository\\samples\\opticon_file.opt")
+				.ForOpticonFile("\\files\\<TenantNumber>\\Files\\SampleDataSources\\opticon_file.opt")
 				.WithDefaultDelimitersForOpticonFile()
 				.WithEndOfLineForWindows()
 				.WithStartFromBeginning()
@@ -552,7 +552,7 @@ User can cancel running Import Job in every moment. All related data sources wil
 			DataSourceSettings dataSourceSettings = new DataSourceSettings
 			{
 				Type = DataSourceType.Opticon,
-				Path = "C:\\DefaultFileRepository\\samples\\opticon_file.opt",
+				Path = "\\files\\<TenantNumber>\\Files\\SampleDataSources\\opticon_file.opt",
 				NewLineDelimiter = default,
 				ColumnDelimiter = default,
 				QuoteDelimiter = default,
@@ -677,7 +677,7 @@ User can cancel running Import Job in every moment. All related data sources wil
 
         {
         "dataSourceSettings": {
-            "Path": "C:\\DefaultFileRepository\\samples\\load_file.dat",
+            "Path": "\\files\\<TenantNumber>\\Files\\SampleDataSources\\load_file.dat",
             "FirstLineContainsColumnNames": true,
             "StartLine": 1,
             "ColumnDelimiter": "|",
@@ -695,7 +695,7 @@ User can cancel running Import Job in every moment. All related data sources wil
     > C# builder
    
 			DataSourceSettings dataSourceSettings = DataSourceSettingsBuilder.Create()
-				.ForLoadFile("C:\\DefaultFileRepository\\samples\\load_file.dat)
+				.ForLoadFile("\\files\\<TenantNumber>\\Files\\SampleDataSources\\load_file.dat)
 				.WithDelimiters(d => d
 					.WithColumnDelimiters('|')
 					.WithQuoteDelimiter('^')
@@ -713,7 +713,7 @@ User can cancel running Import Job in every moment. All related data sources wil
 			DataSourceSettings dataSourceSettings = new DataSourceSettings
 			{
 				Type = DataSourceType.LoadFile,
-				Path = "C:\\DefaultFileRepository\\samples\\load_file.dat",
+				Path = "\\files\\<TenantNumber>\\Files\\SampleDataSources\\load_file.dat",
 				NewLineDelimiter = '#',
 				ColumnDelimiter = '|',
 				QuoteDelimiter = '^',
@@ -1068,7 +1068,7 @@ List of samples:
 
  
 			// Path to the file in opticon format used in data source settings.
-			const string opticonFilePath = "X:\\DefaultFileRepository\\samples\\opticon_01.opt";
+			const string opticonFilePath = "\\files\\<TenantNumber>\\Files\\SampleDataSources\\opticon_01.opt";
 
  - Run application 
 
@@ -1124,7 +1124,7 @@ List of samples:
 - Update variable which defines the path to the load file/opticon file (e.g. $opticonFilePath) according to the location where you copied sample data.
 
         $workspaceId = 1000000
-        $loadFilePath = "C:\DefaultFileRepository\samples\load_file_01.dat"
+        $loadFilePath = "\\files\<TenantNumber>\Files\SampleDataSources\load_file_01.dat"
 
  - Update other Ids related to your workspace - productionSetsArtifactId , rootFolderId,rdoArtifactTypeID. They are required only by specific samples.
 
