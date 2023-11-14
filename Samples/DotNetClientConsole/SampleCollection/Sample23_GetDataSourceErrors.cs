@@ -52,8 +52,8 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 
 			// Path to the load file used in data source settings.
 			// first file contains incorrect values.
-			const string loadFile01Path = "C:\\DefaultFileRepository\\samples\\load_file_05.dat";
-			const string loadFile02Path = "C:\\DefaultFileRepository\\samples\\notExistingFile.dat";
+			const string loadFile01Path = "\\files\\T001\\Files\\SampleDataSources\\load_file_05.dat";
+			const string loadFile02Path = "\\files\\T001\\Files\\SampleDataSources\\notExistingFile.dat";
 
 			// Create payload for request.
 			var createJobPayload = new

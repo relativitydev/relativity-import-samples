@@ -3,7 +3,7 @@
 . "$global:rootDir\Helpers\WriteInformationClass.ps1"
 
 $workspaceId = 1000000
-$opticonFilePath = "C:\DefaultFileRepository\samples\opticon_01.opt"
+$opticonFilePath = "\\files\T001\Files\SampleDataSources\opticon_01.opt"
 
 $importId = New-Guid
 $sourceId = New-Guid

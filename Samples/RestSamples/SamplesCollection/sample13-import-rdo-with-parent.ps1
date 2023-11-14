@@ -4,7 +4,7 @@
 
 $workspaceId = 1000000
 $rdoArtifactTypeID = 1000001
-$loadFilePath = "C:\DefaultFileRepository\samples\rdo_load_file_03.dat"
+$loadFilePath = "\\files\T001\Files\SampleDataSources\rdo_load_file_03.dat"
 
 $importId = New-Guid
 $sourceId = New-Guid
