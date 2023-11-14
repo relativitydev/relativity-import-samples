@@ -1289,7 +1289,7 @@
             "type": "string",
             "description": "Custom provided fileshare location where dataset (load file) will be generated. When not provided the default fileshare location for selected workspace is used.",
             "nullable": true,
-            "example": "\\files\\<TenantNumber>\\Files\\EDDS1015024\\DiagnosticJob"
+            "example": "\\files\\T001\\Files\\EDDS1015024\\DiagnosticJob"
           }
         }
       },
@@ -1473,7 +1473,7 @@
           "Path": {
             "type": "string",
             "description": "File localization",
-            "example": "\\files\\<TenantNumber>\\Files\\tmp_loadfile\\loadfile.dat"
+            "example": "\\files\\T001\\Files\\tmp_loadfile\\loadfile.dat"
           },
           "EndOfLine": {
             "$ref": "#/components/schemas/DataSourceEndOfLine"

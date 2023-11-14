@@ -42,7 +42,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 			const int fileNameColumnIndex = 13;
 			const int filePathColumnIndex = 22;
 
-			const string loadFile01Path = "\\files\\<TenantNumber>\\Files\\SampleDataSources\\load_file_01.dat";
+			const string loadFile01Path = "\\files\\T001\\Files\\SampleDataSources\\load_file_01.dat";
 
 			// Configuration settings for images import. Builder is used to create settings.
 			ImportDocumentSettings importSettings = ImportDocumentSettingsBuilder.Create()

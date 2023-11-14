@@ -36,7 +36,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 			// Destination workspace artifact Id.
 			const int workspaceId = 1000000;
 
-			const string loadFile07PathTemplate = "\\files\\<TenantNumber>\\Files\\SampleDataSources\\load_file_07_{0}.dat";
+			const string loadFile07PathTemplate = "\\files\\T001\\Files\\SampleDataSources\\load_file_07_{0}.dat";
 
 			// set of columns indexes in load file used in import settings.
 			const int controlNumberColumnIndex = 0;

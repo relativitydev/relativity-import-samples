@@ -4,7 +4,7 @@
 
 $workspaceId = 1000000
 $rootFolderId = 1000001
-$loadFilePath = "\\files\<TenantNumber>\Files\SampleDataSources\load_file_03.dat"
+$loadFilePath = "\\files\T001\Files\SampleDataSources\load_file_03.dat"
 
 $importId = New-Guid
 $sourceId = New-Guid

@@ -3,7 +3,7 @@
 . "$global:rootDir\Helpers\WriteInformationClass.ps1"
 
 $workspaceId = 1000000
-$loadFilePath = "\\files\<TenantNumber>\Files\SampleDataSources\rdo_load_file_01.dat"
+$loadFilePath = "\\files\T001\Files\SampleDataSources\rdo_load_file_01.dat"
 
 $importId = New-Guid
 $sourceId = New-Guid

@@ -44,7 +44,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 			const int filePathColumnIndex = 22;
 
 			// Path to the load file used in data source settings.
-			const string loadFile01Path = "\\files\\<TenantNumber>\\Files\\SampleDataSources\\load_file_01.dat";
+			const string loadFile01Path = "\\files\\T001\\Files\\SampleDataSources\\load_file_01.dat";
 
 			// overlay key field
 			const string overlayKeyField = "Control Number";

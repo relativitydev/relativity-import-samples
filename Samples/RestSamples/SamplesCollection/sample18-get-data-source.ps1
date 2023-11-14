@@ -6,7 +6,7 @@ $workspaceId = 1000000
 $importId = New-Guid
 $sourcesCount = 10
 $pageSize = 7
-$loadFilePath = "\\files\<TenantNumber>\Files\SampleDataSources\load_file"
+$loadFilePath = "\\files\T001\Files\SampleDataSources\load_file"
 $global:Endpoints = [Endpoints]::new($workspaceId)
 
 Context "Sample18 Read Data sources for Import Job" {

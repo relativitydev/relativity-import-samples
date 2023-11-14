@@ -48,7 +48,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 			const int rdoArtifactTypeID = 2000000;
 
 			// Path to the load file used in data source settings.
-			const string rdoLoadFile = "\\files\\<TenantNumber>\\Files\\SampleDataSources\\rdo_load_file_03.dat";
+			const string rdoLoadFile = "\\files\\T001\\Files\\SampleDataSources\\rdo_load_file_03.dat";
 
 			// Create request's payload
 			var createJobPayload = new

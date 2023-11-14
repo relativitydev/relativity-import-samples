@@ -43,7 +43,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 			const int productionSetsArtifactId = 1000001;
 
 			// Path to the file in opticon format used in data source settings.
-			const string opticonFilePath = "\\files\\<TenantNumber>\\Files\\SampleDataSources\\opticon_02.opt";
+			const string opticonFilePath = "\\files\\T001\\Files\\SampleDataSources\\opticon_02.opt";
 
 			// Create request's payload
 			var createJobPayload = new

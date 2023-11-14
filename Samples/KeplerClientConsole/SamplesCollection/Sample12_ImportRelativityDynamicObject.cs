@@ -45,7 +45,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 			const int domainArtifactTypeID = 1000027;
 
 			// Path to the load file used in data source settings.
-			const string rdoLoadFile = "\\files\\<TenantNumber>\\Files\\SampleDataSources\\rdo_load_file_01.dat";
+			const string rdoLoadFile = "\\files\\T001\\Files\\SampleDataSources\\rdo_load_file_01.dat";
 
 			// Configuration RDO settings for Relativity Dynamic Objects (RDOs) import. Builder is used to create settings.
 			ImportRdoSettings importSettings = ImportRdoSettingsBuilder.Create()

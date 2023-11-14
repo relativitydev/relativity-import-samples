@@ -104,7 +104,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 			DataSourceSettings dataSourceSettings = new DataSourceSettings
 			{
 				Type = DataSourceType.LoadFile,
-				Path = "\\files\\<TenantNumber>\\Files\\SampleDataSources\\load_file_04.dat",
+				Path = "\\files\\T001\\Files\\SampleDataSources\\load_file_04.dat",
 				NewLineDelimiter = '#',
 				ColumnDelimiter = '|',
 				QuoteDelimiter = '^',

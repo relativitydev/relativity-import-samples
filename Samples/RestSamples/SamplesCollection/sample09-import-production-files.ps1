@@ -4,7 +4,7 @@
 
 $workspaceId = 1000000
 $productionSetsArtifactId = 1000001
-$opticonFilePath = "\\files\<TenantNumber>\Files\SampleDataSources\opticon_02.opt"
+$opticonFilePath = "\\files\T001\Files\SampleDataSources\opticon_02.opt"
 
 $importId = New-Guid
 $sourceId = New-Guid

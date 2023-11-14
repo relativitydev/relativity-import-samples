@@ -76,7 +76,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 			DataSourceSettings dataSourceSettings = new DataSourceSettings
 			{
 				Type = DataSourceType.Opticon,
-				Path = "\\files\\<TenantNumber>\\Files\\SampleDataSources\\opticon_01.opt",
+				Path = "\\files\\T001\\Files\\SampleDataSources\\opticon_01.opt",
 				NewLineDelimiter = default,
 				ColumnDelimiter = default,
 				QuoteDelimiter = default,
