@@ -866,7 +866,7 @@ Import service throws two kind of errors:
  - job level errors
  - item level errors.
 
- Job level error are severe enough to cause the entire import job to fail. This errors can be found in the *GetDetailsAsync* endpoints for *IImportJobController* and '*IImportSourceController*.
+ Job level error are severe enough to cause the entire import job to fail. This errors can be found in the *GetDetailsAsync* endpoints for *IImportJobController* and *IImportSourceController*.
 
  Item level errors are specific to rows within the data source being imported. Unlike job level errors, item level errors do not cause the entire import job to fail. Instead, they are logged and the import process continues with the next row from the load file.
  Item level errors can result in whole record, meaning document or RDO, not being imported to the workspace or the record in the workspace can be incomplete.
