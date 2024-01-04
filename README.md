@@ -14,7 +14,7 @@
 **[API Documentation](#rest-api)**<br>
 **[API Response](#api-response)**<br>
 **[ImportJob & DataSource States](#rest-api)**<br>
-**[Error Codes](#error-codes)**<br>
+**[Errors](#errors)**<br>
 ### **[Code Samples](#samples)**
 **[.NET Console Application - How-to](#net-code-samples---how-to)**<br>
 **[.NET Framework & Kepler Console Application - How-to](#keplerclient-code-samples---how-to)**<br>
@@ -860,16 +860,79 @@ Data source state can be read from GET Data source details response
 | 50 | Completed               | Data source processed, import finished.                         |
 |    |                         |                                                                 |
 
-# Error Codes
+# Errors
+## General remarks
+Import service throws two kind of errors:
+ - job level errors
+ - item level errors.
+
+ Job level errors are severe enough to cause the entire import job to fail. These errors can be found in the *GetDetailsAsync* endpoints for *IImportJobController* and *IImportSourceController*.
+
+ Item level errors are specific to rows within the data source being imported. Unlike job level errors, item level errors do not cause the entire import job to fail. Instead, they are logged and the import process continues with the next row from the load file.
+ Item level errors can result in whole record, meaning document or RDO, not being imported to the workspace or the record in the workspace can be incomplete.
+ You can retrieve all item level errors that occurred during the import process from *GetItemErrorsAsync* endpoint for *IImportSourceController*.
+
+## Retrieving errors
 
 Error handling in Import Service returns Error Codes and Error Messages:
  - in every response for failed HTTP request
- - when requested by user for all item errors that occurred during importing of particular data source e.g.:
+ - when requested by user for all job level errors that occurred during importing of particular data source e.g.:
+
+ > curl
+
+        curl -X GET 'https://relativity.roadie.so/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/00000000-0000-0000-0000-000000000000/sources/00000000-0000-0000-0000-000000000000/details'
+        -H 'accept: application/json'
+        -H 'X-CSRF-Header: -'
+
+
+  > JSON response
+
+    {
+	"Value": {
+		"State": "Failed",
+		"DataSourceSettings": {
+		    Path": "file.dat",
+		    "EndOfLine": "Windows",
+		    "Type": "LoadFile",
+		    "FirstLineContainsColumnNames": true,
+		    "StartLine": 0,
+		    "Encoding": "utf-8"
+		    "ColumnDelimiter": "a",
+		    "QuoteDelimiter": "b",
+		    "NewLineDelimiter": "c",
+		    "MultiValueDelimiter": "d",
+		    "NestedValueDelimiter": "e"
+		},
+		"JobLevelErrors": [
+		{
+		"LineNumber": -1,
+		"ErrorDetails": [
+		        {
+		            "ColumnIndex": -1,
+		            "ErrorCode": "S.RD.EXT.0217",
+		            "ErrorMessage": "Cannot read Data Source. Could not open file for reading by RestartableStream.",
+		            "ErrorMessageTemplate": "Cannot read Data Source. Could not open file for reading by RestartableStream.",
+		            "ErrorProperties": {}
+		        }
+		    ]
+		},
+		"CreatedBy": 777,
+		"CreatedOn": "2022-10-18T15:09:12.69",
+		"LastModifiedBy": 777,
+		"LastModifiedOn": "2022-10-18T15:10:00.497"
+	},
+	"IsSuccess": true,
+	"ErrorMessage": "",
+	"ErrorCode": "",
+	"ImportJobID": "00000000-0000-0000-0000-000000000000"
+	}
+
+- when requested by user for all item errors that occurred during importing of particular data source e.g.:
 
  > curl
 
         curl -X GET 'https://relativity.roadie.so/Relativity.REST/api/import-service/v1/workspaces/10000/import-jobs/00000000-0000-0000-0000-000000000000/sources/00000000-0000-0000-0000-000000000000/itemerrors?start=0&length=10'
-        -H 'accept: application/json' 
+        -H 'accept: application/json'
         -H 'X-CSRF-Header: -'
 
 
