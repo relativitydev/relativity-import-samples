@@ -14,7 +14,7 @@
 **[API Documentation](#rest-api)**<br>
 **[API Response](#api-response)**<br>
 **[ImportJob & DataSource States](#rest-api)**<br>
-**[Error Codes](#error-codes)**<br>
+**[Errors](#errors)**<br>
 ### **[Code Samples](#samples)**
 **[.NET Console Application - How-to](#net-code-samples---how-to)**<br>
 **[.NET Framework & Kepler Console Application - How-to](#keplerclient-code-samples---how-to)**<br>
@@ -866,13 +866,13 @@ Import service throws two kind of errors:
  - job level errors
  - item level errors.
 
- Job level error are severe enough to cause the entire import job to fail. This errors can be found in the 'GetDetailsAsync' endpoints for 'IImportJobController' and 'IImportSourceController'.
+ Job level error are severe enough to cause the entire import job to fail. This errors can be found in the *GetDetailsAsync* endpoints for *IImportJobController* and '*IImportSourceController*.
 
  Item level errors are specific to rows within the data source being imported. Unlike job level errors, item level errors do not cause the entire import job to fail. Instead, they are logged and the import process continues with the next row from the load file.
- Item level errors can result in whole document not being imported to the workspace or the record in the workspace can be incomplete.
- You can retrieve all item level errors that occurred during the import process from 'GetItemErrorsAsync' endpoint for 'IImportSourceController'.
+ Item level errors can result in whole record, meaning document or RDO, not being imported to the workspace or the record in the workspace can be incomplete.
+ You can retrieve all item level errors that occurred during the import process from *GetItemErrorsAsync* endpoint for *IImportSourceController*.
 
-## Error Codes
+## Retrieving errors
 
 Error handling in Import Service returns Error Codes and Error Messages:
  - in every response for failed HTTP request
@@ -970,7 +970,7 @@ Error handling in Import Service returns Error Codes and Error Messages:
     "ImportJobID": "00000000-0000-0000-0000-000000000000"
     }
 
-### Error code structure
+## Error code structure
 
 Error code returned from the Import Service API endpoint has the following structure:
 
