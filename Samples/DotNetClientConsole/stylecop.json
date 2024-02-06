@@ -1,0 +1,14 @@
+﻿{
+	"$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
+	"settings": {
+		"documentationRules": {
+			"companyName": "Relativity ODA LLC",
+			"copyrightText": "© Relativity All Rights Reserved."
+		},
+		"indentation": {
+			"useTabs": true,
+			"tabSize": 4, 
+			"indentationSize": 4
+		}
+	}
+}

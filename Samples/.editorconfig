@@ -1,0 +1,6 @@
+﻿[*.cs]
+end_of_line = crlf
+indent_style = tab
+
+# SA0001: Xml comment analysis disabled
+dotnet_diagnostic.SA0001.severity = none
