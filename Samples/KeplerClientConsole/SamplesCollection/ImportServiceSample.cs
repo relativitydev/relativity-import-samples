@@ -20,17 +20,16 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 	/// </summary>
 	public partial class ImportServiceSample
 	{
-		private readonly IServiceFactory _serviceFactory;
+		private readonly IServiceFactory serviceFactory;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ImportServiceSample"/> class.
 		/// </summary>
 		public ImportServiceSample()
 		{
-			this._serviceFactory = KeplerProxyHelper.GetServiceFactory();
+			this.serviceFactory = KeplerProxyHelper.GetServiceFactory();
 		}
 
-		
 		private async Task<DataSourceState?> WaitImportDataSourceToBeCompleted(Func<Task<ValueResponse<DataSourceDetails>>> funcAsync, int? timeout = null)
 		{
 			DataSourceState[] completedStates = { DataSourceState.Completed, DataSourceState.CompletedWithItemErrors, DataSourceState.Failed };

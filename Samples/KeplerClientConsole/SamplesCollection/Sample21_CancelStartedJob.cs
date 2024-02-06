@@ -1,5 +1,5 @@
 // <copyright file="Sample21_CancelStartedJob.cs" company="Relativity ODA LLC">
-// � Relativity All Rights Reserved.
+// © Relativity All Rights Reserved.
 // </copyright>
 
 namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
@@ -25,7 +25,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample21_CancelStartedJob()
 		{
-			Console.WriteLine($"Running {nameof(Sample21_CancelStartedJob)}");
+			Console.WriteLine($"Running {nameof(this.Sample21_CancelStartedJob)}");
 
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
@@ -53,13 +53,13 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 					.WithoutFolders();
 
 			using (Relativity.Import.V1.Services.IDocumentConfigurationController documentConfiguration =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IDocumentConfigurationController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IDocumentConfigurationController>())
 
 			using (Relativity.Import.V1.Services.IImportJobController importJobController =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
 
 			using (Relativity.Import.V1.Services.IImportSourceController importSourceController =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportSourceController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportSourceController>())
 			{
 				Response response = await importJobController.CreateAsync(
 					importJobID: importId,
@@ -107,11 +107,11 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 				Console.WriteLine("Import Job Status");
 				Console.WriteLine($"	IsSuccess: {valueResponse.IsSuccess}");
 				Console.WriteLine($"	Import status: {valueResponse.Value.State}");
-
 			}
 		}
 	}
 }
+
 /* Example of expected console result:
 IImportJobController.BeginAsync
 Response.IsSuccess: True

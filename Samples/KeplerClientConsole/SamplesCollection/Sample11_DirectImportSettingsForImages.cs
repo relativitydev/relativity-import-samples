@@ -23,7 +23,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample11_DirectImportSettingsForImages()
 		{
-			Console.WriteLine($"Running {nameof(Sample11_DirectImportSettingsForImages)}");
+			Console.WriteLine($"Running {nameof(this.Sample11_DirectImportSettingsForImages)}");
 
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
@@ -48,14 +48,14 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 					PageNumbering = PageNumbering.AutoNumberImages,
 					ProductionID = null,
 					LoadExtractedText = true,
-					ExtractedTextEncoding = "UTF-8"
+					ExtractedTextEncoding = "UTF-8",
 				},
 				Fields = null,
 				Folder = new FolderSettings
 				{
 					FolderPathColumnIndex = null,
 					RootFolderID = rootFolderId,
-				}
+				},
 			};
 
 			// Configuration settings for data source created without DataSourceSettingsBuilder.
@@ -75,13 +75,13 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 				StartLine = 0,
 			};
 
-			using (Relativity.Import.V1.Services.IDocumentConfigurationController documentConfiguration = this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IDocumentConfigurationController>())
+			using (Relativity.Import.V1.Services.IDocumentConfigurationController documentConfiguration = this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IDocumentConfigurationController>())
 
 			using (Relativity.Import.V1.Services.IImportJobController importJobController =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
 
 			using (Relativity.Import.V1.Services.IImportSourceController importSourceController =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportSourceController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportSourceController>())
 			{
 				// Create import job.
 				Response response = await importJobController.CreateAsync(
@@ -125,6 +125,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 		}
 	}
 }
+
 /* Expected console result:
 	Data source state: Completed
 	Import data source progress: Total records: 5, Imported records: 5, Records with errors: 0

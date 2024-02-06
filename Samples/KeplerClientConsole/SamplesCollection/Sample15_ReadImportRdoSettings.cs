@@ -22,7 +22,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample15_ReadImportRdoSettings()
 		{
-			Console.WriteLine($"Running {nameof(Sample15_ReadImportRdoSettings)}");
+			Console.WriteLine($"Running {nameof(this.Sample15_ReadImportRdoSettings)}");
 
 			// GUID identifiers for import job.
 			Guid importId = Guid.NewGuid();
@@ -46,10 +46,10 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 					.WithParentColumnIndex(parentObjectIdColumnIndex));
 
 			using (Relativity.Import.V1.Services.IRDOConfigurationController rdoConfiguration =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IRDOConfigurationController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IRDOConfigurationController>())
 
 			using (Relativity.Import.V1.Services.IImportJobController importJobController =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
 			{
 				// Create import job.
 				Response response = await importJobController.CreateAsync(

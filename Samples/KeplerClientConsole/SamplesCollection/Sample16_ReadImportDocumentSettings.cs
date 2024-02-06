@@ -22,7 +22,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample16_ReadImportDocumentSettings()
 		{
-			Console.WriteLine($"Running {nameof(Sample16_ReadImportDocumentSettings)}");
+			Console.WriteLine($"Running {nameof(this.Sample16_ReadImportDocumentSettings)}");
 
 			// GUID identifiers for import job.
 			Guid importId = Guid.NewGuid();
@@ -46,17 +46,18 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 				.WithFieldsMapped(x => x
 					.WithField(controlNumberColumnIndex, "Control Number")
 					.WithField(emailToColumnIndex, "Email To")
-					.WithExtractedTextField(10,
+					.WithExtractedTextField(
+						10,
 						e => e.WithExtractedTextInSeparateFiles(
 								a => a.WithEncoding("UTF-8")
 									.WithFileSizeDefinedInColumn(fileSizeColumnIndex))))
 				.WithoutFolders();
 
 			using (Relativity.Import.V1.Services.IDocumentConfigurationController documentConfiguration =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IDocumentConfigurationController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IDocumentConfigurationController>())
 
 			using (Relativity.Import.V1.Services.IImportJobController importJobController =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
 			{
 				// Create import job.
 				Response response = await importJobController.CreateAsync(
@@ -69,7 +70,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 
 				// Add import document settings to existing import job.
 				response = await documentConfiguration.CreateAsync(workspaceId, importId, importSettings);
-				ResponseHelper.EnsureSuccessResponse(response, "IDocumentConfigurationController.CreateAsync");// Read ImportDocumentSettings of existing import job.
+				ResponseHelper.EnsureSuccessResponse(response, "IDocumentConfigurationController.CreateAsync"); // Read ImportDocumentSettings of existing import job.
 
 				// Read import document settings for particular import job.
 				ValueResponse<ImportDocumentSettings> documentSettings = await documentConfiguration.ReadAsync(workspaceId, importId);

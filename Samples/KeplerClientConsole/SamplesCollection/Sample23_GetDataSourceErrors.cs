@@ -27,7 +27,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample23_GetDataSourceErrors()
 		{
-			Console.WriteLine($"Running {nameof(Sample23_GetDataSourceErrors)}");
+			Console.WriteLine($"Running {nameof(this.Sample23_GetDataSourceErrors)}");
 
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
@@ -95,13 +95,13 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 				.WithDefaultCultureInfo();
 
 			using (Relativity.Import.V1.Services.IDocumentConfigurationController documentConfiguration =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IDocumentConfigurationController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IDocumentConfigurationController>())
 
 			using (Relativity.Import.V1.Services.IImportJobController importJobController =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
 
 			using (Relativity.Import.V1.Services.IImportSourceController importSourceController =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportSourceController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportSourceController>())
 			{
 				// Create import job.
 				Response response = await importJobController.CreateAsync(
@@ -138,7 +138,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 					funcAsync: () => importJobController.GetDetailsAsync(workspaceId, importId));
 
 				Console.WriteLine($"Import job state: {importJobState}");
-				ValueResponse <ImportProgress> valueResponse = await importJobController.GetProgressAsync(workspaceId, importId);
+				ValueResponse<ImportProgress> valueResponse = await importJobController.GetProgressAsync(workspaceId, importId);
 
 				if (valueResponse?.IsSuccess ?? false)
 				{
@@ -147,7 +147,6 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 					Console.WriteLine($"Import job Id: {valueResponse.ImportJobID}");
 					Console.WriteLine($"Import job progress: Total records: {valueResponse.Value.TotalRecords}, Imported records: {valueResponse.Value.ImportedRecords}, Records with errors: {valueResponse.Value.ErroredRecords}");
 				}
-
 
 				foreach (var source in new[] { sourceId01, sourceId02 })
 				{

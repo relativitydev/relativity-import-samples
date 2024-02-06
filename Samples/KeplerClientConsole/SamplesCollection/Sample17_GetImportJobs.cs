@@ -23,7 +23,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample17_GetImportJobs()
 		{
-			Console.WriteLine($"Running {nameof(Sample17_GetImportJobs)}");
+			Console.WriteLine($"Running {nameof(this.Sample17_GetImportJobs)}");
 
 			// destination workspace artifact Id.
 			const int workspaceId = 1000000;
@@ -46,12 +46,11 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 				.WithoutFolders();
 
 			using (Relativity.Import.V1.Services.IDocumentConfigurationController documentConfiguration =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IDocumentConfigurationController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IDocumentConfigurationController>())
 			using (Relativity.Import.V1.Services.IImportJobController importJobController =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
 			{
 				// Create n import jobs.
-
 				Console.WriteLine($"Creating {importCount} jobs");
 				for (int i = 0; i < importCount; i++)
 				{
@@ -78,12 +77,12 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 						Console.WriteLine(importJobId);
 					}
 				}
-				
 			}
 		}
 	}
 }
-/* Example of console result 
+
+/* Example of console result
 	Response.IsSuccess: True
 	Jobs total count: 10
 	ImportJobIds:

@@ -2,6 +2,7 @@
 // © Relativity All Rights Reserved.
 // </copyright>
 
+#pragma warning disable SA1600 // Elements should be documented
 namespace Relativity.Import.Samples.DotNetClient.Helpers
 {
 	public static class RelativityImportEndpoints
@@ -31,12 +32,12 @@ namespace Relativity.Import.Samples.DotNetClient.Helpers
 
 		// Data Source section
 		public static string GetImportSourceUri(int workspaceId, Guid importId, Guid sourceId) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/{importId}/sources/{sourceId}";
-		
-		public static string GetImportSourceDetailsUri(int workspaceId, Guid importId, Guid sourceId) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/{importId}/sources/{sourceId}/details";
-		
-		public static string GetImportSourceProgressUri(int workspaceId, Guid importId, Guid sourceId) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/{importId}/sources/{sourceId}/progress";
-		
-		public static string GetImportSourceItemErrorsUri(int workspaceId, Guid importId, Guid sourceId, int start, int length) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/{importId}/sources/{sourceId}/itemerrors?start={start}&length={length}";
 
+		public static string GetImportSourceDetailsUri(int workspaceId, Guid importId, Guid sourceId) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/{importId}/sources/{sourceId}/details";
+
+		public static string GetImportSourceProgressUri(int workspaceId, Guid importId, Guid sourceId) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/{importId}/sources/{sourceId}/progress";
+
+		public static string GetImportSourceItemErrorsUri(int workspaceId, Guid importId, Guid sourceId, int start, int length) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/{importId}/sources/{sourceId}/itemerrors?start={start}&length={length}";
+#pragma warning restore SA1600 // Elements should be documented
 	}
 }

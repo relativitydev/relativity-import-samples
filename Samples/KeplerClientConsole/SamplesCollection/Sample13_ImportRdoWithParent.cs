@@ -1,5 +1,5 @@
 // <copyright file="Sample13_ImportRdoWithParent.cs" company="Relativity ODA LLC">
-// � Relativity All Rights Reserved.
+// © Relativity All Rights Reserved.
 // </copyright>
 
 namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
@@ -25,7 +25,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample13_ImportRdoWithParent()
 		{
-			Console.WriteLine($"Running {nameof(Sample13_ImportRdoWithParent)}");
+			Console.WriteLine($"Running {nameof(this.Sample13_ImportRdoWithParent)}");
 
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
@@ -63,13 +63,13 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 				.WithDefaultCultureInfo();
 
 			using (Relativity.Import.V1.Services.IRDOConfigurationController rdoConfiguration =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IRDOConfigurationController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IRDOConfigurationController>())
 
 			using (Relativity.Import.V1.Services.IImportJobController importJobController =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
 
 			using (Relativity.Import.V1.Services.IImportSourceController importSourceController =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportSourceController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportSourceController>())
 			{
 				// Create import job.
 				Response response = await importJobController.CreateAsync(
@@ -113,6 +113,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 		}
 	}
 }
+
 /* Expected console result:
  Data source state: Completed
  Import data source progress: Total records: 3, Imported records: 3, Records with errors: 0
