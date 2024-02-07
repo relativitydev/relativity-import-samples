@@ -132,4 +132,4 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 /* Expected console result:
 	Data source state: Completed
 	Import data source progress: Total records: 4, Imported records: 4, Records with errors: 0
- */
+*/

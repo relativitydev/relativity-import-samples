@@ -73,5 +73,5 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 
 /* Expected console result:
 	Read RDO settings: ArtifactTypeID:100222, ParentColumnIndex:2
- */
+*/
 }

@@ -5,10 +5,6 @@
 		<TargetFramework>net462</TargetFramework>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
-		<CodeAnalysisRuleSet>..\testProjects.ruleset</CodeAnalysisRuleSet>
-	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net462|AnyCPU'">
 		<CodeAnalysisRuleSet>..\ignoreStylecop.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>

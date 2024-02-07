@@ -163,4 +163,4 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 	Import job Id: dc126168-abc7-49e6-b329-d1721f27f67b
 	Import job progress: Total records: 4, Imported records: 0, Records with errors: 4
 
- */
+*/

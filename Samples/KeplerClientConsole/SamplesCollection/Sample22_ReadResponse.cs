@@ -97,7 +97,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 
 // Example of output
 /*
- IImportJobController.CreateAsync
+IImportJobController.CreateAsync
 IsSuccess:True
 ImportJobID:bf272e8c-c26b-435f-a21b-14a3f46661e2
 ErrorCode:

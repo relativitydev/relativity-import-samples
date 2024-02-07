@@ -98,34 +98,34 @@ Response.IsSuccess: True
 FieldMappings count: 2
 
 {
-  "Value": {
+	"Value": {
 	"Overlay": null,
 	"Native": {
-	  "FilePathColumnIndex": 22,
-	  "FileNameColumnIndex": 13
+		"FilePathColumnIndex": 22,
+		"FileNameColumnIndex": 13
 	},
 	"Image": null,
 	"Fields": {
-	  "FieldMappings": [
+		"FieldMappings": [
 		{
-		  "ColumnIndex": 0,
-		  "Field": "Control Number",
-		  "ContainsID": false,
-		  "ContainsFilePath": false
+			"ColumnIndex": 0,
+			"Field": "Control Number",
+			"ContainsID": false,
+			"ContainsFilePath": false
 		},
 		{
-		  "ColumnIndex": 11,
-		  "Field": "Email To",
-		  "ContainsID": false,
-		  "ContainsFilePath": false
+			"ColumnIndex": 11,
+			"Field": "Email To",
+			"ContainsID": false,
+			"ContainsFilePath": false
 		}
-	  ]
+		]
 	},
 	"Folder": null,
 	"Other": null
-  },
-  "IsSuccess": true,
-  "ErrorMessage": null,
-  "ErrorCode": null,
-  "ImportJobID": "7ac85319-831c-4bfc-a8de-9d645c55fbd0"
-  */
+	},
+	"IsSuccess": true,
+	"ErrorMessage": null,
+	"ErrorCode": null,
+	"ImportJobID": "7ac85319-831c-4bfc-a8de-9d645c55fbd0"
+ */

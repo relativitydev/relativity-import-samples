@@ -145,4 +145,4 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 	ImportJobID:bf272e8c-c26b-435f-a21b-14a3f46661e2
 	ErrorCode:J.BEG.VLD.1508
 	ErrorMessage:Cannot begin Import Job. Job is not configured. Current Job state: New
- */
+*/

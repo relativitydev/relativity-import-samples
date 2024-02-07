@@ -116,11 +116,11 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 IImportJobController.BeginAsync
 Response.IsSuccess: True
 Import Job Status
-        IsSuccess: True
-        Import status: Scheduled
+		IsSuccess: True
+		Import status: Scheduled
 IImportJobController.CancelAsync
 Response.IsSuccess: True
 Import Job Status
-        IsSuccess: True
-        Import status: Canceled
+		IsSuccess: True
+		Import status: Canceled
 */
