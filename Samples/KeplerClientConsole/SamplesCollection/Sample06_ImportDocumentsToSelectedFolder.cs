@@ -24,7 +24,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample06_ImportDocumentsToSelectedFolder()
 		{
-			Console.WriteLine($"Running {nameof(Sample06_ImportDocumentsToSelectedFolder)}");
+			Console.WriteLine($"Running {nameof(this.Sample06_ImportDocumentsToSelectedFolder)}");
 
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
@@ -67,11 +67,11 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 				.WithDefaultCultureInfo();
 
 			using (Relativity.Import.V1.Services.IDocumentConfigurationController documentConfiguration =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IDocumentConfigurationController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IDocumentConfigurationController>())
 			using (Relativity.Import.V1.Services.IImportJobController importJobController =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
 			using (Relativity.Import.V1.Services.IImportSourceController importSourceController =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportSourceController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportSourceController>())
 			{
 				// Create import job.
 				Response response = await importJobController.CreateAsync(
@@ -86,8 +86,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 				ResponseHelper.EnsureSuccessResponse(response, "IDocumentConfigurationController.CreateAsync");
 
 				// Add data source settings to existing import job.
-				response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId,
-					dataSourceSettings);
+				response = await importSourceController.AddSourceAsync(workspaceId, importId, sourceId, dataSourceSettings);
 				ResponseHelper.EnsureSuccessResponse(response, "IImportSourceController.AddSourceAsync");
 
 				// Start import job.

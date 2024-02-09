@@ -25,7 +25,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample18_GetDataSource()
 		{
-			Console.WriteLine($"Running {nameof(Sample18_GetDataSource)}");
+			Console.WriteLine($"Running {nameof(this.Sample18_GetDataSource)}");
 
 			// destination workspace artifact Id.
 			const int workspaceId = 1000000;
@@ -49,11 +49,11 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 				.WithoutFolders();
 
 			using (Relativity.Import.V1.Services.IDocumentConfigurationController documentConfiguration =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IDocumentConfigurationController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IDocumentConfigurationController>())
 			using (Relativity.Import.V1.Services.IImportJobController importJobController =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
 			using (Relativity.Import.V1.Services.IImportSourceController importSourceController =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportSourceController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportSourceController>())
 			{
 				// Create import job.
 				Guid importId = Guid.NewGuid();
@@ -101,6 +101,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 		}
 	}
 }
+
 /* Example of console result:
 	Response.IsSuccess: True
 	Data Sources total count: 10

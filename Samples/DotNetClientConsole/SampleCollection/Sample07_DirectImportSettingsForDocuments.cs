@@ -6,15 +6,15 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 {
 	using System;
 	using System.Net.Http;
-	using System.Threading.Tasks;
-	using Relativity.Import.V1;
-	using Relativity.Import.V1.Models.Settings;
-	using Relativity.Import.V1.Models.Sources;
 	using System.Net.Http.Json;
-	using Relativity.Import.V1.Models;
 	using System.Text.Json;
 	using System.Text.Json.Serialization;
+	using System.Threading.Tasks;
 	using Relativity.Import.Samples.DotNetClient.Helpers;
+	using Relativity.Import.V1;
+	using Relativity.Import.V1.Models;
+	using Relativity.Import.V1.Models.Settings;
+	using Relativity.Import.V1.Models.Sources;
 
 	/// <summary>
 	///  Class containing examples of using import service SDK.
@@ -28,7 +28,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample07_DirectImportSettingsForDocuments()
 		{
-			Console.WriteLine($"Running {nameof(Sample07_DirectImportSettingsForDocuments)}");
+			Console.WriteLine($"Running {nameof(this.Sample07_DirectImportSettingsForDocuments)}");
 
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
@@ -52,7 +52,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 			var createJobPayload = new
 			{
 				applicationName = "Import-service-sample-app",
-				correlationID = "Sample-job-0007"
+				correlationID = "Sample-job-0007",
 			};
 
 			// Configuration settings for document import. Example of set without using ImportDocumentSettingsBuilder.
@@ -101,7 +101,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 							ColumnIndex = extractedTextFilePathColumnIndex,
 							ContainsFilePath = true,
 							Encoding = "UTF-8",
-							FileSizeColumnIndex = fileSizeColumnIndex
+							FileSizeColumnIndex = fileSizeColumnIndex,
 						},
 					},
 				},
@@ -109,7 +109,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 				{
 					FolderPathColumnIndex = null,
 					RootFolderID = rootFolderId,
-				}
+				},
 			};
 
 			// Create payload for request.
@@ -141,7 +141,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 			// endpoint: POST /import-jobs/{importId}
 			var createImportJobUri = RelativityImportEndpoints.GetImportJobCreateUri(workspaceId, importId);
 
-			var response = await httpClient.PostAsJsonAsync(createImportJobUri,createJobPayload);
+			var response = await httpClient.PostAsJsonAsync(createImportJobUri, createJobPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
 
 			// Add import document settings to existing import job (configure import job).
@@ -173,13 +173,13 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 			// endpoint: GET import-jobs/{importId}/sources/{sourceId}/details"
 			var importSourceDetailsUri = RelativityImportEndpoints.GetImportSourceDetailsUri(workspaceId, importId, sourceId);
 
-			JsonSerializerOptions options = new()
+			JsonSerializerOptions options = new ()
 			{
-				Converters = { new JsonStringEnumConverter() }
+				Converters = { new JsonStringEnumConverter() },
 			};
 
 			var dataSourceState = await ImportJobSampleHelper.WaitImportDataSourceToBeCompleted(
-				funcAsync: () => httpClient.GetFromJsonAsync<ValueResponse<DataSourceDetails>> (importSourceDetailsUri, options),
+				funcAsync: () => httpClient.GetFromJsonAsync<ValueResponse<DataSourceDetails>>(importSourceDetailsUri, options),
 				timeout: 10000);
 
 			// Get current import progress for specific data source.
@@ -187,7 +187,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 			var importSourceProgressUri = RelativityImportEndpoints.GetImportSourceProgressUri(workspaceId, importId, sourceId);
 
 			var valueResponse = await httpClient.GetFromJsonAsync<ValueResponse<ImportProgress>>(importSourceProgressUri);
-			
+
 			if (valueResponse?.IsSuccess ?? false)
 			{
 				Console.WriteLine("\n");
@@ -197,7 +197,8 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 		}
 	}
 }
+
 /* Expected console result:
 	Data source state: Completed
 	Import data source progress: Total records: 2, Imported records: 2, Records with errors: 0
- */
+*/

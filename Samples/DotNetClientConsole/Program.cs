@@ -14,9 +14,9 @@ namespace Relativity.Import.Samples.DotNetClient
 	{
 		private static void Main(string[] args)
 		{
-
 			// Execute samples:
 			var sampleCollection = new SampleCollection.ImportServiceSample();
+
 			// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 			// Uncomment the samples you wish to run:
 			// NOTE: Copy sample source files into destination location.
@@ -44,7 +44,7 @@ namespace Relativity.Import.Samples.DotNetClient
 
 					// await sampleCollection.Sample10_ImportImagesInAppendOverlayMode();
 
-					//await sampleCollection.Sample11_DirectImportSettingsForImages();
+					// await sampleCollection.Sample11_DirectImportSettingsForImages();
 
 					// await sampleCollection.Sample12_ImportRelativityDynamicObject();
 

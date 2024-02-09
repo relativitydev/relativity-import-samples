@@ -23,7 +23,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample07_DirectImportSettingsForDocuments()
 		{
-			Console.WriteLine($"Running {nameof(Sample07_DirectImportSettingsForDocuments)}");
+			Console.WriteLine($"Running {nameof(this.Sample07_DirectImportSettingsForDocuments)}");
 
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
@@ -89,7 +89,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 							ColumnIndex = extractedTextFilePathColumnIndex,
 							ContainsFilePath = true,
 							Encoding = "UTF-8",
-							FileSizeColumnIndex = fileSizeColumnIndex
+							FileSizeColumnIndex = fileSizeColumnIndex,
 						},
 					},
 				},
@@ -97,7 +97,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 				{
 					FolderPathColumnIndex = null,
 					RootFolderID = rootFolderId,
-				}
+				},
 			};
 
 			// Example of data source configuration created without using DataSourceSettingsBuilder.
@@ -118,13 +118,13 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 			};
 
 			using (Relativity.Import.V1.Services.IDocumentConfigurationController documentConfiguration =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IDocumentConfigurationController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IDocumentConfigurationController>())
 
 			using (Relativity.Import.V1.Services.IImportJobController importJobController =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
 
 			using (Relativity.Import.V1.Services.IImportSourceController importSourceController =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportSourceController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportSourceController>())
 			{
 				// Create import job.
 				Response response = await importJobController.CreateAsync(

@@ -2,26 +2,42 @@
 // © Relativity All Rights Reserved.
 // </copyright>
 
-using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
-
 namespace Relativity.Import.Samples.DotNetClient.Helpers
 {
+	using System.Net.Http.Json;
+	using System.Text;
+	using System.Text.Json;
+
+	/// <summary>
+	/// Helper class for http client.
+	/// </summary>
 	internal static class HttpClientHelper
 	{
+		/// <summary>
+		/// Serialize content.
+		/// </summary>
+		/// <typeparam name="T">Generic type.</typeparam>
+		/// <param name="model">model.</param>
+		/// <returns>http content.</returns>
 		internal static StringContent SerializeContent<T>(T model)
 		{
 			var requestModel = new
 			{
-				model
+				model,
 			};
 
 			var json = JsonSerializer.Serialize(requestModel);
 			return new StringContent(json, Encoding.UTF8, "application/json");
 		}
 
-		internal static async Task<T?> DeserializeResponse<T>(HttpResponseMessage response) where T : class
+		/// <summary>
+		/// Deserialize response.
+		/// </summary>
+		/// <typeparam name="T">Generic type.</typeparam>
+		/// <param name="response">Http response message.</param>
+		/// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
+		internal static async Task<T?> DeserializeResponse<T>(HttpResponseMessage response)
+			where T : class
 		{
 			if (response.IsSuccessStatusCode)
 			{
@@ -37,11 +53,17 @@ namespace Relativity.Import.Samples.DotNetClient.Helpers
 				{
 					Console.WriteLine($"Exception occurred during response deserialization: {ex.Message}");
 				}
+
 				return null;
 			}
+
 			return null;
 		}
 
+		/// <summary>
+		/// Create http client.
+		/// </summary>
+		/// <returns>Http client instance.</returns>
 		internal static HttpClient CreateHttpClient()
 		{
 			var restClient = new HttpClient
@@ -56,6 +78,5 @@ namespace Relativity.Import.Samples.DotNetClient.Helpers
 
 			return restClient;
 		}
-
 	}
 }

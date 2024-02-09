@@ -6,11 +6,11 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 {
 	using System;
 	using System.Net.Http;
-	using System.Threading.Tasks;
-	using Relativity.Import.V1;
 	using System.Net.Http.Json;
-	using Relativity.Import.V1.Models;
+	using System.Threading.Tasks;
 	using Relativity.Import.Samples.DotNetClient.Helpers;
+	using Relativity.Import.V1;
+	using Relativity.Import.V1.Models;
 
 	/// <summary>
 	///  Class containing examples of using import service SDK.
@@ -23,7 +23,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample17_GetImportJobs()
 		{
-			Console.WriteLine($"Running {nameof(Sample17_GetImportJobs)}");
+			Console.WriteLine($"Running {nameof(this.Sample17_GetImportJobs)}");
 
 			// Destination workspace artifact Id.
 			const int workspaceId = 1000000;
@@ -37,7 +37,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 
 			var response = await httpClient.GetAsync(getJobsUri);
 			var valueResponse = await ImportJobSampleHelper.EnsureSuccessValueResponse<ImportJobs>(response);
-			if (valueResponse is {IsSuccess: true})
+			if (valueResponse is { IsSuccess: true })
 			{
 				Console.WriteLine($"Import Jobs total count: {valueResponse.Value.TotalCount}");
 			}
@@ -50,11 +50,12 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 				Console.WriteLine($"Creating {importCount} jobs");
 				Guid importId = Guid.NewGuid();
 				var createImportJobUri = RelativityImportEndpoints.GetImportJobCreateUri(workspaceId, importId);
+
 				// Create payload for request.
 				var createJobPayload = new
 				{
 					applicationName = "Import-service-sample-app",
-					correlationID = $"Sample-job-0017-GetImportJobs_{i}"
+					correlationID = $"Sample-job-0017-GetImportJobs_{i}",
 				};
 
 				// Create import job.
@@ -69,7 +70,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 			valueResponse =
 				await httpClient.GetFromJsonAsync<ValueResponse<ImportJobs>>(getJobsUri);
 
-			if (valueResponse is {IsSuccess: true})
+			if (valueResponse is { IsSuccess: true })
 			{
 				Console.WriteLine($"Jobs total count: {valueResponse.Value.TotalCount}");
 				Console.WriteLine($"ImportJobIds:");
@@ -82,7 +83,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 	}
 }
 
-/* Example of console result 
+/* Example of console result
 	Response.IsSuccess: True
 	Jobs total count: 15
 	ImportJobIds:

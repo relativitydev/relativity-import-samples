@@ -23,7 +23,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample14_DirectImportSettingsForRdo()
 		{
-			Console.WriteLine($"Running {nameof(Sample14_DirectImportSettingsForRdo)}");
+			Console.WriteLine($"Running {nameof(this.Sample14_DirectImportSettingsForRdo)}");
 
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
@@ -62,6 +62,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 							ColumnIndex = nameColumnIndex,
 							ContainsFilePath = false,
 						},
+
 						// If you do not use these fields please just comment them. Otherwise use sample01 first to import related documents.
 						new FieldMapping
 						{
@@ -118,13 +119,13 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 			};
 
 			using (Relativity.Import.V1.Services.IRDOConfigurationController rdoConfiguration =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IRDOConfigurationController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IRDOConfigurationController>())
 
 			using (Relativity.Import.V1.Services.IImportJobController importJobController =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
 
 			using (Relativity.Import.V1.Services.IImportSourceController importSourceController =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportSourceController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportSourceController>())
 			{
 				// Create import job.
 				Response response = await importJobController.CreateAsync(
@@ -157,7 +158,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 
 				// Get current import progress for specific data source.
 				var importProgress = await importSourceController.GetProgressAsync(workspaceId, importId, sourceId);
-				
+
 				if (importProgress.IsSuccess)
 				{
 					Console.WriteLine($"\n\nData source state: {dataSourceState}");

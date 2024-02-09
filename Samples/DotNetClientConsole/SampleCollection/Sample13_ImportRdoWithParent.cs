@@ -6,17 +6,17 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 {
 	using System;
 	using System.Net.Http;
+	using System.Net.Http.Json;
+	using System.Text.Json;
+	using System.Text.Json.Serialization;
 	using System.Threading.Tasks;
+	using Relativity.Import.Samples.DotNetClient.Helpers;
 	using Relativity.Import.V1;
 	using Relativity.Import.V1.Builders.DataSource;
+	using Relativity.Import.V1.Builders.Rdos;
+	using Relativity.Import.V1.Models;
 	using Relativity.Import.V1.Models.Settings;
 	using Relativity.Import.V1.Models.Sources;
-	using System.Net.Http.Json;
-	using Relativity.Import.V1.Models;
-	using System.Text.Json.Serialization;
-	using System.Text.Json;
-	using Relativity.Import.V1.Builders.Rdos;
-	using Relativity.Import.Samples.DotNetClient.Helpers;
 
 	/// <summary>
 	///  Class containing examples of using import service SDK.
@@ -26,12 +26,12 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 		/// <summary>
 		/// Example of import Relativity Dynamic Objects (RDO) with selecting its parent.
 		/// NOTE: Sample is based on the existing RDO "Domain" and records imported in sample12.
-		/// It requires to create descendant object for Domain object first. 
+		/// It requires to create descendant object for Domain object first.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample13_ImportRdoWithParent()
 		{
-			Console.WriteLine($"Running {nameof(Sample13_ImportRdoWithParent)}");
+			Console.WriteLine($"Running {nameof(this.Sample13_ImportRdoWithParent)}");
 
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
@@ -54,7 +54,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 			var createJobPayload = new
 			{
 				applicationName = "Import-service-sample-app",
-				correlationID = "Sample-job-0013"
+				correlationID = "Sample-job-0013",
 			};
 
 			// Configuration RDO settings for Relativity Dynamic Objects (RDOs) import. Builder is used to create settings.
@@ -121,9 +121,9 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 			var importSourceDetailsUri =
 				RelativityImportEndpoints.GetImportSourceDetailsUri(workspaceId, importId, sourceId);
 
-			JsonSerializerOptions options = new()
+			JsonSerializerOptions options = new ()
 			{
-				Converters = {new JsonStringEnumConverter()}
+				Converters = { new JsonStringEnumConverter() },
 			};
 
 			var dataSourceState = await ImportJobSampleHelper.WaitImportDataSourceToBeCompleted(
@@ -149,7 +149,8 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 		}
 	}
 }
+
 /* Expected console result:
  Data source state: Completed
  Import data source progress: Total records: 3, Imported records: 3, Records with errors: 0
- */
+*/

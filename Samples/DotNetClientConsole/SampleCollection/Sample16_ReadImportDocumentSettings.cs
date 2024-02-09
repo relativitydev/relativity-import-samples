@@ -6,12 +6,12 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 {
 	using System;
 	using System.Net.Http;
-	using System.Threading.Tasks;
-	using Relativity.Import.V1.Models.Settings;
 	using System.Net.Http.Json;
 	using System.Text.Json;
+	using System.Threading.Tasks;
 	using Relativity.Import.Samples.DotNetClient.Helpers;
 	using Relativity.Import.V1.Builders.Documents;
+	using Relativity.Import.V1.Models.Settings;
 
 	/// <summary>
 	///  Class containing examples of using import service SDK.
@@ -24,7 +24,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample16_ReadImportDocumentSettings()
 		{
-			Console.WriteLine($"Running {nameof(Sample16_ReadImportDocumentSettings)}");
+			Console.WriteLine($"Running {nameof(this.Sample16_ReadImportDocumentSettings)}");
 
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
@@ -42,7 +42,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 			var createJobPayload = new
 			{
 				applicationName = "Import-service-sample-app",
-				correlationID = "Sample-job-0016"
+				correlationID = "Sample-job-0016",
 			};
 
 			// Configuration settings for document import. Builder is used to create settings.
@@ -56,7 +56,6 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 					.WithField(controlNumberColumnIndex, "Control Number")
 					.WithField(emailToColumnIndex, "Email To"))
 				.WithoutFolders();
-
 
 			// Create payload for request.
 			var importSettingPayload = new { importSettings };
@@ -79,16 +78,16 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 			// Get import document settings for existing import job.
 			// endpoint: GET /import-jobs/{importId}/documents-configurations
 			var getResponse = await httpClient.GetAsync(documentConfigurationUri);
-			
-			//Check and print values
+
+			// Check and print values
 			var valueResponse = await ImportJobSampleHelper.EnsureSuccessValueResponse<ImportDocumentSettings>(getResponse);
 			Console.WriteLine($"FieldMappings count: {valueResponse?.Value.Fields.FieldMappings.Length}");
 
 			var json = JsonSerializer.Serialize(valueResponse, new JsonSerializerOptions()
 			{
-				WriteIndented = true
+				WriteIndented = true,
 			});
-			
+
 			Console.WriteLine(json);
 		}
 	}
@@ -99,34 +98,34 @@ Response.IsSuccess: True
 FieldMappings count: 2
 
 {
-  "Value": {
+	"Value": {
 	"Overlay": null,
 	"Native": {
-	  "FilePathColumnIndex": 22,
-	  "FileNameColumnIndex": 13
+		"FilePathColumnIndex": 22,
+		"FileNameColumnIndex": 13
 	},
 	"Image": null,
 	"Fields": {
-	  "FieldMappings": [
+		"FieldMappings": [
 		{
-		  "ColumnIndex": 0,
-		  "Field": "Control Number",
-		  "ContainsID": false,
-		  "ContainsFilePath": false
+			"ColumnIndex": 0,
+			"Field": "Control Number",
+			"ContainsID": false,
+			"ContainsFilePath": false
 		},
 		{
-		  "ColumnIndex": 11,
-		  "Field": "Email To",
-		  "ContainsID": false,
-		  "ContainsFilePath": false
+			"ColumnIndex": 11,
+			"Field": "Email To",
+			"ContainsID": false,
+			"ContainsFilePath": false
 		}
-	  ]
+		]
 	},
 	"Folder": null,
 	"Other": null
-  },
-  "IsSuccess": true,
-  "ErrorMessage": null,
-  "ErrorCode": null,
-  "ImportJobID": "7ac85319-831c-4bfc-a8de-9d645c55fbd0"
-  */
+	},
+	"IsSuccess": true,
+	"ErrorMessage": null,
+	"ErrorCode": null,
+	"ImportJobID": "7ac85319-831c-4bfc-a8de-9d645c55fbd0"
+ */

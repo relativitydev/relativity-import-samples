@@ -6,17 +6,17 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 {
 	using System;
 	using System.Net.Http;
+	using System.Net.Http.Json;
+	using System.Text.Json;
+	using System.Text.Json.Serialization;
 	using System.Threading.Tasks;
+	using Relativity.Import.Samples.DotNetClient.Helpers;
 	using Relativity.Import.V1;
 	using Relativity.Import.V1.Builders.DataSource;
 	using Relativity.Import.V1.Builders.Documents;
+	using Relativity.Import.V1.Models;
 	using Relativity.Import.V1.Models.Settings;
 	using Relativity.Import.V1.Models.Sources;
-	using System.Net.Http.Json;
-	using Relativity.Import.V1.Models;
-	using System.Text.Json.Serialization;
-	using System.Text.Json;
-	using Relativity.Import.Samples.DotNetClient.Helpers;
 
 	/// <summary>
 	///  Class containing examples of using import service SDK.
@@ -30,7 +30,8 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample03_ImportFromTwoDataSources()
 		{
-			Console.WriteLine($"Running {nameof(Sample03_ImportFromTwoDataSources)}");
+			Console.WriteLine($"Running {nameof(this.Sample03_ImportFromTwoDataSources)}");
+
 			// GUID identifiers for import job and data sources.
 			Guid importId = Guid.NewGuid();
 			Guid source01Id = Guid.NewGuid();
@@ -52,7 +53,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 			var createJobPayload = new
 			{
 				applicationName = "Import-service-sample-app",
-				correlationID = "Sample-job-0003"
+				correlationID = "Sample-job-0003",
 			};
 
 			// Configuration settings for document import. Builder is used to create settings.
@@ -67,7 +68,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 				.WithoutFolders();
 
 			// Create payload for request.
-			var importSettingPayload = new {importSettings};
+			var importSettingPayload = new { importSettings };
 
 			// Configuration settings for data source. Builder is used to create settings.
 			DataSourceSettings dataSourceSettings01 = DataSourceSettingsBuilder.Create()
@@ -145,9 +146,9 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 			// You can also get data sources details to verify if all sources are imported.
 			var importDetailsUri = RelativityImportEndpoints.GetImportJobDetailsUri(workspaceId, importId);
 
-			JsonSerializerOptions options = new()
+			JsonSerializerOptions options = new ()
 			{
-				Converters = { new JsonStringEnumConverter() }
+				Converters = { new JsonStringEnumConverter() },
 			};
 
 			var importState = await ImportJobSampleHelper.WaitImportJobToBeFinished(
@@ -158,7 +159,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 
 			// Get current import progress for specific data source.
 			// endpoint: GET import-jobs/{importId}/sources/{sourceId}/progress"
-			foreach (var sourceId in new[] {source01Id, source02Id})
+			foreach (var sourceId in new[] { source01Id, source02Id })
 			{
 				var importSourceProgressUri = RelativityImportEndpoints.GetImportSourceProgressUri(workspaceId, importId, sourceId);
 
@@ -172,6 +173,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 		}
 	}
 }
+
 /* Expected console result:
 	Import job state: Completed
 	Import data source progress (sourceID: 412d8422-7b12-4cb1-9390-9f55858f98c9) - Total records: 4, Imported records: 4, Records with errors: 0

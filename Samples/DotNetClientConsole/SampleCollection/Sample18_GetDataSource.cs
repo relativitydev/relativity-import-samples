@@ -6,14 +6,14 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 {
 	using System;
 	using System.Net.Http;
-	using System.Threading.Tasks;
-	using Relativity.Import.V1;
 	using System.Net.Http.Json;
-	using Relativity.Import.V1.Models;
+	using System.Threading.Tasks;
 	using Relativity.Import.Samples.DotNetClient.Helpers;
-	using Relativity.Import.V1.Builders.Documents;
-	using Relativity.Import.V1.Models.Settings;
+	using Relativity.Import.V1;
 	using Relativity.Import.V1.Builders.DataSource;
+	using Relativity.Import.V1.Builders.Documents;
+	using Relativity.Import.V1.Models;
+	using Relativity.Import.V1.Models.Settings;
 
 	/// <summary>
 	///  Class containing examples of using import service SDK.
@@ -26,7 +26,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample18_GetDataSource()
 		{
-			Console.WriteLine($"Running {nameof(Sample18_GetDataSource)}");
+			Console.WriteLine($"Running {nameof(this.Sample18_GetDataSource)}");
 
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
@@ -51,7 +51,6 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 					.WithField(controlNumberColumnIndex, "Control Number"))
 				.WithoutFolders();
 
-
 			// Create payload for request.
 			var importSettingPayload = new { importSettings };
 
@@ -61,7 +60,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 			var createJobPayload = new
 			{
 				applicationName = "Import-service-sample-app",
-				correlationID = $"Sample-job-0018"
+				correlationID = $"Sample-job-0018",
 			};
 
 			// Create import job.
@@ -76,7 +75,6 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 			var documentConfigurationUri = RelativityImportEndpoints.GetDocumentConfigurationUri(workspaceId, importId);
 			response = await httpClient.PostAsJsonAsync(documentConfigurationUri, importSettingPayload);
 			await ImportJobSampleHelper.EnsureSuccessResponse(response);
-
 
 			// Add n data sources to the existing job.
 			for (int i = 0; i < dataSourceCount; i++)
@@ -107,7 +105,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 			ValueResponse<DataSources>? valueResponse =
 				await httpClient.GetFromJsonAsync<ValueResponse<DataSources>>(importSourcesUri);
 
-			if (valueResponse is {IsSuccess: true})
+			if (valueResponse is { IsSuccess: true })
 			{
 				Console.WriteLine($"Data Sources total count: {valueResponse.Value.TotalCount}");
 				Console.WriteLine($"Data source Ids:");

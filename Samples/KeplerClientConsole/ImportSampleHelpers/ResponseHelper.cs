@@ -1,8 +1,14 @@
-﻿using Relativity.Import.V1;
-using System;
-
+﻿// <copyright file="ResponseHelper.cs" company="Relativity ODA LLC">
+// © Relativity All Rights Reserved.
+// </copyright>
 namespace Relativity.Import.Samples.DotNetFrameworkClient.ImportSampleHelpers
 {
+	using System;
+	using Relativity.Import.V1;
+
+	/// <summary>
+	/// Helper class for response.
+	/// </summary>
 	public static class ResponseHelper
 	{
 		/// <summary>
@@ -10,7 +16,6 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.ImportSampleHelpers
 		/// </summary>
 		/// <param name="response">Response.</param>
 		/// <param name="requestDescription">request description.</param>
-		/// <returns>bool indicating the received response has IsSuccess.</returns>
 		public static void EnsureSuccessResponse(Response response, string requestDescription = null)
 		{
 			ConsoleWriteLine(requestDescription, ConsoleColor.DarkGreen);
@@ -20,6 +25,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.ImportSampleHelpers
 				Console.WriteLine("Response is null");
 				throw new Exception("Response is null");
 			}
+
 			if (response.IsSuccess == false)
 			{
 				var errorInfo = $"ErrorMessage: {response.ErrorMessage} ErrorCode: {response.ErrorCode}";

@@ -24,7 +24,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample10_ImportImagesInAppendOverlayMode()
 		{
-			Console.WriteLine($"Running {nameof(Sample10_ImportImagesInAppendOverlayMode)}");
+			Console.WriteLine($"Running {nameof(this.Sample10_ImportImagesInAppendOverlayMode)}");
 
 			// GUID identifiers for import job and data source.
 			Guid importId = Guid.NewGuid();
@@ -61,11 +61,11 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 				.WithDefaultCultureInfo();
 
 			using (Relativity.Import.V1.Services.IDocumentConfigurationController documentConfiguration =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IDocumentConfigurationController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IDocumentConfigurationController>())
 			using (Relativity.Import.V1.Services.IImportJobController importJobController =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportJobController>())
 			using (Relativity.Import.V1.Services.IImportSourceController importSourceController =
-				this._serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportSourceController>())
+				this.serviceFactory.CreateProxy<Relativity.Import.V1.Services.IImportSourceController>())
 			{
 				Response response = await importJobController.CreateAsync(
 					importJobID: importId,
@@ -113,4 +113,4 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 /* Expected console result:
 	Data source state: Completed
 	Import data source progress: Total records: 5, Imported records: 5, Records with errors: 0
- */
+*/

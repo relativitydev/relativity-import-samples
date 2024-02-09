@@ -1,5 +1,5 @@
 // <copyright file="Sample03_ImportFromTwoDataSources.cs" company="Relativity ODA LLC">
-// � Relativity All Rights Reserved.
+// © Relativity All Rights Reserved.
 // </copyright>
 
 namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
@@ -26,7 +26,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample03_ImportFromTwoDataSources()
 		{
-			Console.WriteLine($"Running {nameof(Sample03_ImportFromTwoDataSources)}");
+			Console.WriteLine($"Running {nameof(this.Sample03_ImportFromTwoDataSources)}");
 
 			// GUID identifiers for import job and data sources.
 			Guid importId = Guid.NewGuid();
@@ -86,9 +86,9 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 				.WithDefaultEncoding()
 				.WithDefaultCultureInfo();
 
-			using (IDocumentConfigurationController documentConfiguration = this._serviceFactory.CreateProxy<IDocumentConfigurationController>())
-			using (IImportJobController importJobController = this._serviceFactory.CreateProxy<IImportJobController>())
-			using (IImportSourceController importSourceController = this._serviceFactory.CreateProxy<IImportSourceController>())
+			using (IDocumentConfigurationController documentConfiguration = this.serviceFactory.CreateProxy<IDocumentConfigurationController>())
+			using (IImportJobController importJobController = this.serviceFactory.CreateProxy<IImportJobController>())
+			using (IImportSourceController importSourceController = this.serviceFactory.CreateProxy<IImportSourceController>())
 			{
 				// Create import job.
 				Response response = await importJobController.CreateAsync(
