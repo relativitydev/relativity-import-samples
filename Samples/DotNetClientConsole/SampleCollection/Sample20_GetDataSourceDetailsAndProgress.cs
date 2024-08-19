@@ -47,7 +47,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 			const int filePathColumnIndex = 22;
 
 			// Path to the load file used in data source settings.
-			const string loadFile01Path = "\\files\\T001\\Files\\SampleDataSources\\load_file_01.dat";
+			const string loadFile01Path = "\\\\files\\T001\\StructuredData\\Import\\SampleDataSources\\load_file_01.dat";
 
 			// Create payload for request.
 			var createJobPayload = new
