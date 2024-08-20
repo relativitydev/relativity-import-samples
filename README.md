@@ -1187,7 +1187,7 @@ List of samples:
 - Update variable which defines the path to the load file/opticon file (e.g. $opticonFilePath) according to the location where you copied sample data.
 
         $workspaceId = 1000000
-        $loadFilePath = "\\\\files\T001\StructuredData\\Import\SampleDataSources\load_file_01.dat"
+        $loadFilePath = "\\files\T001\StructuredData\Import\SampleDataSources\load_file_01.dat"
 
  - Update other Ids related to your workspace - productionSetsArtifactId , rootFolderId,rdoArtifactTypeID. They are required only by specific samples.
 

@@ -2,7 +2,7 @@
 . "$global:rootDir\Helpers\EndpointsClass.ps1"
 
 $workspaceId = 1000000
-$loadFilePath = "\\\\files\T001\StructuredData\Import\SampleDataSources\load_file_01.dat"
+$loadFilePath = "\\files\T001\StructuredData\Import\SampleDataSources\load_file_01.dat"
 
 $importId = New-Guid
 $sourceId = New-Guid
