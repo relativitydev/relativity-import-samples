@@ -3,8 +3,8 @@
 . "$global:rootDir\Helpers\WriteInformationClass.ps1"
 
 $workspaceId = 1000000
-$loadFile01Path = "\\files\T001\StructuredData\Import\SampleDataSources\load_file_05.dat"
-$loadFile02Path = "\\files\T001\StructuredData\Import\SampleDataSources\notExistingFile.dat"
+$loadFile01Path = "\\\\files\T001\StructuredData\Import\SampleDataSources\load_file_05.dat"
+$loadFile02Path = "\\\\files\T001\StructuredData\Import\SampleDataSources\notExistingFile.dat"
 
 $importId = New-Guid
 $source01Id = New-Guid
