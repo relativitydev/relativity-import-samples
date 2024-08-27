@@ -980,47 +980,6 @@
           }
         }
       }
-    },
-    "/import-private/v1/DiagnosticJob/Execute": {
-      "post": {
-        "tags": [
-          "Diagnostic Job Module"
-        ],
-        "summary": "",
-        "description": "Create, configure, and execute simple import job for diagnostic purpose.",
-        "operationId": "Import.Services.V1.IDiagnosticJobController.ExecuteAsync",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/X-CSRF-Header"
-          }
-        ],
-        "requestBody": {
-          "description": "",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DiagnosticJobSettings"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DiagnosticJobResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request. Validation exception."
-          }
-        }
-      }
     }
   },
   "components": {
@@ -1368,50 +1327,6 @@
             "type": "string",
             "format": "uuid",
             "example": "00000000-0000-0000-0000-000000000000"
-          }
-        }
-      },
-      "DiagnosticJobResponse": {
-        "type": "object",
-        "properties": {
-          "InformationMessage": {
-            "type": "string",
-            "example": "Diagnostic Import Job was properly started. Use the dedicated api endpoints to monitor job progress and state."
-          },
-          "IsSuccess": {
-            "type": "boolean",
-            "example": true
-          },
-          "ErrorMessage": {
-            "type": "string",
-            "example": ""
-          },
-          "ErrorCode": {
-            "type": "string",
-            "example": ""
-          },
-          "ImportJobID": {
-            "description": "Import job identification GUID number.",
-            "type": "string",
-            "format": "uuid",
-            "example": "00000000-0000-0000-0000-000000000000"
-          }
-        }
-      },
-      "DiagnosticJobSettings": {
-        "type": "object",
-        "properties": {
-          "WorkspaceID": {
-            "type": "integer",
-            "description": "Indicates the WorkspaceID for which the import will be executed. If not provided the Relativity Starter Template workspace is used.",
-            "nullable": true,
-            "example": 1003663
-          },
-          "FileSharePath": {
-            "type": "string",
-            "description": "Custom provided fileshare location where dataset (load file) will be generated. When not provided the default fileshare location for selected workspace is used.",
-            "nullable": true,
-            "example": "\\\\files\\T001\\StructuredData\\Import\\EDDS1015024\\DiagnosticJob"
           }
         }
       },
