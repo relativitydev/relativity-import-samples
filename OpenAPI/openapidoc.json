@@ -624,6 +624,121 @@
         }
       }
     },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/sources/{sourceID}/delete": {
+      "post": {
+        "tags": [
+          "Import Source Module"
+        ],
+        "summary": "",
+        "description": "Deletes the parent folder of the data source's load file if it is located in \\StructuredData\\Import\\.",
+        "operationId": "Import.Services.V1.IImportSourceController.DeleteParentFolderAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/importJobID"
+          },
+          {
+            "$ref": "#/components/parameters/sourceID"
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {}
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/location": {
+      "get": {
+        "tags": [
+          "Import Job Module"
+        ],
+        "summary": "",
+        "description": "Gets the default location for the import files upload.",
+        "operationId": "Import.Services.V1.ImportJobController.GetDefaultLocationForWorkspaceAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValueResponse.String"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
+    "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/location": {
+      "get": {
+        "tags": [
+          "Import Job Module"
+        ],
+        "summary": "",
+        "description": "Gets the default location for the import files upload.",
+        "operationId": "Import.Services.V1.ImportJobController.GetDefaultLocationForJobAsync",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-CSRF-Header"
+          },
+          {
+            "$ref": "#/components/parameters/workspaceID"
+          },
+          {
+            "$ref": "#/components/parameters/importJobID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValueResponse.String"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation exception."
+          }
+        }
+      }
+    },
     "/import-service/v1/workspaces/{workspaceID}/import-jobs/{importJobID}/sources/": {
       "get": {
         "tags": [
@@ -865,47 +980,6 @@
           }
         }
       }
-    },
-    "/import-private/v1/DiagnosticJob/Execute": {
-      "post": {
-        "tags": [
-          "Diagnostic Job Module"
-        ],
-        "summary": "",
-        "description": "Create, configure, and execute simple import job for diagnostic purpose.",
-        "operationId": "Import.Services.V1.IDiagnosticJobController.ExecuteAsync",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/X-CSRF-Header"
-          }
-        ],
-        "requestBody": {
-          "description": "",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DiagnosticJobSettings"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DiagnosticJobResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request. Validation exception."
-          }
-        }
-      }
     }
   },
   "components": {
@@ -1138,10 +1212,17 @@
         "type": "object",
         "properties": {
           "State": {
-            "$ref": "#/components/schemas/DataSourceState",
-            "description": "Indicates in what state currently DataSource is."
+            "$ref": "#/components/schemas/DataSourceState"
           },
-          "DataSourceSettings": { "$ref": "#/components/schemas/DataSourceSettings" }
+          "DataSourceSettings": { "$ref": "#/components/schemas/DataSourceSettings" },
+          "IsParentFolderDeleted": {
+            "type": "boolean",
+            "description": "Gets or sets a value indicating whether the source load file's parent folder is deleted.",
+            "example": true
+          },
+          "JobLevelErrors": {
+            "$ref": "#/components/schemas/ImportError"
+          }
         }
       },
       "ValueResponse.ImportDocumentSettings": {
@@ -1246,50 +1327,6 @@
             "type": "string",
             "format": "uuid",
             "example": "00000000-0000-0000-0000-000000000000"
-          }
-        }
-      },
-      "DiagnosticJobResponse": {
-        "type": "object",
-        "properties": {
-          "InformationMessage": {
-            "type": "string",
-            "example": "Diagnostic Import Job was properly started. Use the dedicated api endpoints to monitor job progress and state."
-          },
-          "IsSuccess": {
-            "type": "boolean",
-            "example": true
-          },
-          "ErrorMessage": {
-            "type": "string",
-            "example": ""
-          },
-          "ErrorCode": {
-            "type": "string",
-            "example": ""
-          },
-          "ImportJobID": {
-            "description": "Import job identification GUID number.",
-            "type": "string",
-            "format": "uuid",
-            "example": "00000000-0000-0000-0000-000000000000"
-          }
-        }
-      },
-      "DiagnosticJobSettings": {
-        "type": "object",
-        "properties": {
-          "WorkspaceID": {
-            "type": "integer",
-            "description": "Indicates the WorkspaceID for which the import will be executed. If not provided the Relativity Starter Template workspace is used.",
-            "nullable": true,
-            "example": 1003663
-          },
-          "FileSharePath": {
-            "type": "string",
-            "description": "Custom provided fileshare location where dataset (load file) will be generated. When not provided the default fileshare location for selected workspace is used.",
-            "nullable": true,
-            "example": "\\\\files\\T001\\StructuredData\\Import\\EDDS1015024\\DiagnosticJob"
           }
         }
       },
@@ -1549,7 +1586,7 @@
       "FileTypeSettings": {
         "type": "object",
         "properties": {
-          "ValidateFileType": {
+          "DoNotValidateFileType": {
             "type": "boolean",
             "description": "Indicates if file type validation should be run in import service.",
             "example": false
@@ -1578,7 +1615,7 @@
             "type": "boolean",
             "example": true
           },
-          "ValidateFileType": {
+          "DoNotValidateFileType": {
             "type": "boolean",
             "example": true
           },
@@ -1657,6 +1694,10 @@
           "LineNumber": {
             "type": "integer",
             "example": 1
+          },
+          "ObjectIdentifier": {
+            "type": "string",
+            "description": "Document identifier"
           }
         }
       },
