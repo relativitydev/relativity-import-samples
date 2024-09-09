@@ -69,6 +69,12 @@ namespace Relativity.Import.Samples.DotNetClient
 					// await sampleCollection.Sample22_ReadResponse();
 
 					// await sampleCollection.Sample23_GetDataSourceErrors();
+
+					// await sampleCollection.Sample24_DeleteSource();
+
+					// await sampleCollection.Sample25_GetLocation_Job();
+
+					// await sampleCollection.Sample26_GetLocation_Workspace();
 				});
 
 			try

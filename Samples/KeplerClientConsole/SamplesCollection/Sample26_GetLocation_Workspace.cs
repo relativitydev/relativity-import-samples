@@ -10,6 +10,9 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 	using System;
 	using System.Threading.Tasks;
 
+	/// <summary>
+	/// Class containing examples of using import service SDK.
+	/// </summary>
 	public partial class ImportServiceSample
 	{
 		/// <summary>
