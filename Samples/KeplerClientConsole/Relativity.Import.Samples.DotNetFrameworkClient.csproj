@@ -25,7 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Relativity.Import.SDK" Version="1.0.22" />
+		<PackageReference Include="Relativity.Import.SDK" Version="1.2.1" />
 	</ItemGroup>
 
 </Project>
