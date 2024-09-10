@@ -80,7 +80,7 @@ namespace Relativity.Import.Samples.DotNetClient.Helpers
 		/// Get import job default location uri.
 		/// </summary>
 		/// <param name="workspaceId">Workspace ID.</param>
-		/// <returns>String representing the uri to get import location for specified job.</returns>
+		/// <returns>String representing the uri to get default location for the import files upload.</returns>
 		public static string GetImportJobDefaultLocationUri(int workspaceId) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/location";
 
 		/// <summary>
@@ -88,7 +88,7 @@ namespace Relativity.Import.Samples.DotNetClient.Helpers
 		/// </summary>
 		/// <param name="workspaceId">Workspace ID.</param>
 		/// <param name="importId">Import job ID.</param>
-		/// <returns>String representing the uri to get import location for specified job.</returns>
+		/// <returns>String representing the uri to get default location for the import files upload based on the job GUID.</returns>
 		public static string GetImportSourceDefaultLocationUri(int workspaceId, Guid importId) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/{importId}/location";
 
 		// Document Configuration section
@@ -146,6 +146,8 @@ namespace Relativity.Import.Samples.DotNetClient.Helpers
 		/// <param name="workspaceId">Workspace ID.</param>
 		/// <param name="importId">Import job ID.</param>
 		/// <param name="sourceId">Source ID.</param>
+		/// <param name="start">Start index of item errors.</param>
+		/// <param name="length">Length of item errors to get.</param>
 		/// <returns>String representing the uri to get errors reported during import for a single source.</returns>
 		public static string GetImportSourceItemErrorsUri(int workspaceId, Guid importId, Guid sourceId, int start, int length) => $"api/import-service/v1/workspaces/{workspaceId}/import-jobs/{importId}/sources/{sourceId}/itemerrors?start={start}&length={length}";
 

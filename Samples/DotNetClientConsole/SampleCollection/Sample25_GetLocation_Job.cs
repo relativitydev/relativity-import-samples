@@ -22,7 +22,7 @@ public partial class ImportServiceSample
 		int workspaceId = 1036722;
 
 		// Targetted job GUID
-		Guid jobID = Guid.Parse("c107191e-242f-450d-bddd-b1e6d4d58e96");
+		Guid jobID = Guid.Parse("00000000-0000-0000-0000-000000000000");
 
 		using HttpClient client = HttpClientHelper.CreateHttpClient();
 		var content = new StringContent(string.Empty, Encoding.UTF8, "application/json");

@@ -14,7 +14,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 	public partial class ImportServiceSample
 	{
 		/// <summary>
-		/// Example of getting default location for import job.
+		/// Example of getting the default location for the import files upload based on the job GUID.
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
 		public async Task Sample25_GetLocation_Job()
