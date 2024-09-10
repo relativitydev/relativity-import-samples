@@ -4,11 +4,10 @@
 
 namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 {
-	using Relativity.Import.Samples.DotNetFrameworkClient.ImportSampleHelpers;
-	using Relativity.Import.V1;
-
 	using System;
 	using System.Threading.Tasks;
+	using Relativity.Import.Samples.DotNetFrameworkClient.ImportSampleHelpers;
+	using Relativity.Import.V1;
 
 	/// <summary>
 	/// Class containing examples of using import service SDK.

@@ -1,14 +1,13 @@
-﻿// <copyright file="Sample25_GetLocation.cs" company="Relativity ODA LLC">
+﻿// <copyright file="Sample25_GetLocation_Job.cs" company="Relativity ODA LLC">
 // © Relativity All Rights Reserved.
 // </copyright>
 
-using Relativity.Import.Samples.DotNetFrameworkClient.ImportSampleHelpers;
-
-using System;
-using System.Threading.Tasks;
-
 namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 {
+	using System;
+	using System.Threading.Tasks;
+	using Relativity.Import.Samples.DotNetFrameworkClient.ImportSampleHelpers;
+
 	/// <summary>
 	/// Class containing examples of using import service SDK.
 	/// </summary>
