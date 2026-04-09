@@ -48,8 +48,7 @@ Context "Sample05 Import documents with extracted text" {
                             "Field": "Extracted Text",
                             "ContainsID": false,
                             "ContainsFilePath": true,
-                            "Encoding": "UTF-8",
-                            "FileSizeColumnIndex": 14
+                            "Encoding": "UTF-8"
                         }
                     ]
                 },
