@@ -45,7 +45,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 			const int extractedTextFilePathColumnIndex = 12;
 			const int emailToColumnIndex = 11;
 			const int fileNameColumnIndex = 13;
-			const int fileSizeColumnIndex = 14;
+
 			const int filePathColumnIndex = 22;
 
 			// Create payload for request.
@@ -101,8 +101,7 @@ namespace Relativity.Import.Samples.DotNetClient.SampleCollection
 							ColumnIndex = extractedTextFilePathColumnIndex,
 							ContainsFilePath = true,
 							Encoding = "UTF-8",
-							FileSizeColumnIndex = fileSizeColumnIndex,
-						},
+							},
 					},
 				},
 				Folder = new FolderSettings

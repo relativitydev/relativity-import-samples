@@ -51,7 +51,6 @@ Context "Sample07 Direct import settings for documents" {
             ContainsID          = $false
             ContainsFilePath    = $true
             Encoding            = "UTF-8"
-            FileSizeColumnIndex = 14
         }
         $fields = @($field1, $field2, $field3, $field4)
         $jobConfigurationBody = @{

@@ -37,7 +37,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 			const int controlNumberColumnIndex = 0;
 			const int extractedTextPathColumnIndex = 12;
 			const int fileNameColumnIndex = 13;
-			const int fileSizeColumnIndex = 14;
+
 			const int filePathColumnIndex = 22;
 
 			// Path to the load files used in data source settings.
@@ -54,8 +54,7 @@ namespace Relativity.Import.Samples.DotNetFrameworkClient.SamplesCollection
 					.WithField(controlNumberColumnIndex, "Control Number")
 					.WithExtractedTextField(extractedTextPathColumnIndex, e => e
 						.WithExtractedTextInSeparateFiles(f => f
-							.WithEncoding("UTF-8")
-							.WithFileSizeDefinedInColumn(fileSizeColumnIndex))))
+							.WithEncoding("UTF-8"))))
 				.WithoutFolders();
 
 			// Configuration settings for data source. Builder is used to create settings.

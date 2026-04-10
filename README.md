@@ -216,8 +216,7 @@ which may lead to errors during import process.
         .WithFieldsMapped(x => x
             .WithField(controlNumberColumnIndex, "Control Number")
             .WithExtractedTextInSeparateFiles(f => f
-		.WithEncoding("UTF-16")
-		.WithFileSizeDefinedInColumn(fileSizeColumnIndex))))
+		.WithEncoding("UTF-16"))))
         .WithFolders(f => f
             .WithRootFolderID(rootFolderId, r => r
                 .WithFolderPathDefinedInColumn(folderPathColumnIndex)));
@@ -1216,8 +1215,7 @@ For the document workflow, set **FieldMapping.Encoding** to UTF-16. Similarly, f
 					.WithField(controlNumberColumnIndex, "Control Number")
 					.WithExtractedTextField(extractedTextPathColumnIndex, e => e
 						.WithExtractedTextInSeparateFiles(f => f
-							.WithEncoding("UTF-16")
-							.WithFileSizeDefinedInColumn(fileSizeColumnIndex))))
+							.WithEncoding("UTF-16"))))
 				.WithoutFolders();
 
     
@@ -1234,10 +1232,6 @@ For the document workflow, set **FieldMapping.Encoding** to UTF-16. Similarly, f
  
 If your mapping contains more than one long text field, you should use UTF-16. No other encodings are supported in this case.
 
-### FileSizeColumnIndex
-Another valuable setting that can enhance performance is the **FieldMapping.FileSizeColumnIndex**. By configuring this setting, the need for additional file size calculations can be eliminated. The file sizes will be automatically extracted from the load file, streamlining the process and saving valuable processing time.
-
-**Note:** The FileSizeColumnIndex setting will only take effect if FieldMapping.ContainsFilePath is set to true, and the FieldMapping.Encoding is set to UTF-16. This property applies only to long text fields stored in Data Grid, including Extracted Text.
 
 
 
